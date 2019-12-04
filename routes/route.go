@@ -27,7 +27,7 @@ func AllRoutes() Routes {
 		Route{"Play", "GET", "/play", controller.Play},
 		Route{"About", "GET", "/about", controller.About},
 		Route{"Debug", "GET", "/debug", controller.Debug},
-		Route{"GoSpider", "GET", "/go-spider", controller.GoSpider},
+		Route{"MoviesSpider", "GET", "/movies-spider", controller.GoSpider},
 	}
 	return routes
 }

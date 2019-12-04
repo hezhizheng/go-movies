@@ -1,11 +1,27 @@
 # Go Movies
 
-> 一个基于golang的爬虫电影站
+> 一个基于golang的爬虫电影站，效果站： [https://go-movies.hezhizheng.com/](https://go-movies.hezhizheng.com/)
 
 ## 使用安装 
+```
+# 下载
+git clone https://github.com/hezhizheng/go-movies
+
+# 进入目录
+cd go-movies
+
+# 启动
+go run main.go 
+or
+# 安装 bee 工具
+bee run
+
+访问
+http://127.0.0.1:8899
+```
 
 ### 开启爬虫
-- /go-spider
+- 直接访问链接http://127.0.0.1:8899/movies-spider
 - 消耗：Windows 下 cup 10% 左右，内存 30mb 左右 
 - 网络正常的情况下，爬虫完毕耗时大概21分钟左右（存在部分爬取失败的记录）
 

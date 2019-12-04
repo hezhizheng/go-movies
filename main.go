@@ -32,7 +32,7 @@ func main() {
 	// 注册所有路由
 	router := TraversingRouter()
 
-	addr := ":8964"
+	addr := ":8899"
 	log.Println("监听端口", "http://127.0.0.1"+addr)
 	log.Println(http.ListenAndServe(addr, router))
 }
