@@ -2,7 +2,7 @@
 
 > 一个基于golang的爬虫电影站，效果站： [https://go-movies.hezhizheng.com/](https://go-movies.hezhizheng.com/)
 
-![img](https://cdn.learnku.com/uploads/images/201912/05/6843/gQa6CgVZ7G.png!large)
+![img](https://i.loli.net/2019/12/05/Qzqv4HWoMp2DByi.png)
 
 ## 使用安装 
 ```
