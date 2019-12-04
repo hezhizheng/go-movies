@@ -2,6 +2,8 @@
 
 > 一个基于golang的爬虫电影站，效果站： [https://go-movies.hezhizheng.com/](https://go-movies.hezhizheng.com/)
 
+![img](https://cdn.learnku.com/uploads/images/201912/05/6843/gQa6CgVZ7G.png!large)
+
 ## 使用安装 
 ```
 # 下载
@@ -35,7 +37,10 @@ http://127.0.0.1:8899
 ## 目录结构参考beego设置
 
 ## TODO
--[ ] 跨平台打包,模板路径不正确
--[ ] goroutine 并发数控制
--[ ] 爬取数据的完整性
--[ ] redis查询问题？
+- [ ] 跨平台打包,模板路径不正确
+- [ ] goroutine 并发数控制
+- [ ] 爬取数据的完整性
+- [ ] redis查询问题？
+
+## Other
+许多Go的原理还没弄懂，有精力会慢慢深究下。写得很潦草，多多包涵。
