@@ -1,0 +1,81 @@
+{{ define "sidebar.html" }}
+    <div id="sidebar">
+
+
+        <div class="search box row">
+            <div class="search_site">
+                <form method="get" name="searchform" id="searchform" action="/search">
+                    <input type="submit" value="" id="searchsubmit" class="button">
+                    <label><span>请输入搜索内容，仅支持电影名称</span>
+                        <input type="text" class="search-s" name="q" required>
+                    </label>
+                </form>
+            </div>
+        </div>
+
+        <div class="widget box row">
+            <div id="tab-title">
+                <div class="tab">
+                    <ul id="tabnav">
+                        <li class="selected">最新电影</li>
+                        <li class="">最新剧集</li>
+                        <li class="">站长推荐</li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div id="tab-content">
+                <ul class="">
+                    {{ range .new_film }}
+                    <li>
+                        <a href='/movie?link={{ .Link }}'>
+                            {{ .Name }}
+                        </a>
+                    </li>
+                    {{ end }}
+
+                </ul>
+                <ul class="hide">
+                    {{ range .new_tv }}
+                    <li>
+                        <a href='/movie?link={{ .Link }}'>
+                            {{ .Name }}
+                        </a>
+                    </li>
+                    {{ end }}
+                </ul>
+                <ul class="hide">
+
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-14334'>
+                            绝命毒师第一季完结
+                        </a>
+                    </li>
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-14335.html'>
+                            绝命毒师第二季完结
+                        </a>
+                    </li>
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-14336.html'>
+                            绝命毒师第三季完结
+                        </a>
+                    </li>
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-14338.html'>
+                            绝命毒师第四季完结
+                        </a>
+                    </li>
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-14339.html'>
+                            绝命毒师第五季完结
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+{{ end }}

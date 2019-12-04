@@ -1,0 +1,39 @@
+{{ define "main_left.html" }}
+    <div class="mainleft">
+        <ul id="post_container" class="masonry clearfix">
+
+            {{ range .movieLists }}
+
+            <li class="post box row fixed-hight">
+                <div class="post_hover">
+                    <div class="thumbnail">
+                        <a href="/movie?link={{ .Link }}" class="zoom" rel="bookmark" title="{{ .Name }}">
+
+                            <img src="{{ .Cover }}" alt="{{ .Name }}">
+                        </a>
+                    </div>
+                    <div class="article">
+                        <h2><a href="/movie?link={{ .Link }}" rel="bookmark" title="{{ .Name }}">{{ .Name }}</a></h2>
+                        <div class="entry_post">
+                            <p>
+
+                               主演： {{ .Starring }}                            </p>
+                        </div>
+
+                        <div class="arrow-catpanel-top">&nbsp;</div>
+                    </div>
+                    <div class="info">
+                        <span class="info_date info_ico">{{ .UpdatedAt }}</span>
+{{/*                        <span class="info_views info_ico"></span>*/}}
+{{/*                        <span class="info_comment info_ico"><a href="12149.html#respond" title="《花生酱猎鹰》上的评论">评论</a></span>*/}}
+                        <span class="info_category info_ico">{{ .Category }}</span>
+                    </div>
+                </div>
+            </li>
+
+            {{ end }}
+
+        </ul>
+        <div class="clear"></div>
+    </div>
+{{ end }}

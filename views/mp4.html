@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>play</title>
+    <meta name="referrer" content="never">
+    <link href="//cdn.bootcss.com/video.js/7.6.0/alt/video-js-cdn.min.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/video.js/7.6.0/alt/video.core.min.js"></script>
+</head>
+<body>
+
+<video id="video" class="video-js vjs-default-skin vjs-fluid vjs-big-play-centered "  width="100%" height="100%" controls preload="none"
+       data-setup='{ "html5" : { "nativeTextTracks" : false } }'>
+    <source src="{{ .play_url }}" type="video/mp4">
+    <p class="vjs-no-js">  播放视频需要启用 JavaScript，推荐使用<a href="http://videojs.com/html5-video-support/" target="_blank">支持HTML5</a>的浏览器访问。</p>
+</video>
+
+</body>
+</html>

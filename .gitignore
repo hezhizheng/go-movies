@@ -1,0 +1,4 @@
+.idea
+/conf/app.conf
+*.exe
+*.exe~

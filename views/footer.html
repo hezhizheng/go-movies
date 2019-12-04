@@ -1,0 +1,59 @@
+{{ define "footer.html" }}
+    <div class="clear"></div>
+    <div id="footer">
+        <div class="footnav container">
+            <ul id="footnav" class="menu">
+            </ul>
+        </div>
+        <div class="footnav container">
+            <ul id="friendlink" class="menu">
+            </ul>
+        </div>
+        <div class="copyright">
+            <p> Copyright &copy; 2019 <a href=""><strong>
+                        GoMovies     </strong><a href="javascript:;"></a><br>
+
+            <p class="author"> power by <a href="https://hezhizheng.com" target="_blank" rel="external">hezhizheng.com</a></p>
+        </div>
+    </div>
+
+    <!--gototop-->
+    <div id="tbox"> <a id="gotop" href="javascript:void(0)"></a> </div>
+
+
+    <script type="text/javascript" src="/static/js/jquery.masonry.js"></script>
+    <script type="text/javascript" src="/static/js/loostrive.js"></script>
+
+    <script language="javascript" type="text/javascript">
+        (function() {
+            var oDiv = document.getElementById("nav_b");
+            var H = 0, iE6;
+            var Y = oDiv;
+            while (Y) {
+                H += Y.offsetTop;
+                Y = Y.offsetParent;
+            };
+            iE6 = window.ActiveXObject && !window.XMLHttpRequest;
+            if (!iE6) {
+                window.onscroll = function() {
+                    var s = document.body.scrollTop || document.documentElement.scrollTop;
+                    if (s > H) {
+                        oDiv.className = "mainmenus container nav_b";
+                        if (iE6) {
+                            oDiv.style.top = (s - H) + "px";
+                        }
+                    } else {
+                        oDiv.className = "mainmenus container";
+                    }
+                }
+            }
+        })();
+    </script>
+
+    <style>
+        .search_m{display: none;}
+        @media only screen and (max-width: 640px){
+            .search_m{max-width: 360px !important;margin: 0 auto;margin-bottom: 10px;display: block;}
+        }
+    </style>
+{{ end }}

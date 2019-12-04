@@ -1,0 +1,110 @@
+{{ define "about.html" }}
+
+{{ template "header.html" . }}
+
+<body class="custom-background">
+<!---加载进度条---->
+<script type="text/javascript">
+jQuery(function(){
+jQuery('#loading-one').empty().append('页面载入完毕.').parent().fadeOut('slow');
+});
+</script>
+<div id="main_loading" onclick="javascript:turnoff('loading')">
+  <p id="loading-one" onclick="javascript:turnoff('loading')">页面载入中...</p>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+function turnoff(obj){
+document.getElementById(obj).style.display="none";
+}
+//]]&gt;
+</script>
+<!---加载进度条---->
+
+
+{{/*头 log*/}}
+{{ template "body_head.html" . }}
+
+{{/*导航栏*/}}
+{{ template "nav.html" . }}
+
+
+	<div class="container">
+        		        <div class="row">
+			                <div class="subsidiary box">
+                    <div class="bulletin fourfifth">
+                        <span class="sixth">当前位置：</span>       关于              </div>
+                </div>
+                    </div>
+
+
+
+
+
+
+      	<div class="mainleft" id="content">
+			<div class="article_container row  box">
+                <h1 >关于</h1>
+
+            	<div class="clear"></div>
+
+            <div class="context">
+				<div id="post_content">
+                    <p>
+                        <img alt="" src="https://i.loli.net/2019/11/19/fzNZBnvO8eoyj6h.png">
+                        <br>◎本　　站：golang + redis 实现的影站(低级爬虫)。无管理后台。使用参考
+                        <br>◎说　　明：bug存在，有精力在慢慢搞（PS：页面加载不正常请重新刷新）。
+                        <br>◎界　　面：copy某一个电影网站的，排版请见谅。
+                        <br>◎联　　系：<a href="https://www.facebook.com/hezhizheng1026" target="_blank"
+                                     aria-label="hezhizheng 的 Facebook 地址">
+                            <i class="fa fa-facebook fa-fw" title="Facebook"></i>
+                        </a>
+                        <a href="https://twitter.com/he_zhizheng" target="_blank"
+                           aria-label="hezhizheng 的 Twitter 地址">
+                            <i class="fa fa-twitter fa-fw" title="Twitter"></i>
+                        </a>
+                        <a href="http://weibo.com/u/5675317400" target="_blank"
+                           aria-label="hezhizheng 的 Weibo 地址">
+                            <i class="fa fa-weibo fa-fw" title="Weibo"></i>
+                        </a>
+                        <a href="https://github.com/hezhizheng" target="_blank"
+                           aria-label="hezhizheng 的 Github 地址">
+                            <i class="fa fa-github fa-fw" title="Github"></i>
+                        </a>
+                        <a href="https://www.instagram.com/dexter_ho_cn" target="_blank"
+                           aria-label="hezhizheng 的 Instagram 地址">
+                            <i class="fa fa-instagram fa-fw" title="Instagram"></i>
+                        </a>
+                        <a href="https://hezhizheng.com" target="_blank"
+                           aria-label="hezhizheng 的 blog 地址">
+                            <i class=" fa fa-bold" title="blog"></i>
+                        </a>
+                    </p>
+
+                    <hr>
+
+</div>
+                &nbsp;               	<div class="clear"></div>
+
+
+
+            </div>
+		</div>
+
+    	<div>
+
+	</div>
+
+  </div>
+    </div>
+
+
+
+
+</body>
+
+{{ template "footer.html" . }}
+
+</html>
+
+{{ end }}
