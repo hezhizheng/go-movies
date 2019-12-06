@@ -5,6 +5,7 @@ import (
 	"go_movies/utils"
 	"log"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -98,6 +99,18 @@ func MovieListsRange(key string, start, stop int64) []MovieListStruct {
 
 	var movieKeyMap MovieListStruct
 
+	sStart := strconv.FormatInt(start, 10)
+	sStop := strconv.FormatInt(stop, 10)
+
+	cacheKey := "movie_lists_key:" + key + ":start:" + sStart + ":stop:" + sStop
+
+	movieList := models.FindMoviesStringValue(cacheKey)
+
+	if movieList != "" {
+		utils.Json.Unmarshal([]byte(movieList), &data)
+		return data
+	}
+
 	movieKeys, _ := models.ZREVRANGEMoviesKey(key, start, stop)
 
 	for _, val := range movieKeys {
@@ -123,6 +136,9 @@ func MovieListsRange(key string, start, stop int64) []MovieListStruct {
 		mutex.Lock()
 		data = append(data, movieKeyMap)
 		mutex.Unlock()
+
+		byteData, _ := utils.Json.MarshalIndent(data, "", " ")
+		models.SaveMovies(cacheKey, string(byteData))
 	}
 
 	return data

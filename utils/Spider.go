@@ -60,7 +60,6 @@ var (
 func StartSpider() {
 	// 获取所有分类
 	Categories := SpiderOKCategories()
-
 	for _, v := range Categories {
 
 		cateUrl := v.Link
@@ -219,13 +218,18 @@ func SpiderOKMovies(cateUrl string) {
 		})
 		defer p.Release()
 
-		for j := 0; j < lastPageInt; j++ {
+		for j := 1; j <= lastPageInt; j++ {
 
 			wg.Add(1)
 			pageUrl := CategoryToPageUrl(cateUrl, strconv.Itoa(j))
 
 			// todo 使用 goroutine 内存跟cpu消耗太高。 暂时没找到解决方案
 			ForeachPage(cateUrl, pageUrl)
+
+			// 完成一个分类删除所有页面缓存
+			if j == lastPageInt {
+				go DelAllListCacheKey()
+			}
 		}
 		wg.Wait()
 	})
@@ -555,4 +559,14 @@ func TransformId(Url string) string {
 	UrlStrSplit := strings.Split(Url, "-id-")[1]
 
 	return strings.TrimRight(UrlStrSplit, ".html")
+}
+
+func DelAllListCacheKey() {
+
+	AllListCacheKey := RedisDB.Keys("movie_lists_key:detail_links:*").Val()
+
+	// 删除已经缓存的数据
+	for _, val := range AllListCacheKey {
+		RedisDB.Del(val)
+	}
 }

@@ -23,3 +23,7 @@ func FindMoviesStringValue(key string) string {
 func FindMoviesHashValue(key string) map[string]string {
 	return utils.RedisDB.HGetAll(key).Val()
 }
+
+func SaveMovies(key string, value string) error {
+	return utils.RedisDB.Set(key, value, 0).Err()
+}
