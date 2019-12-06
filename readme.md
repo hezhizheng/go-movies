@@ -18,14 +18,19 @@ or
 # 安装 bee 工具
 bee run
 
+# 如安装依赖包失败，请使用代理
+export GOPROXY=https://goproxy.io,direct
+or
+export GOPROXY=https://goproxy.io,direct
+
 访问
 http://127.0.0.1:8899
 ```
 
 ### 开启爬虫
-- 直接访问链接http://127.0.0.1:8899/movies-spider
-- 消耗：Windows 下 cup 10% 左右，内存 30mb 左右 
-- 网络正常的情况下，爬虫完毕耗时大概21分钟左右（存在部分爬取失败的记录）
+- 直接访问链接http://127.0.0.1:8899/movies-spider(开启定时任务，定时爬取就好)
+- 消耗：Windows 下 cup 10% 左右，内存 30mb 左右(爬虫完毕都会降下来) 
+- 网络正常的情况下，爬虫完毕耗时大概21分钟左右（存在部分资源爬取失败的情况）
 
 ## Tools
 - [https://github.com/gocolly/colly](https://github.com/gocolly/colly) 爬虫框架

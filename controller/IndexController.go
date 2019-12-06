@@ -77,8 +77,8 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	NewTVKey := "detail_links:id:2"
 
 	// TODO 这个查询50个都会慢？？？
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 9)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 9)
+	NewFilm := services.MovieListsRange(NewFilmKey, 0, 49)
+	NewTV := services.MovieListsRange(NewTVKey, 0, 49)
 
 	show["categories"] = Categories
 	show["page"] = "页面"
@@ -110,8 +110,8 @@ func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	NewFilmKey := "detail_links:id:1"
 	NewTVKey := "detail_links:id:2"
 
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 9)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 9)
+	NewFilm := services.MovieListsRange(NewFilmKey, 0, 49)
+	NewTV := services.MovieListsRange(NewTVKey, 0, 49)
 
 	show["categories"] = Categories
 	show["MovieDetail"] = MovieDetail
@@ -163,8 +163,8 @@ func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	NewFilmKey := "detail_links:id:1"
 	NewTVKey := "detail_links:id:2"
 
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 9)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 9)
+	NewFilm := services.MovieListsRange(NewFilmKey, 0, 49)
+	NewTV := services.MovieListsRange(NewTVKey, 0, 49)
 
 	show["movieLists"] = MovieLists
 	show["categories"] = Categories

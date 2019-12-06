@@ -5,7 +5,7 @@ import (
 )
 
 func FindMoviesKey(key string) []string {
-	return utils.RedisDB.Keys("*" + key + "*").Val()
+	return utils.RedisDB.Keys(key).Val()
 }
 
 func SCanMoviesKey(cursor uint64, match string, count int64) ([]string, uint64, error) {

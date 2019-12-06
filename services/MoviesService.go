@@ -137,7 +137,7 @@ func MovieDetail(link string) map[string]interface{} {
 	defer mutex.Unlock()
 	data := make(map[string]interface{})
 
-	details := models.FindMoviesKey("movies_detail:" + link)
+	details := models.FindMoviesKey("movies_detail:" + link + "*")
 
 	detail := make(map[string]string)
 	if len(details) > 0 {
@@ -194,21 +194,22 @@ func RangeSCanMoviesKey(key string) []string {
 
 	i = 0
 	for {
-		s, c, _ := models.SCanMoviesKey(i, "*"+key+"*", 1000)
+		s, c, _ := models.SCanMoviesKey(i, key+"*", 1000)
 
-		log.Println(s)
-		// 游标为0才停止循环
-		if c == 0 && len(s) == 1 {
+		log.Println(s, c)
+		// 如果只有一个，停止循环
+		if len(s) == 1 {
 			all = s
 			break
+		} else {
+			i = c
+			for _, val := range s {
+				mutex.Lock()
+				all = append(all, val)
+				mutex.Unlock()
+			}
 		}
-		i = c
 
-		for _, val := range s {
-			mutex.Lock()
-			all = append(all, val)
-			mutex.Unlock()
-		}
 	}
 
 	return all
@@ -221,7 +222,7 @@ func SearchMovies(key string) []MovieListStruct {
 
 	var movieKeyMap MovieListStruct
 
-	movieKeys := models.FindMoviesKey(":movie_name:" + key)
+	movieKeys := models.FindMoviesKey("*" + ":movie_name:" + key + "*")
 
 	for _, val := range movieKeys {
 
