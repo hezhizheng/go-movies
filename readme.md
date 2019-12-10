@@ -21,7 +21,7 @@ bee run
 # 如安装依赖包失败，请使用代理
 export GOPROXY=https://goproxy.io,direct
 or
-export GOPROXY=https://goproxy.io,direct
+export GOPROXY=https://goproxy.cn,direct
 
 访问
 http://127.0.0.1:8899
