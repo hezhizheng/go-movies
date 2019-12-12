@@ -3,23 +3,6 @@
 {{ template "header.html" . }}
 
 <body class="custom-background">
-<!---加载进度条---->
-<script type="text/javascript">
-jQuery(function(){
-jQuery('#loading-one').empty().append('页面载入完毕.').parent().fadeOut('slow');
-});
-</script>
-<div id="main_loading" onclick="javascript:turnoff('loading')">
-  <p id="loading-one" onclick="javascript:turnoff('loading')">页面载入中...</p>
-</div>
-<script type="text/javascript">
-//<![CDATA[
-function turnoff(obj){
-document.getElementById(obj).style.display="none";
-}
-//]]&gt;
-</script>
-<!---加载进度条---->
 
 
 {{/*头 log*/}}
@@ -51,7 +34,7 @@ document.getElementById(obj).style.display="none";
             <div class="context">
 				<div id="post_content">
                     <p>
-                        <img alt="" src="https://i.loli.net/2019/11/19/fzNZBnvO8eoyj6h.png">
+                        <img alt="" src="/static/image/xuexi.png">
                         <br>◎本　　站：golang + redis 实现的影站(低级爬虫)。无管理后台。使用参考
                         <br>◎说　　明：bug存在，有精力在慢慢搞（PS：页面加载不正常请重新刷新）。
                         <br>◎界　　面：copy某一个电影网站的，排版请见谅。

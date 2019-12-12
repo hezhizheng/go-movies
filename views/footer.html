@@ -21,6 +21,10 @@
     <div id="tbox"> <a id="gotop" href="javascript:void(0)"></a> </div>
 
 
+    <script type='text/javascript' src='/static/js/jquery.min-3.8.1.js'></script>
+    <script type='text/javascript' src='/static/js/lets-kill-ie6-3.8.1.js'></script>
+    <script src="/static/org/layer-v3.1.1/layer/layer.js"></script>
+
     <script type="text/javascript" src="/static/js/jquery.masonry.js"></script>
     <script type="text/javascript" src="/static/js/loostrive.js"></script>
 
@@ -48,6 +52,20 @@
                 }
             }
         })();
+    </script>
+
+    {{/*  延迟加载图片 */}}
+    <script>
+        function replaceImg(){
+            $("img").each(function () {
+                let realImgUrl = $(this).attr("data-url");
+                if ( realImgUrl !== "" )
+                {
+                    $(this).attr("src",$(this).attr("data-url"))
+                }
+            });
+        }
+        setTimeout(replaceImg, 1000);
     </script>
 
     <style>

@@ -8,8 +8,11 @@
                 <div class="post_hover">
                     <div class="thumbnail">
                         <a href="/movie?link={{ .Link }}" class="zoom" rel="bookmark" title="{{ .Name }}">
-
-                            <img src="{{ .Cover }}" alt="{{ .Name }}">
+                            <img
+                                src="/static/image/golang.png"
+                                data-url="{{ .Cover }}"
+                                onerror="this.src='/static/image/golang.png'"
+                                alt="{{ .Name }}" >
                         </a>
                     </div>
                     <div class="article">
@@ -36,4 +39,5 @@
         </ul>
         <div class="clear"></div>
     </div>
+
 {{ end }}

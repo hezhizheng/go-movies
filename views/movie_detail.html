@@ -3,23 +3,6 @@
 {{ template "header.html" . }}
 
 <body class="custom-background">
-<!---加载进度条---->
-<script type="text/javascript">
-jQuery(function(){
-jQuery('#loading-one').empty().append('页面载入完毕.').parent().fadeOut('slow');
-});
-</script>
-<div id="main_loading" onclick="javascript:turnoff('loading')">
-  <p id="loading-one" onclick="javascript:turnoff('loading')">页面载入中...</p>
-</div>
-<script type="text/javascript">
-//<![CDATA[
-function turnoff(obj){
-document.getElementById(obj).style.display="none";
-}
-//]]&gt;
-</script>
-<!---加载进度条---->
 
 
 {{/*头 log*/}}
@@ -55,7 +38,14 @@ document.getElementById(obj).style.display="none";
 
             <div class="context">
 				<div id="post_content">
-                    <p><img alt="" src="{{ .MovieDetail.info.cover }}">
+                    <p>
+                        {{/*   <img alt="" src="{{ .MovieDetail.info.cover }}">*/}}
+                        <img
+                                src="/static/image/golang.png"
+                                data-url="{{ .MovieDetail.info.cover }}"
+                                onerror="this.src='/static/image/golang.png'"
+                                alt="{{ .MovieDetail.info.name }}" >
+
                         <br>◎片　　名　{{ .MovieDetail.info.name }}
                         <br>◎别　　名　{{ .MovieDetail.detail.alias }})
                         <br>◎年　　代　{{ .MovieDetail.detail.released }}
