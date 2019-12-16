@@ -493,6 +493,12 @@ func MoviesInfo(url string) MoviesDetail {
 			detail["vod_play_info"] = e.Text
 		})
 
+		if detail["vod_play_info"] == "" || detail["vod_play_info"] == nil {
+			c.OnXML("/html/body/div[5]/div[2]/div[2]/text()", func(e *colly.XMLElement) {
+				detail["vod_play_info"] = e.Text
+			})
+		}
+
 		md = MoviesDetail{
 			Link:     url,
 			Name:     name,
