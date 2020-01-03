@@ -12,6 +12,9 @@ git clone https://github.com/hezhizheng/go-movies
 # 进入目录
 cd go-movies
 
+# 生成配置文件(默认使用redis db10的库，可自行修改app.go中的配置)
+cp ./config/app.go.backup ./config/app.go
+
 # 启动
 go run main.go 
 or
@@ -34,18 +37,47 @@ http://127.0.0.1:8899
 
 ## Tools
 - [https://github.com/gocolly/colly](https://github.com/gocolly/colly) 爬虫框架
-- html/template 模板引擎
+- 模板引擎：https://github.com/shiyanhui/hero
 - 数据库 redis 缓存/持久 [https://github.com/Go-redis/redis](https://github.com/Go-redis/redis)
 - 路由 [https://github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter)
 - json解析 jsoniter [github.com/json-iterator/go](github.com/json-iterator/go)
+- 跨平台打包：https://github.com/mitchellh/gox
+- 静态资源处理：https://github.com/rakyll/statik
+
+## 注意
+```
+# 修改静态文件/static  、 views/hero 需要先安装包的依赖，执行以下编译命令，更多用法可参考官方redame.md
+
+# https://github.com/rakyll/statik
+statik -src=xxxPath/go_movies/static -f 
+
+# https://github.com/shiyanhui/hero
+hero -source="./views/hero"
+```
+
+## 编译可执行文件(跨平台)
+```
+# 用法参考 https://github.com/mitchellh/gox
+# 生成文件可直接执行
+gox -osarch="linux/amd64" # Linux
+......
+
+```
 
 ## 目录结构参考beego设置
 
 ## TODO
-- [ ] 跨平台打包,模板路径不正确
+- [x] 跨平台编译,模板路径不正确
+  - 使用 https://github.com/rakyll/statik 处理 js、css、image等静态资源
+  - 使用 https://github.com/shiyanhui/hero 替换 html/template 模板引擎
+- [x] redis查询问题
+  - 缓存页面数据
+- [x] 增加配置文件读取
+  - 使用 https://github.com/spf13/viper
+- [ ] Docker 部署
 - [ ] goroutine 并发数控制
 - [ ] 爬取数据的完整性
-- [x] redis查询问题(缓存页面数据)
+
 
 ## Other
 许多Go的原理还没弄懂，有精力会慢慢深究下。写得很潦草，多多包涵。

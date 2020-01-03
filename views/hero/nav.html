@@ -1,0 +1,44 @@
+<div class="mainmenus container" id="nav_b">
+        <div class="mainmenu">
+            <div class="topnav">
+                <ul id="menus">
+
+                    <li class="menu-item
+                    <% if show["nav_link"] == "/" { %>
+                    <%= "current_page_item" %>
+                    <% } %> ">
+                    <a href="/">首页</a>
+                    </li>
+
+
+                    <% for _, category := range show["categories"].([]map[string]interface{}) { %>
+                        <li class="menu-item
+                        <% if category["link"].(string) == show["nav_link"] { %>
+                            <%= "current_page_item" %>
+                        <% } %> ">
+                    <a href="/?cate=<%= category["link"].(string) %> "><%= category["name"].(string) %></a>
+                    </li>
+                    <% } %>
+
+                    <li class="menu-item
+                    <% if show["nav_link"] == "/about" { %>
+                    <%= "current_page_item" %>
+                    <% } %> ">
+                    <a href="/about"> 关于 </a>
+                    </li>
+
+                </ul>
+                <div id="select_menu">
+                    <select onChange="document.location.href=this.options[this.selectedIndex].value;" id="select-menu-nav">
+                        <option value="#">导航菜单</option>
+                        <% for _, category := range show["categories"].([]map[string]interface{}) { %>
+                        <option   value="/?cate=<%= category["link"].(string) %> "><%= category["name"].(string) %></option>
+                        <% } %>
+
+                        <option   value="about"> 关于 </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>

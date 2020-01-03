@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/julienschmidt/httprouter"
+	"github.com/spf13/viper"
 	"go_movies/controller"
 )
 
@@ -20,6 +21,8 @@ type Route struct {
 type Routes []Route
 
 func AllRoutes() Routes {
+	spiderPath := viper.GetString(`app.spider_path`)
+	spiderPathName := viper.GetString(`app.spider_path_name`)
 	routes := Routes{
 		Route{"Index", "GET", "/", controller.Index},
 		Route{"Movie", "GET", "/movie", controller.Movie},
@@ -27,7 +30,7 @@ func AllRoutes() Routes {
 		Route{"Play", "GET", "/play", controller.Play},
 		Route{"About", "GET", "/about", controller.About},
 		Route{"Debug", "GET", "/debug", controller.Debug},
-		Route{"MoviesSpider", "GET", "/movies-spider", controller.GoSpider},
+		Route{spiderPathName, "GET", spiderPath, controller.GoSpider},
 	}
 	return routes
 }

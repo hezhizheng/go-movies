@@ -1,0 +1,42 @@
+
+    <div class="mainleft">
+        <ul id="post_container" class="masonry clearfix">
+
+            <% for _, movieLists := range show["movieLists"].([]services.MovieListStruct) { %>
+
+            <li class="post box row fixed-hight">
+                <div class="post_hover">
+                    <div class="thumbnail">
+                        <a href="/movie?link=<%= movieLists.Link %>" class="zoom" rel="bookmark" title="<%= movieLists.Name %>">
+                            <img
+                                src="/static/image/golang.png"
+                                data-url="<%= movieLists.Cover %>"
+                                onerror="this.src='/static/image/golang.png'"
+                                alt="<%= movieLists.Name %>" >
+                        </a>
+                    </div>
+                    <div class="article">
+                        <h2><a href="/movie?link=<%= movieLists.Link %>" rel="bookmark" title="<%= movieLists.Name %>"><%= movieLists.Name %></a></h2>
+                        <div class="entry_post">
+                            <p>
+
+                               主演： <%= movieLists.Starring %>                            </p>
+                        </div>
+
+                        <div class="arrow-catpanel-top">&nbsp;</div>
+                    </div>
+                    <div class="info">
+                        <span class="info_date info_ico"><%= movieLists.UpdatedAt %></span>
+
+                        <span class="info_category info_ico"><%= movieLists.Category %></span>
+                    </div>
+                </div>
+            </li>
+
+            <% } %>
+
+        </ul>
+        <div class="clear"></div>
+    </div>
+
+

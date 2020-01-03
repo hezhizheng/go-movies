@@ -1,16 +1,12 @@
 package controller
 
 import (
+	"bytes"
 	"github.com/julienschmidt/httprouter"
 	"go_movies/services"
-	"html/template"
-	"log"
+	heroTpl "go_movies/views/hero"
 	"net/http"
 	"strconv"
-)
-
-var (
-	t = template.Must(template.ParseGlob("views/*.html"))
 )
 
 // 首页
@@ -76,7 +72,6 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	NewFilmKey := "detail_links:id:1"
 	NewTVKey := "detail_links:id:2"
 
-	// TODO 这个查询50个都会慢？？？
 	NewFilm := services.MovieListsRange(NewFilmKey, 0, 49)
 	NewTV := services.MovieListsRange(NewTVKey, 0, 49)
 
@@ -91,8 +86,10 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["next_status"] = nextStatus
 	show["nav_link"] = navLink
 
-	err := t.ExecuteTemplate(w, "index.html", show)
-	log.Println(err)
+	buffer := new(bytes.Buffer)
+	heroTpl.Index(show, buffer)
+	w.Write(buffer.Bytes())
+
 }
 
 func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -119,9 +116,9 @@ func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["new_tv"] = NewTV
 	show["nav_link"] = "/"
 
-	te2 := t.ExecuteTemplate(w, "movie_detail.html", show)
-
-	log.Println(te2)
+	buffer := new(bytes.Buffer)
+	heroTpl.MDetail(show, buffer)
+	w.Write(buffer.Bytes())
 }
 
 func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -134,11 +131,17 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["play_url"] = PlayUrl
 	show["type"] = PlayType
 
-	// 根据类型渲染不同模板
-	tplName := PlayType + ".html"
+	buffer := new(bytes.Buffer)
 
-	te2 := t.ExecuteTemplate(w, tplName, show)
-	log.Println(te2)
+	if PlayType == "mp4" {
+		heroTpl.Mp4(show, buffer)
+	} else if PlayType == "m3u8" {
+		heroTpl.M3u8(show, buffer)
+	} else {
+		heroTpl.Kuyun(show, buffer)
+	}
+
+	w.Write(buffer.Bytes())
 }
 
 func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -172,9 +175,9 @@ func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["new_tv"] = NewTV
 	show["nav_link"] = "/"
 
-	te2 := t.ExecuteTemplate(w, "search.html", show)
-
-	log.Println(te2, q)
+	buffer := new(bytes.Buffer)
+	heroTpl.Search(show, buffer)
+	w.Write(buffer.Bytes())
 }
 
 func About(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -189,7 +192,7 @@ func About(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	show["nav_link"] = "/about"
 
-	te2 := t.ExecuteTemplate(w, "about.html", show)
-
-	log.Println(te2)
+	buffer := new(bytes.Buffer)
+	heroTpl.About(show, buffer)
+	w.Write(buffer.Bytes())
 }

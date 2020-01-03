@@ -226,7 +226,7 @@ func SpiderOKMovies(cateUrl string) {
 			// todo 使用 goroutine 内存跟cpu消耗太高。 暂时没找到解决方案
 			ForeachPage(cateUrl, pageUrl)
 
-			// 完成一个分类删除所有页面缓存
+			// 完成一个分类删除所有缓存
 			if j == lastPageInt {
 				go DelAllListCacheKey()
 			}

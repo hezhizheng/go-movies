@@ -1,4 +1,4 @@
-{{ define "footer.html" }}
+
     <div class="clear"></div>
     <div id="footer">
         <div class="footnav container">
@@ -10,7 +10,7 @@
             </ul>
         </div>
         <div class="copyright">
-            <p> Copyright &copy; 2019 <a href=""><strong>
+            <p> Copyright &copy; 2019- <%=  time.Now().Format("2006") %> <a href=""><strong>
                         GoMovies     </strong><a href="javascript:;"></a><br>
 
             <p class="author"> power by <a href="https://hezhizheng.com" target="_blank" rel="external">hezhizheng.com</a></p>
@@ -54,7 +54,7 @@
         })();
     </script>
 
-    {{/*  延迟加载图片 */}}
+
     <script>
         function replaceImg(){
             $("img").each(function () {
@@ -74,4 +74,3 @@
             .search_m{max-width: 360px !important;margin: 0 auto;margin-bottom: 10px;display: block;}
         }
     </style>
-{{ end }}

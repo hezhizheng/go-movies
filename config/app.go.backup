@@ -1,0 +1,17 @@
+package config
+
+var AppJsonConfig = []byte(`
+{
+  "app": {
+    "port": ":8899",
+    "spider_path": "/movies-spider",
+    "spider_path_name": "MoviesSpider"
+  },
+  "redis": {
+    "port": "6379",
+    "addr": "localhost",
+    "password": "",
+    "db": 10
+  }
+}
+`)

@@ -1,4 +1,6 @@
 .idea
-/conf/app.conf
+/config/*.conf
+/config/*.json
+/config/*.go
 *.exe
 *.exe~

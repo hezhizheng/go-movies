@@ -1,4 +1,4 @@
-{{ define "sidebar.html" }}
+
     <div id="sidebar">
 
 
@@ -26,23 +26,23 @@
             </div>
             <div id="tab-content">
                 <ul class="">
-                    {{ range .new_film }}
+                    <% for _, new_film := range show["new_film"].([]services.MovieListStruct) { %>
                     <li>
-                        <a href='/movie?link={{ .Link }}'>
-                            {{ .Name }}
+                        <a href='/movie?link=<%= new_film.Link %>'>
+                            <%= new_film.Name %>
                         </a>
                     </li>
-                    {{ end }}
+                    <% } %>
 
                 </ul>
                 <ul class="hide">
-                    {{ range .new_tv }}
+                    <% for _, new_tv := range show["new_tv"].([]services.MovieListStruct) { %>
                     <li>
-                        <a href='/movie?link={{ .Link }}'>
-                            {{ .Name }}
+                        <a href='/movie?link=<%= new_tv.Link %>'>
+                            <%= new_tv.Name %>
                         </a>
                     </li>
-                    {{ end }}
+                    <% } %>
                 </ul>
                 <ul class="hide">
 
@@ -78,4 +78,3 @@
 
 
     </div>
-{{ end }}

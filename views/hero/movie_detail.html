@@ -1,0 +1,176 @@
+<%: func MDetail(show map[string]interface{}, buffer *bytes.Buffer) %>
+
+<%+ "header.html" %>
+
+<body class="custom-background">
+
+
+<%+ "body_head.html" %>
+
+<%+ "nav.html" %>
+
+
+	<div class="container">
+        		        <div class="row">
+			                <div class="subsidiary box">
+                    <div class="bulletin fourfifth">
+                        <span class="sixth">当前位置：</span>       <%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["type"].(string) %>              </div>
+                </div>
+                    </div>
+
+
+
+           <%+ "sidebar.html" %>
+
+
+
+      	<div class="mainleft" id="content">
+			<div class="article_container row  box">
+				<h1 class="info-name"><%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["name"] %></h1>
+                    <div class="article_info">
+                        <span class="info_author info_ico"></span>
+                        <span class="info_category info_ico"><a href="index6.html" title="查看剧情片中的全部文章" rel="category tag"><%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["type"].(string) %></a></span>
+                        <span class="info_date info_ico"><%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["update"].(string) %></span>
+                    </div>
+            	<div class="clear"></div>
+
+            <div class="context">
+				<div id="post_content">
+                    <p>
+                        <img
+                                src="/static/image/golang.png"
+                                data-url="<%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["cover"] %>"
+                                onerror="this.src='/static/image/golang.png'"
+                                alt="<%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["name"] %>" >
+
+                        <br>◎片　　名　<%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["name"] %>
+                        <br>◎别　　名　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["alias"].(string) %>)
+                        <br>◎年　　代　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["released"].(string) %>
+                        <br>◎产　　地　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["area"].(string)  %>
+                        <br>◎类　　别　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["type"].(string)  %>
+                        <br>◎语　　言　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["language"].(string)  %>
+                        <br>◎字　　幕　。。。
+                        <br>◎上映日期　。。。
+                        <br>◎片　　长　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["length"].(string)  %> 分钟
+                        <br>◎导　　演　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["director"].(string) %>
+                        <br>◎主　　演　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["starring"].(string) %>
+                    </p>
+                    <p>◎简　　介
+                        <br>
+                        <% if show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["vod_play_info"] != nil { %>
+                           <%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["vod_play_info"].(string) %>
+                        <% } %>
+                        <br>&nbsp;
+                    </p>
+
+                    <hr>
+
+</div>
+                &nbsp;               	<div class="clear"></div>
+
+<div class="widget box row">
+    <h3>播放地址 kuyun （无插件 极速播放）</h3>
+
+    <% if show["MovieDetail"].(map[string]interface{})["is_film"].(string) == "1" { %>
+
+    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["kuyun"].([]map[string]interface{}) { %>
+    <a title='在线播放' href="javascript:;" play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="kuyun" class="lBtn">
+        在线播放<%= MovieDetail["episode"].(string) %>
+    </a>
+
+    <% } %>
+
+    <% }else{ %>
+
+    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["kuyun"].([]map[string]interface{}) { %>
+    <a title='剧集' href="javascript:;"  play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="kuyun" class="lBtn">
+        第<%= MovieDetail["episode"].(string) %>集
+    </a>
+
+    <% } %>
+
+    <% } %>
+
+</div>
+
+<div class="widget box row">
+    <h3>播放地址 ckm3u8（无需安装插件，游览器需支持flash！）</h3>
+    <% if show["MovieDetail"].(map[string]interface{})["is_film"].(string) == "1" { %>
+
+    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["ckm3u8"].([]map[string]interface{}) { %>
+        <a title='在线播放' href="javascript:;"  play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="m3u8" class="lBtn">
+            在线播放<%= MovieDetail["episode"].(string) %>
+        </a>
+
+    <% } %>
+
+    <% }else{ %>
+
+    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["ckm3u8"].([]map[string]interface{}) { %>
+    <a title='剧集' href="javascript:;" play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="m3u8" class="lBtn">
+        第<%= MovieDetail["episode"].(string) %>集
+    </a>
+
+    <% } %>
+
+    <% } %>
+</div>
+
+<div class="widget box row">
+    <h3>播放地址 MP4（无需安装插件，可下载）</h3>
+
+    <% if show["MovieDetail"].(map[string]interface{})["is_film"].(string) == "1" { %>
+
+    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["download"].([]map[string]interface{}) { %>
+    <a title='在线播放' href="javascript:;" play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="mp4" class="lBtn">
+        在线播放<%= MovieDetail["episode"].(string) %>
+    </a>
+
+    <% } %>
+
+    <% }else{ %>
+
+    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["download"].([]map[string]interface{}) { %>
+    <a title='剧集' href="javascript:;"  play-link ="<%= MovieDetail["play_link"].(string) %>" play-type="mp4" class="lBtn">
+        第<%= MovieDetail["episode"].(string) %>集
+    </a>
+
+    <% } %>
+
+    <% } %>
+</div>
+
+            </div>
+		</div>
+
+    	<div>
+
+	</div>
+
+  </div>
+    </div>
+
+
+
+
+</body>
+
+<%+ "footer.html" %>
+
+<script>
+    $('.lBtn').on('click', function(){
+        let play_url = $(this).attr("play-link");
+        let play_type = $(this).attr("play-type");
+        layer.open({
+            type: 2,
+            title: $('.info-name').text() + " " + $(this).text(),
+            maxmin: true,
+            shadeClose: false, //点击遮罩关闭层
+            area :  ['100%', '100%'],
+            content: '/play?play_url=' + play_url + '&play_type=' + play_type
+            // content: play_url
+        });
+    });
+</script>
+
+</html>

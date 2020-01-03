@@ -1,0 +1,40 @@
+<%: func Search(show map[string]interface{}, buffer *bytes.Buffer) %>
+
+<%+ "header.html" %>
+
+<body class="custom-background">
+
+<%+ "body_head.html" %>
+
+<%+ "nav.html" %>
+
+
+<div class="container">
+
+    <div class="subsidiary row box">
+        <div class="bulletin fourfifth"> <span class="sixth">站点公告：</span>
+            <marquee class="fivesixth" direction="left" onmouseout="start();" onmouseover="stop();" scrollamount="2" scrolldelay="15;">
+                <script src="/static/js/thea2.js"></script>
+            </marquee>
+        </div>
+        <div class="bdshare_small fifth">
+        </div>
+    </div>
+
+    <%+ "sidebar.html" %>
+
+
+    <%+ "main_left.html" %>
+
+	</div>
+
+<div class="clear"></div>
+
+</body>
+
+
+<%+ "footer.html" %>
+
+
+
+</html>
