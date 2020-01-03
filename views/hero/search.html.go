@@ -343,7 +343,7 @@ func Search(show map[string]interface{}, buffer *bytes.Buffer) {
 	buffer.WriteString(` <a href=""><strong>
                         GoMovies     </strong><a href="javascript:;"></a><br>
 
-            <p class="author"> power by <a href="https://hezhizheng.com" target="_blank" rel="external">hezhizheng.com</a></p>
+            <p class="author"> power by <a href="https://hzz.cool" target="_blank" rel="external">hzz.cool</a></p>
         </div>
     </div>
 
