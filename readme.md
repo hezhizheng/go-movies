@@ -56,13 +56,21 @@ hero -source="./views/hero"
 ```
 
 ## 编译可执行文件(跨平台)
-```
-# 用法参考 https://github.com/mitchellh/gox
-# 生成文件可直接执行
-gox -osarch="linux/amd64" # Linux
-......
 
 ```
+# 用法参考 https://github.com/mitchellh/gox
+# 生成文件可直接执行 Linux
+gox -osarch="linux/amd64" 
+......
+```
+- 提供win64、Linux64的已编译的文件下载
+
+`使用请确保redis为开启状态，默认使用 DB10，启动成功之后先执行爬虫 http://127.0.0.1:8899/movies-spider`
+
+[微云](https://share.weiyun.com/5iLGksd)  （推荐微云+[proxyee-down](https://github.com/proxyee-down-org/proxyee-down),  原来go版本已经在开发中了...）
+
+![img](https://i.loli.net/2020/01/04/OxsqRunwliy31zN.png)
+
 
 ## 目录结构参考beego设置
 
