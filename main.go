@@ -39,6 +39,7 @@ func TraversingRouter() *httprouter.Router {
 	return router
 }
 
+// 初始化配置文件
 func init() {
 	viper.SetConfigType("json") // 设置配置文件的类型
 
@@ -54,6 +55,18 @@ func init() {
 	}
 }
 
+// 首次启动自动开启爬虫
+func firstSpider()  {
+
+	hasHK := utils.RedisDB.Exists("detail_links:hk").Val()
+	log.Println("hasHK",hasHK)
+	// 不存在首页的key 则认为是第一次启动
+	if hasHK == 0 {
+		// 开启爬虫
+		go utils.StartSpider()
+	}
+}
+
 func main() {
 	// 注册所有路由
 	router := TraversingRouter()
@@ -65,5 +78,9 @@ func main() {
 	port := viper.GetString(`app.port`)
 	log.Println("监听端口", "http://127.0.0.1"+port)
 
+	firstSpider()
+
 	log.Println(http.ListenAndServe(port, router))
+
+
 }

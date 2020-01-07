@@ -15,7 +15,7 @@ cd go-movies
 # 生成配置文件(默认使用redis db10的库，可自行修改app.go中的配置)
 cp ./config/app.go.backup ./config/app.go
 
-# 启动
+# 启动 (首次启动会自动开启爬虫任务)
 go run main.go 
 or
 # 安装 bee 工具
