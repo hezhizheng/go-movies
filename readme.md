@@ -71,6 +71,29 @@ gox -osarch="linux/amd64"
 
 ![img](https://i.loli.net/2020/01/04/OxsqRunwliy31zN.png)
 
+## Docker 部署
+
+```
+# 安装 redis 镜像(已有可以忽略) 
+sudo docker pull redis:latest
+
+# 启动redis容器
+# 根据实际情况分配端口 -p 宿主机端口:容器端口
+sudo docker run -itd --name redis-test -p 6379:6379 redis
+
+# 修改 app.go 的redis 连接地址为容器名称
+"addr":"redis-test"
+
+# 编译go-movies
+gox -osarch="linux/amd64"
+
+# 构造镜像
+sudo docker build -t go-movies-docker-scratch .
+
+# 启动容器
+sudo docker run --link redis-test:redis -p 8899:8899 -d go-movies-docker-scratch
+
+```
 
 ## 目录结构参考beego设置
 
@@ -82,7 +105,7 @@ gox -osarch="linux/amd64"
   - 缓存页面数据
 - [x] 增加配置文件读取
   - 使用 https://github.com/spf13/viper
-- [ ] Docker 部署
+- [x] Docker 部署
 - [ ] goroutine 并发数控制
 - [ ] 爬取数据的完整性
 

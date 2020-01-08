@@ -17,7 +17,7 @@ func InitRedisDB() (err error) {
 
 	_, err = RedisDB.Ping().Result()
 	if err != nil {
-		return err
+		panic(err)
 	}
 	return nil
 }
