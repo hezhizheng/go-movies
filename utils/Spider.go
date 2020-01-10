@@ -374,6 +374,7 @@ func MoviesInfo(url string) MoviesDetail {
 			playLink := element.ChildAttr("input", "value")
 
 			Episode := strconv.Itoa(i + 1)
+			Episode = transformEpisode(Episode, element.Text)
 
 			if strings.Index(playLink, "m3u8") == -1 {
 				kuyun := map[string]string{
@@ -399,6 +400,7 @@ func MoviesInfo(url string) MoviesDetail {
 			playLink := element.ChildAttr("input", "value")
 
 			Episode := strconv.Itoa(i + 1)
+			Episode = transformEpisode(Episode, element.Text)
 
 			if strings.Index(playLink, "m3u8") == -1 {
 				kuyun := map[string]string{
@@ -423,6 +425,7 @@ func MoviesInfo(url string) MoviesDetail {
 			playLink := element.ChildAttr("input", "value")
 
 			Episode := strconv.Itoa(i + 1)
+			Episode = transformEpisode(Episode, element.Text)
 
 			download := map[string]string{
 				"episode":   Episode,
@@ -575,4 +578,17 @@ func DelAllListCacheKey() {
 	for _, val := range AllListCacheKey {
 		RedisDB.Del(val)
 	}
+}
+
+// 只处理国语跟广东话、其他语言暂不处理
+func transformEpisode(episode, linkName string) string {
+
+	if strings.Index(linkName, "粤语$") > 0 {
+		episode = "粤语"
+	}
+	if strings.Index(linkName, "国语$") > 0 {
+		episode = "国语"
+	}
+
+	return episode
 }

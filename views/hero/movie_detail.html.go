@@ -288,7 +288,7 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
 	buffer.WriteString(`
                         <br>◎别　　名　`)
 	hero.EscapeHTML(show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["alias"].(string), buffer)
-	buffer.WriteString(`)
+	buffer.WriteString(`
                         <br>◎年　　代　`)
 	hero.EscapeHTML(show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["released"].(string), buffer)
 	buffer.WriteString(`
@@ -338,7 +338,7 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
     <a title='在线播放' href="javascript:;" play-link ="`)
 			hero.EscapeHTML(MovieDetail["play_link"].(string), buffer)
 			buffer.WriteString(`"  play-type="kuyun" class="lBtn">
-        在线播放`)
+        在线播放 `)
 			hero.EscapeHTML(MovieDetail["episode"].(string), buffer)
 			buffer.WriteString(`
     </a>
@@ -372,7 +372,7 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
         <a title='在线播放' href="javascript:;"  play-link ="`)
 			hero.EscapeHTML(MovieDetail["play_link"].(string), buffer)
 			buffer.WriteString(`"  play-type="m3u8" class="lBtn">
-            在线播放`)
+            在线播放 `)
 			hero.EscapeHTML(MovieDetail["episode"].(string), buffer)
 			buffer.WriteString(`
         </a>
@@ -406,7 +406,7 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
     <a title='在线播放' href="javascript:;" play-link ="`)
 			hero.EscapeHTML(MovieDetail["play_link"].(string), buffer)
 			buffer.WriteString(`"  play-type="mp4" class="lBtn">
-        在线播放`)
+        在线播放 `)
 			hero.EscapeHTML(MovieDetail["episode"].(string), buffer)
 			buffer.WriteString(`
     </a>
