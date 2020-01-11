@@ -217,6 +217,29 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
 	buffer.WriteString(`
                 </ul>
                 <ul class="hide">
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-26855.html'>
+                            表姐，你好嘢！
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-26856.html'>
+                            表姐，你好嘢！2
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-26857.html'>
+                            表姐，你好嘢！3之大人驾到
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-26858.html'>
+                            表姐，你好嘢！4之情不自禁
+                        </a>
+                    </li>
 
                     <li>
                         <a href='/movie?link=/?m=vod-detail-id-14334'>
@@ -372,10 +395,19 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
         <div class="copyright">
             <p> Copyright &copy; 2019- `)
 	hero.EscapeHTML(time.Now().Format("2006"), buffer)
-	buffer.WriteString(` <a href=""><strong>
-                        GoMovies     </strong><a href="javascript:;"></a><br>
+	buffer.WriteString(`
+                <a href="">
+                    <strong> GoMovies </strong>
+                </a>
+            </p>
 
-            <p class="author"> power by <a href="https://hzz.cool" target="_blank" rel="external">hzz.cool</a></p>
+            <p> 本站所有视频均由程序自动采集而来，版权归原创者所有，如果侵犯了你的权益，请通知我删除侵权内容，谢谢合作。 </p>
+
+            <p class="author"> power by
+                <a href="https://hzz.cool" target="_blank" rel="external">
+                    hzz.cool
+                </a>
+            </p>
         </div>
     </div>
 

@@ -583,10 +583,10 @@ func DelAllListCacheKey() {
 // 只处理国语跟广东话、其他语言暂不处理
 func transformEpisode(episode, linkName string) string {
 
-	if strings.Index(linkName, "粤语$") > 0 {
+	if strings.Contains(linkName, "粤语$") == true {
 		episode = "粤语"
 	}
-	if strings.Index(linkName, "国语$") > 0 {
+	if strings.Contains(linkName, "国语$") == true {
 		episode = "国语"
 	}
 
