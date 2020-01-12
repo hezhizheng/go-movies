@@ -284,7 +284,7 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
 	buffer.WriteString(`</h1>
                     <div class="article_info">
                         <span class="info_author info_ico"></span>
-                        <span class="info_category info_ico"><a href="index6.html" title="查看剧情片中的全部文章" rel="category tag">`)
+                        <span class="info_category info_ico"><a href="" title="查看剧情片中的全部文章" rel="category tag">`)
 	hero.EscapeHTML(show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["type"].(string), buffer)
 	buffer.WriteString(`</a></span>
                         <span class="info_date info_ico">`)
@@ -324,8 +324,6 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
                         <br>◎语　　言　`)
 	hero.EscapeHTML(show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["language"].(string), buffer)
 	buffer.WriteString(`
-                        <br>◎字　　幕　。。。
-                        <br>◎上映日期　。。。
                         <br>◎片　　长　`)
 	hero.EscapeHTML(show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["length"].(string), buffer)
 	buffer.WriteString(` 分钟

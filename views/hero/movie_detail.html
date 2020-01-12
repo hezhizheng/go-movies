@@ -29,7 +29,7 @@
 				<h1 class="info-name"><%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["name"] %></h1>
                     <div class="article_info">
                         <span class="info_author info_ico"></span>
-                        <span class="info_category info_ico"><a href="index6.html" title="查看剧情片中的全部文章" rel="category tag"><%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["type"].(string) %></a></span>
+                        <span class="info_category info_ico"><a href="" title="查看剧情片中的全部文章" rel="category tag"><%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["type"].(string) %></a></span>
                         <span class="info_date info_ico"><%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["update"].(string) %></span>
                     </div>
             	<div class="clear"></div>
@@ -49,8 +49,6 @@
                         <br>◎产　　地　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["area"].(string)  %>
                         <br>◎类　　别　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["type"].(string)  %>
                         <br>◎语　　言　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["language"].(string)  %>
-                        <br>◎字　　幕　。。。
-                        <br>◎上映日期　。。。
                         <br>◎片　　长　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["length"].(string)  %> 分钟
                         <br>◎导　　演　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["director"].(string) %>
                         <br>◎主　　演　<%= show["MovieDetail"].(map[string]interface{})["detail"].(map[string]interface{})["starring"].(string) %>
