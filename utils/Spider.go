@@ -16,8 +16,9 @@ import (
 // 爬取网站的域名
 //const host = "http://www.jisudhw.com"
 
-//const host = "http://www.okzy.co"
-const host = "http://www.okzyw.com"
+const host = "http://www.okzy.co"
+
+//const host = "http://www.okzyw.com"
 
 // redis key
 
@@ -367,6 +368,13 @@ func MoviesInfo(url string) MoviesDetail {
 		quality := e.ChildText("div .vodh span")
 		score := e.ChildText("div .vodh label")
 
+		_type := ""
+		e.ForEach("div .vodinfobox ul li", func(i int, element *colly.HTMLElement) {
+			if i == 3 {
+				_type = element.ChildText("span")
+			}
+		})
+
 		// 有些页面 1 是 ckm3u8  2 是 kuyun  wtf!
 
 		e.ForEach("div #1 ul li", func(i int, element *colly.HTMLElement) {
@@ -374,7 +382,7 @@ func MoviesInfo(url string) MoviesDetail {
 			playLink := element.ChildAttr("input", "value")
 
 			Episode := strconv.Itoa(i + 1)
-			Episode = transformEpisode(Episode, element.Text)
+			Episode = transformEpisode(_type, Episode, element.Text)
 
 			if strings.Index(playLink, "m3u8") == -1 {
 				kuyun := map[string]string{
@@ -400,7 +408,7 @@ func MoviesInfo(url string) MoviesDetail {
 			playLink := element.ChildAttr("input", "value")
 
 			Episode := strconv.Itoa(i + 1)
-			Episode = transformEpisode(Episode, element.Text)
+			Episode = transformEpisode(_type, Episode, element.Text)
 
 			if strings.Index(playLink, "m3u8") == -1 {
 				kuyun := map[string]string{
@@ -425,7 +433,7 @@ func MoviesInfo(url string) MoviesDetail {
 			playLink := element.ChildAttr("input", "value")
 
 			Episode := strconv.Itoa(i + 1)
-			Episode = transformEpisode(Episode, element.Text)
+			Episode = transformEpisode(_type, Episode, element.Text)
 
 			download := map[string]string{
 				"episode":   Episode,
@@ -458,9 +466,7 @@ func MoviesInfo(url string) MoviesDetail {
 		})
 
 		// 类型
-		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[4]/span", func(e *colly.XMLElement) {
-			detail["type"] = e.Text
-		})
+		detail["type"] = _type
 
 		// 地区
 		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[5]/span", func(e *colly.XMLElement) {
@@ -580,14 +586,20 @@ func DelAllListCacheKey() {
 	}
 }
 
-// 只处理国语跟广东话、其他语言暂不处理
-func transformEpisode(episode, linkName string) string {
+func isFilm(_type string) bool {
+	return strings.Contains(_type, "片")
+}
 
-	if strings.Contains(linkName, "粤语$") == true {
-		episode = "粤语"
-	}
-	if strings.Contains(linkName, "国语$") == true {
-		episode = "国语"
+// 电影只处理国语跟广东话、其他语言暂不处理
+func transformEpisode(_type, episode, linkName string) string {
+
+	if isFilm(_type) == true {
+		if strings.Contains(linkName, "粤语") == true {
+			episode = "粤语"
+		}
+		if strings.Contains(linkName, "国语") == true {
+			episode = "国语"
+		}
 	}
 
 	return episode
