@@ -223,6 +223,18 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
                     </li>
 
                     <li>
+                        <a href='/movie?link=/?m=vod-detail-id-24088.html'>
+                            维多利亚一号
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='/movie?link=/?m=vod-detail-id-14876.html'>
+                            爱人同志
+                        </a>
+                    </li>
+
+                    <li>
                         <a href='/movie?link=/?m=vod-detail-id-26856.html'>
                             表姐，你好嘢！2
                         </a>

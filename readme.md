@@ -2,6 +2,8 @@
 
 > 一个基于golang的爬虫电影站，效果站： [https://go-movies.hezhizheng.com/](https://go-movies.hezhizheng.com/)
 
+> 基本满足日常看片需求
+
 ![img](https://i.loli.net/2019/12/05/Qzqv4HWoMp2DByi.png)
 
 ## 使用安装 
