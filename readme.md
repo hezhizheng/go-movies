@@ -1,6 +1,6 @@
 # Go Movies
 
-> 一个基于golang的爬虫电影站，效果站： [https://go-movies.hezhizheng.com/](https://go-movies.hezhizheng.com/)
+> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/)
 
 > 基本满足日常看片需求
 
