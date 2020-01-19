@@ -56,17 +56,24 @@ type MoviesDetail struct {
 
 var (
 	Smutex sync.Mutex
+	wg     sync.WaitGroup
 )
 
 func StartSpider() {
+
+	antPoolStartSpider, _ := ants.NewPool(10)
 	// 获取所有分类
 	Categories := SpiderOKCategories()
 	for _, v := range Categories {
-
 		cateUrl := v.Link
+		wg.Add(1)
 		// 爬取所有主类下面的商品
-		go SpiderOKMovies(cateUrl)
+		antPoolStartSpider.Submit(func() {
+			SpiderOKMovies(cateUrl)
+			wg.Done()
+		})
 	}
+	wg.Wait()
 }
 
 // 爬取所有类别
@@ -168,12 +175,8 @@ func SpiderOKCategories() []Categories {
 	return Cate
 }
 
-var wg sync.WaitGroup
-
 // 爬取所有类别的电影
 func SpiderOKMovies(cateUrl string) {
-
-	defer ants.Release()
 
 	c := colly.NewCollector(
 		colly.Async(true),
@@ -213,26 +216,26 @@ func SpiderOKMovies(cateUrl string) {
 
 		lastPageInt = lastPage // todo lastPage
 
-		// todo 有时间在研究一下这个用法
-		p, _ := ants.NewPoolWithFunc(100, func(i interface{}) {
-			wg.Done()
-		})
-		defer p.Release()
+		antPoolForeachPage, _ := ants.NewPool(10)
 
 		for j := 1; j <= lastPageInt; j++ {
 
-			wg.Add(1)
 			pageUrl := CategoryToPageUrl(cateUrl, strconv.Itoa(j))
 
-			// todo 使用 goroutine 内存跟cpu消耗太高。 暂时没找到解决方案
-			ForeachPage(cateUrl, pageUrl)
+			wg.Add(1)
+			// 爬取所有主类下面的电影
+			antPoolForeachPage.Submit(func() {
+				ForeachPage(cateUrl, pageUrl)
+				wg.Done()
+			})
 
 			// 完成一个分类删除所有缓存
 			if j == lastPageInt {
-				go DelAllListCacheKey()
+				DelAllListCacheKey()
 			}
 		}
 		wg.Wait()
+
 	})
 
 	visitError := c.Visit(host + cateUrl)
@@ -311,7 +314,7 @@ func ForeachPage(cateUrl string, url string) {
 			}
 
 			// 获取详情
-			go MoviesInfo(link)
+			MoviesInfo(link)
 		}
 	})
 

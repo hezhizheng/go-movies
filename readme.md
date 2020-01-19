@@ -33,9 +33,9 @@ http://127.0.0.1:8899
 ```
 
 ### 开启爬虫
-- 直接访问链接http://127.0.0.1:8899/movies-spider(开启定时任务，定时爬取就好)
-- 消耗：Windows 下 cup 10% 左右，内存 30mb 左右(爬虫完毕都会降下来) 
-- 网络正常的情况下，爬虫完毕耗时大概21分钟左右（存在部分资源爬取失败的情况）
+- 直接访问链接 http://127.0.0.1:8899/movies-spider (开启定时任务，定时爬取就好)
+- 消耗：Windows 下 cup 10% 左右，内存 40mb 左右
+- ~~网络正常的情况下，爬虫完毕耗时大概21分钟左右（存在部分资源爬取失败的情况）~~
 
 ## Tools
 - [https://github.com/gocolly/colly](https://github.com/gocolly/colly) 爬虫框架
@@ -65,7 +65,7 @@ hero -source="./views/hero"
 gox -osarch="linux/amd64" 
 ......
 ```
-- 提供win64、Linux64的已编译的文件下载
+- ~~提供win64、Linux64的已编译的文件下载~~ （请自行编译）
 
 `使用请确保redis为开启状态，默认使用 DB10，启动成功之后先执行爬虫 http://127.0.0.1:8899/movies-spider`
 
@@ -108,7 +108,8 @@ sudo docker run --link redis-test:redis -p 8899:8899 -d go-movies-docker-scratch
 - [x] 增加配置文件读取
   - 使用 https://github.com/spf13/viper
 - [x] Docker 部署
-- [ ] goroutine 并发数控制
+- [x] goroutine 并发数控制
+  - 使用 https://github.com/panjf2000/ants
 - [ ] 爬取数据的完整性
 
 

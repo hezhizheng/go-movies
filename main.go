@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"github.com/julienschmidt/httprouter"
+	"github.com/panjf2000/ants/v2"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/viper"
 	"go_movies/config"
@@ -56,13 +57,14 @@ func init() {
 }
 
 // 首次启动自动开启爬虫
-func firstSpider()  {
+func firstSpider() {
 
 	hasHK := utils.RedisDB.Exists("detail_links:hk").Val()
-	log.Println("hasHK",hasHK)
+	log.Println("hasHK", hasHK)
 	// 不存在首页的key 则认为是第一次启动
 	if hasHK == 0 {
 		// 开启爬虫
+		defer ants.Release()
 		go utils.StartSpider()
 	}
 }
@@ -81,6 +83,5 @@ func main() {
 	firstSpider()
 
 	log.Println(http.ListenAndServe(port, router))
-
 
 }
