@@ -1,5 +1,11 @@
 package config
 
+/**
+参数说明：
+app.spider_path: 爬虫路由
+app.spider_path_name: 爬虫路由名称
+cron.timing_spider: 定时爬虫的CRON表达式
+*/
 var AppJsonConfig = []byte(`
 {
   "app": {
@@ -12,6 +18,9 @@ var AppJsonConfig = []byte(`
     "addr": "localhost",
     "password": "",
     "db": 10
+  },
+  "cron": {
+     "timing_spider": "0 0 1 * * ?"
   }
 }
 `)

@@ -17,6 +17,7 @@ require (
 	github.com/goinggo/mapstructure v0.0.0-20140717182941-194205d9b4a9 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/howeyc/fsnotify v0.9.0 // indirect
+	github.com/jasonlvhit/gocron v0.0.0-20191228163020-98b59b546dee
 	github.com/json-iterator/go v1.1.8
 	github.com/jteeuwen/go-bindata v3.0.8-0.20180305030458-6025e8de665b+incompatible // indirect
 	github.com/julienschmidt/httprouter v1.3.0
@@ -24,6 +25,7 @@ require (
 	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/panjf2000/ants/v2 v2.2.2
 	github.com/rakyll/statik v0.1.6
+	github.com/robfig/cron/v3 v3.0.0
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/shiyanhui/hero v0.0.2
 	github.com/spf13/viper v1.6.1

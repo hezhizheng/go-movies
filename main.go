@@ -82,6 +82,9 @@ func main() {
 
 	firstSpider()
 
+	// 启动定时爬虫任务
+	utils.TimingSpider()
+
 	log.Println(http.ListenAndServe(port, router))
 
 }
