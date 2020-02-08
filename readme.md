@@ -2,7 +2,7 @@
 
 > golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/)
 
-> 基本满足日常看片需求
+> 内置自动爬虫，基本满足日常看片需求。
 
 ![img](https://i.loli.net/2019/12/05/Qzqv4HWoMp2DByi.png)
 
