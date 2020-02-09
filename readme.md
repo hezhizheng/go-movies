@@ -74,7 +74,7 @@ gox -osarch="linux/amd64"
 
 ![img](https://i.loli.net/2020/01/04/OxsqRunwliy31zN.png)
 
-## Docker 部署
+## Docker 部署（使用docker-compose可直接忽略该步骤）
 
 ```
 # 安装 redis 镜像(已有可以忽略) 
@@ -96,6 +96,20 @@ sudo docker build -t go-movies-docker-scratch .
 # 启动容器
 sudo docker run --link redis-test:redis -p 8899:8899 -d go-movies-docker-scratch
 
+```
+
+## docker-compose 一键启动
+```
+# 修改 app.go 的redis 连接地址为容器名称，这里需要跟docker-compose.yml中保持一致
+"addr":"redis-test"
+
+# 编译go-movies
+gox -osarch="linux/amd64"
+
+# 运行
+sudo docker-compose up -d
+
+打开游览器访问 http://127.0.0.1:8899 即可看见网站效果
 ```
 
 ## 目录结构参考beego设置
