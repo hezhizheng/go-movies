@@ -135,6 +135,18 @@ func Search(show map[string]interface{}, buffer *bytes.Buffer) {
         </div>
         <div class="clear"></div>
     </div>
+
+
+<div class="search_m box row">
+    <div class="search_site" style="width: 100%;">
+        <form method="get" name="searchform" id="searchform" action="/search">
+            <input type="submit" value="" id="searchsubmit" class="button">
+            <label><span>请输入搜索内容，仅支持电影名称</span>
+                <input type="text" class="search-s" name="q" required>
+            </label>
+        </form>
+    </div>
+</div>
 `)
 	buffer.WriteString(`
 

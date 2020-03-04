@@ -67,7 +67,7 @@ func StartSpider() {
 	for _, v := range Categories {
 		cateUrl := v.Link
 		wg.Add(1)
-		// 爬取所有主类下面的商品
+		// 爬取所有主类下面的电影
 		antPoolStartSpider.Submit(func() {
 			SpiderOKMovies(cateUrl)
 			wg.Done()
