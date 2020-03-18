@@ -1,0 +1,85 @@
+<%: func Play(show map[string]interface{}, buffer *bytes.Buffer) %>
+
+
+<%+ "header.html" %>
+
+<body class="custom-background">
+
+<%+ "body_head.html" %>
+
+<%+ "nav.html" %>
+
+<style>
+    .video {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+    .video iframe,
+    .video object,
+    .video embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .lBtn_h {
+        background-color: red !important;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="subsidiary box">
+            <div class="bulletin fourfifth">
+                <span class="sixth">当前位置：</span> 视频播放器
+            </div>
+        </div>
+    </div>
+
+    <div class="mainleft" id="content">
+        <div class="article_container row  box" style="padding:0px;">
+
+            <div class="context">
+
+
+                <div id="post_content" style="padding:0px;">
+                    <div class="video">
+                        <iframe id="real_play" width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
+                                frameborder="0" scrolling="no"
+                                src=""></iframe>
+                    </div>
+                </div>
+                &nbsp;
+                <div class="clear"></div>
+                <div class="widget box row">
+                    <h3>播放地址</h3>
+
+                    <a href="https://www.6vdy.org/e/DownSys/play/?classid=6&amp;id=12816&amp;bf=0&amp;pathid1=212"
+                       target="_self" class="lBtn ">
+                        第4部国22 </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div>
+
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+
+<%+ "footer.html" %>
+
+<script>
+    document.getElementById("real_play").src="//" +location.host + "/play?play_url=<%= show["play_url"].(string) %>&play_type=<%= show["type"].(string) %>";
+    // document.getElementById("real_play").src="<%= show["play_url"].(string) %>";
+</script>
+
+</html>

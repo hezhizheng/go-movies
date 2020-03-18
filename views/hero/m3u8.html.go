@@ -17,24 +17,29 @@ func M3u8(show map[string]interface{}, buffer *bytes.Buffer) {
     <meta charset="UTF-8">
     <title>play</title>
     <meta name="referrer" content="never">
-    <script type="text/javascript" src="/static/org/ckplayer/ckplayer/ckplayer.js"></script>
+
+    <link href="//cdn.bootcss.com/video.js/7.6.0/alt/video-js-cdn.min.css" rel="stylesheet">
 </head>
 <body>
 
-<div id="video" style="width:100%;height:100%;"></div>
-<script type="text/javascript">
-    var videoObject = {
-        container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
-        variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-        flashplayer:false,//如果强制使用flashplayer则设置成true
-        video:"`)
+<video id=example-video width="100%" height="100%" class="video-js vjs-default-skin" controls preload="none">
+    <source
+            src="`)
 	hero.EscapeHTML(show["play_url"].(string), buffer)
-	buffer.WriteString(`" //视频地址
-    };
-    var player=new ckplayer(videoObject);
-</script>
+	buffer.WriteString(`"
+            type="application/x-mpegURL">
+</video>
+
 
 </body>
+
+<script src="//cdn.bootcss.com/video.js/7.6.0/alt/video.core.min.js"></script>
+<script src="//cdn.bootcss.com/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+
+<script>
+    var player = videojs('example-video');
+    player.play();
+</script>
 </html>
 `)
 
