@@ -159,15 +159,10 @@
     $('.lBtn').on('click', function(){
         let play_url = $(this).attr("play-link");
         let play_type = $(this).attr("play-type");
-        layer.open({
-            type: 2,
-            title: $('.info-name').text() + " " + $(this).text(),
-            maxmin: true,
-            shadeClose: false, //点击遮罩关闭层
-            area :  ['100%', '100%'],
-            content: '/play?play_url=' + play_url + '&play_type=' + play_type
-            // content: play_url
-        });
+
+        let link = "<%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["link"] %>";
+
+        window.open("//" +location.host + '/play?play_url=' + play_url + '&play_type=' + play_type + '&real_play=1'+'&link='+ link);
     });
 </script>
 

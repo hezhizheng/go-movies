@@ -54,12 +54,77 @@
                 </div>
                 &nbsp;
                 <div class="clear"></div>
-                <div class="widget box row">
-                    <h3>播放地址</h3>
 
-                    <a href="https://www.6vdy.org/e/DownSys/play/?classid=6&amp;id=12816&amp;bf=0&amp;pathid1=212"
-                       target="_self" class="lBtn ">
-                        第4部国22 </a>
+                <div class="widget box row">
+                    <h3>播放地址 kuyun （无插件 极速播放）</h3>
+
+                    <% if show["MovieDetail"].(map[string]interface{})["is_film"].(string) == "1" { %>
+
+                    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["kuyun"].([]map[string]interface{}) { %>
+                    <a title='在线播放' href="javascript:;" play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="kuyun" class="lBtn">
+                    在线播放 <%= MovieDetail["episode"].(string) %>
+                    </a>
+
+                    <% } %>
+
+                    <% }else{ %>
+
+                    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["kuyun"].([]map[string]interface{}) { %>
+                    <a title='剧集' href="javascript:;"  play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="kuyun" class="lBtn">
+                    第<%= MovieDetail["episode"].(string) %>集
+                    </a>
+
+                    <% } %>
+
+                    <% } %>
+
+                </div>
+
+                <div class="widget box row">
+                    <h3>播放地址 ckm3u8（无需安装插件，游览器需支持flash！）</h3>
+                    <% if show["MovieDetail"].(map[string]interface{})["is_film"].(string) == "1" { %>
+
+                    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["ckm3u8"].([]map[string]interface{}) { %>
+                    <a title='在线播放' href="javascript:;"  play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="m3u8" class="lBtn">
+                    在线播放 <%= MovieDetail["episode"].(string) %>
+                    </a>
+
+                    <% } %>
+
+                    <% }else{ %>
+
+                    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["ckm3u8"].([]map[string]interface{}) { %>
+                    <a title='剧集' href="javascript:;" play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="m3u8" class="lBtn">
+                    第<%= MovieDetail["episode"].(string) %>集
+                    </a>
+
+                    <% } %>
+
+                    <% } %>
+                </div>
+
+                <div class="widget box row">
+                    <h3>播放地址 MP4（无需安装插件，可下载）</h3>
+
+                    <% if show["MovieDetail"].(map[string]interface{})["is_film"].(string) == "1" { %>
+
+                    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["download"].([]map[string]interface{}) { %>
+                    <a title='在线播放' href="javascript:;" play-link ="<%= MovieDetail["play_link"].(string) %>"  play-type="mp4" class="lBtn">
+                    在线播放 <%= MovieDetail["episode"].(string) %>
+                    </a>
+
+                    <% } %>
+
+                    <% }else{ %>
+
+                    <% for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["download"].([]map[string]interface{}) { %>
+                    <a title='剧集' href="javascript:;"  play-link ="<%= MovieDetail["play_link"].(string) %>" play-type="mp4" class="lBtn">
+                    第<%= MovieDetail["episode"].(string) %>集
+                    </a>
+
+                    <% } %>
+
+                    <% } %>
                 </div>
             </div>
 
@@ -80,6 +145,17 @@
 <script>
     document.getElementById("real_play").src="//" +location.host + "/play?play_url=<%= show["play_url"].(string) %>&play_type=<%= show["type"].(string) %>";
     // document.getElementById("real_play").src="<%= show["play_url"].(string) %>";
+</script>
+
+<script>
+    $('.lBtn').on('click', function(){
+        let play_url = $(this).attr("play-link");
+        let play_type = $(this).attr("play-type");
+
+        let link = "<%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["link"] %>";
+
+        window.location.href = "//" +location.host + '/play?play_url=' + play_url + '&play_type=' + play_type + '&real_play=1'+'&link='+ link;
+    });
 </script>
 
 </html>

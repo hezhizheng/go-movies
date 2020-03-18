@@ -142,6 +142,9 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	if RealPlay == "1" {
 		Categories := services.AllCategoryDate()
+		link := r.URL.Query()["link"][0]
+		MovieDetail := services.MovieDetail(link)
+		show["MovieDetail"] = MovieDetail
 		show["categories"] = Categories
 		heroTpl.Play(show, buffer)
 	} else if PlayType == "mp4" {
