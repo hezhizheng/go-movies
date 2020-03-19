@@ -16,9 +16,9 @@ import (
 // 爬取网站的域名
 //const host = "http://www.jisudhw.com"
 
-const host = "http://www.okzy.co"
+//const host = "http://www.okzy.co"
 
-//const host = "http://www.okzyw.com"
+const host = "http://www.okzyw.com"
 
 // redis key
 
