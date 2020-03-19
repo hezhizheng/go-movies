@@ -409,7 +409,7 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
 </div>
 
 <div class="widget box row">
-    <h3>播放地址 ckm3u8（无需安装插件，游览器需支持flash！）</h3>
+    <h3>播放地址 ckm3u8（无插件 极速播放）</h3>
     `)
 	if show["MovieDetail"].(map[string]interface{})["is_film"].(string) == "1" {
 		for _, MovieDetail := range show["MovieDetail"].(map[string]interface{})["ckm3u8"].([]map[string]interface{}) {
