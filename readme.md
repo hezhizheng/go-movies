@@ -1,6 +1,6 @@
 # Go Movies
 
-> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/)
+> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/) 支持手机端访问播放
 
 > 内置自动爬虫，基本满足日常看片需求。
 
@@ -68,7 +68,7 @@ gox -osarch="linux/amd64"
 ```
 - ~~提供win64、Linux64的已编译的文件下载~~ （请自行编译）
 
-`使用请确保redis为开启状态，默认使用 DB10，启动成功之后先执行爬虫 http://127.0.0.1:8899/movies-spider`
+`使用请确保redis为开启状态，默认使用 DB10，启动成功之后会自动执行爬虫，可自行访问 http://127.0.0.1:8899/movies-spider 进行爬虫`
 
 [微云](https://share.weiyun.com/5iLGksd)  （推荐微云+[proxyee-down](https://github.com/proxyee-down-org/proxyee-down),  原来go版本已经在开发中了...）
 
