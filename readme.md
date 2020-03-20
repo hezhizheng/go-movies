@@ -4,6 +4,10 @@
 
 > 内置自动爬虫，基本满足日常看片需求。
 
+## Github地址
+[https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
+
+## 首页效果
 ![img](https://i.loli.net/2019/12/05/Qzqv4HWoMp2DByi.png)
 
 ## 使用安装 
