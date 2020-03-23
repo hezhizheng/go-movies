@@ -2,7 +2,7 @@
 
 > golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/) 支持手机端访问播放
 
-> 前后端统一编译，运行只依赖编译后可执行的二进制文件与redis
+> 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
 
 > 内置自动爬虫，基本满足日常看片需求。
 
