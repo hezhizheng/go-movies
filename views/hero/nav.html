@@ -17,6 +17,16 @@
                             <%= "current_page_item" %>
                         <% } %> ">
                     <a href="/?cate=<%= category["link"].(string) %> "><%= category["name"].(string) %></a>
+
+                    <ul class="sub-menu">
+                        <% for _, subCategory := range category["sub"].([]map[string]interface{}) { %>
+                        <li class="menu-item">
+                            <a href="/"><%= subCategory["name"].(string) %></a>
+                        </li>
+                        <% } %>
+                    </ul>
+
+
                     </li>
                     <% } %>
 

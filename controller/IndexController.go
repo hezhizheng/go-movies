@@ -23,7 +23,7 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	// 所有类别/导航
 	Categories := services.AllCategoryDate()
 
-	key := "detail_links:hk" // 默认首页
+	key := "detail_links:id:13" // 默认首页
 
 	start := int64(0)
 	stop := int64(14)

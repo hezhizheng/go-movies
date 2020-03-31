@@ -61,19 +61,51 @@ var (
 
 func StartSpider() {
 
-	antPoolStartSpider, _ := ants.NewPool(10)
 	// 获取所有分类
 	Categories := SpiderOKCategories()
+
+	antPoolStartSpiderSubCate, _ := ants.NewPool(25) // 子类26个
+
+	//antPoolStartSpider, _ := ants.NewPool(4) // 主类4个
+	antPoolStartSpider := antPoolStartSpiderSubCate // 主类4个
+
+	// 爬取所有主类下面的电影
+	funcName1(Categories, antPoolStartSpider)
+	funcName2(Categories, antPoolStartSpiderSubCate)
+	wg.Wait()
+}
+
+func funcName1(Categories []Categories, antPoolStartSpider *ants.Pool) {
 	for _, v := range Categories {
 		cateUrl := v.Link
+		log.Println(v.Sub)
 		wg.Add(1)
-		// 爬取所有主类下面的电影
+
 		antPoolStartSpider.Submit(func() {
 			SpiderOKMovies(cateUrl)
 			wg.Done()
 		})
 	}
-	wg.Wait()
+	//wg.Wait()
+}
+
+func funcName2(Categories []Categories, antPoolStartSpiderSubCate *ants.Pool) {
+
+	for _, v := range Categories {
+		childrenCates := v.Sub
+		log.Println(v.Sub)
+
+		for _, childrenCate := range childrenCates {
+			wg.Add(1)
+			childrenCateUrl := childrenCate.Link
+			antPoolStartSpiderSubCate.Submit(func() {
+				SpiderOKMovies(childrenCateUrl)
+				wg.Done()
+			})
+		}
+	}
+
+	//wg.Wait()
 }
 
 // 爬取所有类别
@@ -216,7 +248,7 @@ func SpiderOKMovies(cateUrl string) {
 
 		lastPageInt = lastPage // todo lastPage
 
-		antPoolForeachPage, _ := ants.NewPool(10)
+		antPoolForeachPage, _ := ants.NewPool(2)
 
 		for j := 1; j <= lastPageInt; j++ {
 
@@ -281,16 +313,7 @@ func ForeachPage(cateUrl string, url string) {
 		// 列表数据
 		if spanClass == "tt" {
 			link := e.ChildAttr("a", "href")
-			name := e.ChildText("a")
-			category := e.ChildText(".xing_vb5")
 			updateAt := e.ChildText(".xing_vb6")
-
-			_movies := Movies{
-				Link:      link,
-				Name:      name,
-				Category:  category,
-				UpdatedAt: updateAt,
-			}
 
 			// 模板时间
 			timeTemplate := "2006-01-02"
@@ -302,16 +325,6 @@ func ForeachPage(cateUrl string, url string) {
 				Member: link,
 			})
 			Smutex.Unlock()
-
-			// 首页香港剧单独存一个集合
-			if _movies.Category == "香港剧" {
-				Smutex.Lock()
-				RedisDB.ZAdd("detail_links:hk", &redis.Z{
-					Score:  float64(stamp1.Unix()),
-					Member: link,
-				})
-				Smutex.Unlock()
-			}
 
 			// 获取详情
 			MoviesInfo(link)

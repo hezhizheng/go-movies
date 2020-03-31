@@ -59,7 +59,7 @@ func init() {
 // 首次启动自动开启爬虫
 func firstSpider() {
 
-	hasHK := utils.RedisDB.Exists("detail_links:hk").Val()
+	hasHK := utils.RedisDB.Exists("detail_links:id:13").Val()
 	log.Println("hasHK", hasHK)
 	// 不存在首页的key 则认为是第一次启动
 	if hasHK == 0 {

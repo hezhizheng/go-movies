@@ -99,6 +99,22 @@ func MDetail(show map[string]interface{}, buffer *bytes.Buffer) {
 		buffer.WriteString(` ">`)
 		hero.EscapeHTML(category["name"].(string), buffer)
 		buffer.WriteString(`</a>
+
+                    <ul class="sub-menu">
+                        `)
+		for _, subCategory := range category["sub"].([]map[string]interface{}) {
+			buffer.WriteString(`
+                        <li class="menu-item">
+                            <a href="/">`)
+			hero.EscapeHTML(subCategory["name"].(string), buffer)
+			buffer.WriteString(`</a>
+                        </li>
+                        `)
+		}
+		buffer.WriteString(`
+                    </ul>
+
+
                     </li>
                     `)
 	}
