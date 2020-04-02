@@ -3,15 +3,13 @@ package services
 import (
 	"go_movies/models"
 	"go_movies/utils"
-	"log"
 )
 
-func AllCategoryDate() []map[string]interface{} {
+func AllCategoryDate() []utils.Categories {
 	categories := models.AllCategory()
 
-	var nav []map[string]interface{}
+	var nav []utils.Categories
 	utils.Json.Unmarshal([]byte(categories), &nav)
 
-	log.Println("nav", nav)
 	return nav
 }

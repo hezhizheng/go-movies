@@ -11,17 +11,17 @@
                     </li>
 
 
-                    <% for _, category := range show["categories"].([]map[string]interface{}) { %>
+                    <% for _, category := range show["categories"].([]utils.Categories) { %>
                         <li class="menu-item
-                        <% if category["link"].(string) == show["nav_link"] { %>
+                        <% if category.Link == show["nav_link"] { %>
                             <%= "current_page_item" %>
                         <% } %> ">
-                    <a href="/?cate=<%= category["link"].(string) %> "><%= category["name"].(string) %></a>
+                    <a href="/?cate=<%= category.Link %> "><%= category.Name %></a>
 
                     <ul class="sub-menu">
-                        <% for _, subCategory := range category["sub"].([]map[string]interface{}) { %>
+                        <% for _, subCategory := range category.Sub { %>
                         <li class="menu-item">
-                            <a href="/"><%= subCategory["name"].(string) %></a>
+                            <a href="/?cate=<%= subCategory.Link %>"><%= subCategory.Name %></a>
                         </li>
                         <% } %>
                     </ul>
@@ -41,10 +41,12 @@
                 <div id="select_menu">
                     <select onChange="document.location.href=this.options[this.selectedIndex].value;" id="select-menu-nav">
                         <option value="#">导航菜单</option>
-                        <% for _, category := range show["categories"].([]map[string]interface{}) { %>
-                        <option   value="/?cate=<%= category["link"].(string) %> "><%= category["name"].(string) %></option>
+                        <% for _, category := range show["categories"].([]utils.Categories) { %>
+                        <option   value="/?cate=<%= category.Link %> "><%= category.Name %></option>
+                        <% for _, subCategory := range category.Sub { %>
+                        <option   value="/?cate=<%= subCategory.Link %> ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= subCategory.Name %></option>
                         <% } %>
-
+                        <% } %>
                         <option   value="about"> 关于 </option>
                     </select>
                 </div>

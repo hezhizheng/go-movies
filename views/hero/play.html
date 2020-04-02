@@ -2,6 +2,7 @@
 
 
 <%+ "header.html" %>
+<link href="//cdn.bootcss.com/video.js/7.6.0/alt/video-js-cdn.min.css" rel="stylesheet">
 
 <body class="custom-background">
 
@@ -47,9 +48,27 @@
 
                 <div id="post_content" style="padding:0px;">
                     <div class="video">
+                        <% if show["type"].(string) == "kuyun" { %>
+                        <iframe id="real_play" width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
+                                frameborder="0" scrolling="no"
+                                src="<%= show["play_url"].(string) %>"></iframe>
+
+                        <% }else if show["type"].(string) == "mp4" { %>
+
                         <iframe id="real_play" width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
                                 frameborder="0" scrolling="no"
                                 src=""></iframe>
+
+                        <% }else{ %>
+
+                        <video id=example-video  class="video-js vjs-default-skin" controls preload="none">
+                            <source
+                                    src="<%= show["play_url"].(string) %>"
+                            type="application/x-mpegURL">
+                        </video>
+
+                        <% } %>
+
                     </div>
                 </div>
                 &nbsp;
@@ -156,6 +175,14 @@
 
         window.location.href = "//" +location.host + '/play?play_url=' + play_url + '&play_type=' + play_type + '&real_play=1'+'&link='+ link;
     });
+</script>
+
+<script src="//cdn.bootcss.com/video.js/7.6.0/alt/video.core.min.js"></script>
+<script src="//cdn.bootcss.com/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+
+<script>
+    var player = videojs('example-video', { fluid: true });
+    player.play();
 </script>
 
 </html>
