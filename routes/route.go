@@ -23,13 +23,16 @@ type Routes []Route
 func AllRoutes() Routes {
 	spiderPath := viper.GetString(`app.spider_path`)
 	spiderPathName := viper.GetString(`app.spider_path_name`)
+
+	debugPath := viper.GetString(`app.debug_path`)
+	debugPathName := viper.GetString(`app.debug_path_name`)
 	routes := Routes{
 		Route{"Index", "GET", "/", controller.Index},
 		Route{"Movie", "GET", "/movie", controller.Movie},
 		Route{"Search", "GET", "/search", controller.Search},
 		Route{"Play", "GET", "/play", controller.Play},
 		Route{"About", "GET", "/about", controller.About},
-		Route{"Debug", "GET", "/debug", controller.Debug},
+		Route{debugPathName, "GET", debugPath, controller.Debug},
 		Route{spiderPathName, "GET", spiderPath, controller.GoSpider},
 	}
 	return routes

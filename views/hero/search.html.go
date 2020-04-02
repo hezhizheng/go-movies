@@ -422,6 +422,8 @@ func Search(show map[string]interface{}, buffer *bytes.Buffer) {
 
             <p> 本站所有视频均由程序自动采集而来，版权归原创者所有，如果侵犯了你的权益，请通知我删除侵权内容，谢谢合作。 </p>
 
+            <p> 视频内所有广告均来自采集视频中自带广告，与本站无关！ </p>
+
             <p class="author"> power by
                 <a href="https://hzz.cool" target="_blank" rel="external">
                     hzz.cool

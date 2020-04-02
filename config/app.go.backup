@@ -4,6 +4,8 @@ package config
 参数说明：
 app.spider_path: 爬虫路由
 app.spider_path_name: 爬虫路由名称
+app.debug_path: debug的路由
+app.debug_path_name: debug的路由名称
 cron.timing_spider: 定时爬虫的CRON表达式
 */
 var AppJsonConfig = []byte(`
@@ -11,7 +13,9 @@ var AppJsonConfig = []byte(`
   "app": {
     "port": ":8899",
     "spider_path": "/movies-spider",
-    "spider_path_name": "MoviesSpider"
+    "spider_path_name": "MoviesSpider",
+    "debug_path": "/debug",
+    "debug_path_name": "Debug"
   },
   "redis": {
     "port": "6379",

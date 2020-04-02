@@ -64,21 +64,21 @@ func StartSpider() {
 	// 获取所有分类
 	Categories := SpiderOKCategories()
 
-	antPoolStartSpiderSubCate, _ := ants.NewPool(25) // 子类26个
+	antPoolStartSpiderSubCate, _ := ants.NewPool(25)
 
 	//antPoolStartSpider, _ := ants.NewPool(4) // 主类4个
-	antPoolStartSpider := antPoolStartSpiderSubCate // 主类4个
+	antPoolStartSpider := antPoolStartSpiderSubCate
 
-	// 爬取所有主类下面的电影
-	funcName1(Categories, antPoolStartSpider)
-	funcName2(Categories, antPoolStartSpiderSubCate)
+	// 爬取所有主类
+	SpiderCategories(Categories, antPoolStartSpider)
+	// 爬取主类对应的子类
+	SpiderSubCategories(Categories, antPoolStartSpiderSubCate)
 	wg.Wait()
 }
 
-func funcName1(Categories []Categories, antPoolStartSpider *ants.Pool) {
+func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
 	for _, v := range Categories {
 		cateUrl := v.Link
-		log.Println(v.Sub)
 		wg.Add(1)
 
 		antPoolStartSpider.Submit(func() {
@@ -86,10 +86,9 @@ func funcName1(Categories []Categories, antPoolStartSpider *ants.Pool) {
 			wg.Done()
 		})
 	}
-	//wg.Wait()
 }
 
-func funcName2(Categories []Categories, antPoolStartSpiderSubCate *ants.Pool) {
+func SpiderSubCategories(Categories []Categories, antPoolStartSpiderSubCate *ants.Pool) {
 
 	for _, v := range Categories {
 		childrenCates := v.Sub
@@ -104,8 +103,6 @@ func funcName2(Categories []Categories, antPoolStartSpiderSubCate *ants.Pool) {
 			})
 		}
 	}
-
-	//wg.Wait()
 }
 
 // 爬取所有类别
