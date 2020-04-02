@@ -149,10 +149,6 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		heroTpl.Play(show, buffer)
 	} else if PlayType == "mp4" {
 		heroTpl.Mp4(show, buffer)
-	} else if PlayType == "m3u8" {
-		heroTpl.M3u8(show, buffer)
-	} else if PlayType == "kuyun" {
-		heroTpl.Kuyun(show, buffer)
 	}
 
 	w.Write(buffer.Bytes())

@@ -218,7 +218,7 @@ func Play(show map[string]interface{}, buffer *bytes.Buffer) {
                         `)
 	if show["type"].(string) == "kuyun" {
 		buffer.WriteString(`
-                        <iframe id="real_play" width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
+                        <iframe width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
                                 frameborder="0" scrolling="no"
                                 src="`)
 		hero.EscapeHTML(show["play_url"].(string), buffer)
