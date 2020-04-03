@@ -66,7 +66,6 @@ func StartSpider() {
 
 	antPoolStartSpiderSubCate, _ := ants.NewPool(25)
 
-	//antPoolStartSpider, _ := ants.NewPool(4) // 主类4个
 	antPoolStartSpider := antPoolStartSpiderSubCate
 
 	// 爬取所有主类
@@ -74,6 +73,9 @@ func StartSpider() {
 	// 爬取主类对应的子类
 	SpiderSubCategories(Categories, antPoolStartSpiderSubCate)
 	wg.Wait()
+
+	log.Println("执行完成，清除页面缓存")
+	go DelAllListCacheKey()
 }
 
 func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
@@ -89,10 +91,8 @@ func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
 }
 
 func SpiderSubCategories(Categories []Categories, antPoolStartSpiderSubCate *ants.Pool) {
-
 	for _, v := range Categories {
 		childrenCates := v.Sub
-		log.Println(v.Sub)
 
 		for _, childrenCate := range childrenCates {
 			wg.Add(1)
@@ -257,11 +257,6 @@ func SpiderOKMovies(cateUrl string) {
 				ForeachPage(cateUrl, pageUrl)
 				wg.Done()
 			})
-
-			// 完成一个分类删除所有缓存
-			if j == lastPageInt {
-				DelAllListCacheKey()
-			}
 		}
 		wg.Wait()
 
