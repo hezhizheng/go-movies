@@ -7,6 +7,7 @@ import (
 	"github.com/panjf2000/ants/v2"
 	"log"
 	"net/http"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -61,6 +62,8 @@ var (
 
 func StartSpider() {
 
+	// 执行时间标记
+	startTime := time.Now()
 	// 获取所有分类
 	Categories := SpiderOKCategories()
 
@@ -74,11 +77,24 @@ func StartSpider() {
 	SpiderSubCategories(Categories, antPoolStartSpiderSubCate)
 	wg.Wait()
 
-	log.Println("执行完成，清除页面缓存")
+	// 结束时间标记
+	endTime := time.Since(startTime)
+
+	ExecSecondsS := strconv.FormatFloat(endTime.Seconds(), 'f', -1, 64)
+	ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', -1, 64)
+	ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', -1, 64)
+
+	log.Println("执行完成，清除页面缓存......", ExecSecondsS, ExecMinutesS, ExecHoursS)
+
 	go DelAllListCacheKey()
+
+	// 钉钉通知
+	SendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
+
 }
 
 func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
+	return
 	for _, v := range Categories {
 		cateUrl := v.Link
 		wg.Add(1)
@@ -91,6 +107,7 @@ func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
 }
 
 func SpiderSubCategories(Categories []Categories, antPoolStartSpiderSubCate *ants.Pool) {
+	return
 	for _, v := range Categories {
 		childrenCates := v.Sub
 
@@ -611,4 +628,22 @@ func transformEpisode(_type, episode, linkName string) string {
 	}
 
 	return episode
+}
+
+func SendDingMsg(msg string) {
+	webhook := "https://oapi.dingtalk.com/robot/send?access_token=78face7560afa1524da82f63ca3fc647f5e16755c94f4e6b42f9d143081b8893"
+	robot := NewRobot(webhook)
+
+	title := "goMovies 爬虫通知"
+	text := "#### goMovies 爬虫通知  \n " + msg
+	atMobiles := []string{""}
+	isAtAll := true
+
+	err := robot.SendMarkdown(title, text, atMobiles, isAtAll)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("已发送钉钉通知")
 }

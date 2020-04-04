@@ -18,7 +18,7 @@ func TimingSpider() {
 
 	c.AddFunc(spec, func() {
 		go StartSpider()
-		log.Println("Spider ing:")
+		log.Println("corn Spider ing:")
 	})
 
 	go c.Start()
