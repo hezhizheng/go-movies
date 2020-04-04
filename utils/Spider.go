@@ -94,7 +94,6 @@ func StartSpider() {
 }
 
 func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
-	return
 	for _, v := range Categories {
 		cateUrl := v.Link
 		wg.Add(1)
@@ -107,7 +106,6 @@ func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
 }
 
 func SpiderSubCategories(Categories []Categories, antPoolStartSpiderSubCate *ants.Pool) {
-	return
 	for _, v := range Categories {
 		childrenCates := v.Sub
 
