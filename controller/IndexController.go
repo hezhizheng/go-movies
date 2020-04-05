@@ -2,6 +2,7 @@ package controller
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"go_movies/services"
 	heroTpl "go_movies/views/hero"
@@ -94,7 +95,15 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	link := r.URL.Query()["link"][0]
+	_link := r.URL.Query()["link"]
+
+	if  len(_link) == 0 {
+		fmt.Fprint(w, "404")
+		return
+	}
+
+	link := _link[0]
+
 
 	// 需要展示的数据
 	show := make(map[string]interface{})
