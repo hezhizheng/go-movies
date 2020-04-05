@@ -22,6 +22,8 @@ require (
 	github.com/jteeuwen/go-bindata v3.0.8-0.20180305030458-6025e8de665b+incompatible // indirect
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/kennygrant/sanitize v1.2.4 // indirect
+	github.com/klauspost/compress v1.10.3 // indirect
+	github.com/klauspost/cpuid v1.2.3 // indirect
 	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/panjf2000/ants/v2 v2.2.2
 	github.com/rakyll/statik v0.1.6
@@ -30,6 +32,7 @@ require (
 	github.com/shiyanhui/hero v0.0.2
 	github.com/spf13/viper v1.6.1
 	github.com/temoto/robotstxt v1.1.1 // indirect
+	github.com/valyala/fasthttp v1.9.0
 	golang.org/x/net v0.0.0-20191021144547-ec77196f6094 // indirect
 	golang.org/x/tools v0.0.0-20191230220329-2aa90c603ae3 // indirect
 	google.golang.org/appengine v1.6.5 // indirect

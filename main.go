@@ -80,7 +80,7 @@ func main() {
 	port := viper.GetString(`app.port`)
 	log.Println("监听端口", "http://127.0.0.1"+port)
 
-	firstSpider()
+	//firstSpider()
 
 	// 启动定时爬虫任务
 	utils.TimingSpider()
