@@ -24,7 +24,7 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	// 所有类别/导航
 	Categories := services.AllCategoryDate()
 
-	key := "detail_links:id:13" // 默认首页
+	key := "detail_links:id:14" // 默认首页
 
 	start := int64(0)
 	stop := int64(14)
@@ -97,13 +97,12 @@ func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	_link := r.URL.Query()["link"]
 
-	if  len(_link) == 0 {
+	if len(_link) == 0 {
 		fmt.Fprint(w, "404")
 		return
 	}
 
 	link := _link[0]
-
 
 	// 需要展示的数据
 	show := make(map[string]interface{})

@@ -11,6 +11,7 @@ require (
 	github.com/coocood/freecache v1.1.0
 	github.com/elazarl/go-bindata-assetfs v1.0.0
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
+	github.com/go-redis/redis v6.15.5+incompatible
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0
