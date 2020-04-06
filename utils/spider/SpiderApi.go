@@ -513,11 +513,17 @@ func FormatVodPlayUrl(VodPlayUrl string) ([]string, []string) {
 
 func FormatVodPDownUrl(VodPDownUrl string) []string {
 
-	r, _ := regexp.Compile("https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?")
+	// todo: 对中文之后的直接过滤掉了，干！
+	// (https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]
+	//r, _ := regexp.Compile("https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?")
+	//
+	//mp4 := r.FindAllString(VodPDownUrl, -1)
+	//
+	//return mp4
 
-	mp4 := r.FindAllString(VodPDownUrl, -1)
+	c := strings.Split(VodPDownUrl, "$")
 
-	return mp4
+	return c[1:] // 去掉第一个元素，一般是切割出来没用的
 }
 
 func inType(s int, d []int) bool {
