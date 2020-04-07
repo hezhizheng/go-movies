@@ -8,6 +8,7 @@ import (
 	"go_movies/utils"
 	"log"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -69,6 +70,9 @@ func StartApi() {
 }
 
 func list(pg int) {
+	// 执行时间标记
+	startTime := time.Now()
+	defer ants.Release()
 	antPool, _ := ants.NewPool(300)
 	for _, subCategoryId := range subCategoryIds() {
 		wg.Add(1)
@@ -81,6 +85,18 @@ func list(pg int) {
 
 	}
 	wg.Wait()
+
+	// 结束时间标记
+	endTime := time.Since(startTime)
+
+	ExecSecondsS := strconv.FormatFloat(endTime.Seconds(), 'f', -1, 64)
+	ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', -1, 64)
+	ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', -1, 64)
+
+	fmt.Println("执行完成......")
+	// 钉钉通知
+	sendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
+
 }
 
 func actionList(subCategoryId string, pg int, pageCount int) {
@@ -533,4 +549,22 @@ func inType(s int, d []int) bool {
 		}
 	}
 	return false
+}
+
+func sendDingMsg(msg string) {
+	webhook := "https://oapi.dingtalk.com/robot/send?access_token=78face7560afa1524da82f63ca3fc647f5e16755c94f4e6b42f9d143081b8893"
+	robot := utils.NewRobot(webhook)
+
+	title := "goMovies 爬虫通知API"
+	text := "#### goMovies 爬虫通知API  \n " + msg
+	atMobiles := []string{""}
+	isAtAll := true
+
+	err := robot.SendMarkdown(title, text, atMobiles, isAtAll)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("已发送钉钉通知")
 }
