@@ -3,6 +3,7 @@ package services
 import (
 	"go_movies/models"
 	"go_movies/utils"
+	"go_movies/utils/spider"
 	"log"
 	"sort"
 	"strconv"
@@ -161,7 +162,10 @@ func MovieDetail(link string) map[string]interface{} {
 	}
 
 	if detail["name"] == "" {
-		go utils.MoviesInfo(link) // 重新采集
+		//go utils.MoviesInfo(link)
+		// 重新采集
+		detailId := TransformCategoryId(link)
+		go spider.Detail(detailId)
 	}
 
 	var kuYunMap []map[string]interface{}

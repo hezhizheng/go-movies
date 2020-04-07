@@ -7,6 +7,7 @@ app.spider_path_name: 爬虫路由名称
 app.debug_path: debug的路由
 app.debug_path_name: debug的路由名称
 cron.timing_spider: 定时爬虫的CRON表达式
+ding.access_token: 钉钉机器人token
 */
 var AppJsonConfig = []byte(`
 {
@@ -25,6 +26,9 @@ var AppJsonConfig = []byte(`
   },
   "cron": {
      "timing_spider": "0 0 1 * * ?"
+  },
+  "ding": {
+     "access_token": "78face7560afa1524da82f63ca3fc647f5e16755c94f4e6b42f9d143081b8893"
   }
 }
 `)

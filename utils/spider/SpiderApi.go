@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v7"
 	"github.com/panjf2000/ants/v2"
+	"github.com/spf13/viper"
 	"github.com/valyala/fasthttp"
 	"go_movies/utils"
 	"log"
@@ -15,9 +16,9 @@ import (
 	"time"
 )
 
-const API_HOST = "https://api.okzy.tv/api.php/provide/vod"
-const AC_LIST = "list"
-const AC_DETAIL = "detail"
+const ApiHost = "https://api.okzy.tv/api.php/provide/vod"
+const AcList = "list"
+const AcDetail = "detail"
 
 type Lists struct {
 	VodId         int    `json:"vod_id"` // 如果json中vod_id不是“1”，而是 1 ，这里一定要声明为 int ！！！fuck 不愧是静态强类型
@@ -94,8 +95,12 @@ func list(pg int) {
 	ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', -1, 64)
 
 	fmt.Println("执行完成......")
+
+	// 删除已缓存的页面
+	go DelAllListCacheKey()
+
 	// 钉钉通知
-	sendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
+	SendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
 
 }
 
@@ -103,7 +108,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 
 	for j := pg; j <= pageCount; j++ {
 
-		url := API_HOST + "?ac=" + AC_LIST + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
+		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
 		log.Println("当前page"+strconv.Itoa(j), url)
 
 		req := fasthttp.AcquireRequest()
@@ -166,14 +171,13 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 
 			if inType(value.TypeId, cartoon) {
 				utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
-					Score: float64(stamp1.Unix()),
-					// /?m=vod-detail-id-14155.html
+					Score:  float64(stamp1.Unix()),
 					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 				})
 			}
 
 			// 获取详情
-			detail(strconv.Itoa(value.VodId))
+			Detail(strconv.Itoa(value.VodId))
 
 		}
 	}
@@ -181,7 +185,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 }
 
 func pageCount(subCategoryId string, pg int) (int, string) {
-	url := API_HOST + "?ac=" + AC_LIST + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(pg)
+	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(pg)
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -216,10 +220,10 @@ func pageCount(subCategoryId string, pg int) (int, string) {
 }
 
 // id与旧的网页爬虫对应不上
-func detail(id string) {
+func Detail(id string) {
 	// movies_detail:/?m=vod-detail-id-10051.html:movie_name:第102次相亲
 
-	url := API_HOST + "?ac=" + AC_DETAIL + "&ids=" + id + "&pg=1"
+	url := ApiHost + "?ac=" + AcDetail + "&ids=" + id + "&pg=1"
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -274,21 +278,27 @@ func detail(id string) {
 		k := map[string]string{
 			"episode":   strconv.Itoa(ik + 1),
 			"play_link": kuyunValue}
+		Smutex.Lock()
 		kuyunAry = append(kuyunAry, k)
+		Smutex.Unlock()
 	}
 
 	for ic, ckm3u8Value := range ckm3u8 {
 		c := map[string]string{
 			"episode":   strconv.Itoa(ic + 1),
 			"play_link": ckm3u8Value}
+		Smutex.Lock()
 		ckm3u8Ary = append(ckm3u8Ary, c)
+		Smutex.Unlock()
 	}
 
 	for im, mp4Value := range mp4 {
 		m := map[string]string{
 			"episode":   strconv.Itoa(im + 1),
 			"play_link": mp4Value}
+		Smutex.Lock()
 		downloadAry = append(downloadAry, m)
+		Smutex.Unlock()
 	}
 
 	kuyunAryJson, _ := utils.Json.MarshalIndent(kuyunAry, "", " ")
@@ -504,7 +514,9 @@ func subCategoryIds() []string {
 	CategoryIds := make([]string, 0)
 	for _, value := range nav {
 		for _, subValue := range value.Sub {
+			Smutex.Lock()
 			CategoryIds = append(CategoryIds, subValue.TypeId)
+			Smutex.Unlock()
 		}
 	}
 
@@ -551,8 +563,12 @@ func inType(s int, d []int) bool {
 	return false
 }
 
-func sendDingMsg(msg string) {
-	webhook := "https://oapi.dingtalk.com/robot/send?access_token=78face7560afa1524da82f63ca3fc647f5e16755c94f4e6b42f9d143081b8893"
+func SendDingMsg(msg string) {
+	accessToken := viper.GetString(`ding.access_token`)
+	if accessToken == "" {
+		return
+	}
+	webhook := "https://oapi.dingtalk.com/robot/send?access_token=" + accessToken
 	robot := utils.NewRobot(webhook)
 
 	title := "goMovies 爬虫通知API"
@@ -567,4 +583,14 @@ func sendDingMsg(msg string) {
 	}
 
 	log.Println("已发送钉钉通知")
+}
+
+func DelAllListCacheKey() {
+
+	AllListCacheKey := utils.RedisDB.Keys("movie_lists_key:detail_links:*").Val()
+
+	// 删除已经缓存的数据
+	for _, val := range AllListCacheKey {
+		utils.RedisDB.Del(val)
+	}
 }

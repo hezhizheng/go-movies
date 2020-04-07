@@ -3,6 +3,7 @@ package utils
 import (
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
+	"go_movies/utils/spider"
 	"log"
 )
 
@@ -17,7 +18,8 @@ func TimingSpider() {
 	spec := viper.GetString(`cron.timing_spider`)
 
 	c.AddFunc(spec, func() {
-		go StartSpider()
+		//go StartSpider()
+		go spider.StartApi()
 		log.Println("corn Spider ing:")
 	})
 

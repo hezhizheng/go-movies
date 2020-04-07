@@ -3,13 +3,13 @@ package main
 import (
 	"bytes"
 	"github.com/julienschmidt/httprouter"
-	"github.com/panjf2000/ants/v2"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/viper"
 	"go_movies/config"
 	"go_movies/routes"
 	_ "go_movies/statik"
 	"go_movies/utils"
+	"go_movies/utils/spider"
 	"log"
 	"net/http"
 )
@@ -59,13 +59,14 @@ func init() {
 // 首次启动自动开启爬虫
 func firstSpider() {
 
-	hasHK := utils.RedisDB.Exists("detail_links:id:13").Val()
+	hasHK := utils.RedisDB.Exists("detail_links:id:14").Val()
 	log.Println("hasHK", hasHK)
 	// 不存在首页的key 则认为是第一次启动
 	if hasHK == 0 {
 		// 开启爬虫
-		defer ants.Release()
-		go utils.StartSpider()
+		// defer ants.Release()
+		//go utils.StartSpider()
+		go spider.StartApi()
 	}
 }
 
@@ -80,7 +81,7 @@ func main() {
 	port := viper.GetString(`app.port`)
 	log.Println("监听端口", "http://127.0.0.1"+port)
 
-	//firstSpider()
+	firstSpider()
 
 	// 启动定时爬虫任务
 	utils.TimingSpider()
