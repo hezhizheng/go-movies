@@ -73,9 +73,6 @@ func StartSpider() {
 	// 爬取主类对应的子类
 	SpiderSubCategories(Categories, antPoolStartSpiderSubCate)
 	wg.Wait()
-
-	log.Println("执行完成，清除页面缓存")
-	go DelAllListCacheKey()
 }
 
 func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
@@ -257,6 +254,11 @@ func SpiderOKMovies(cateUrl string) {
 				ForeachPage(cateUrl, pageUrl)
 				wg.Done()
 			})
+
+			// 完成一个分类删除所有缓存
+			if j == lastPageInt {
+				DelAllListCacheKey()
+			}
 		}
 		wg.Wait()
 
