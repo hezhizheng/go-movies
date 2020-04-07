@@ -551,7 +551,20 @@ func FormatVodPDownUrl(VodPDownUrl string) []string {
 
 	c := strings.Split(VodPDownUrl, "$")
 
-	return c[1:] // 去掉第一个元素，一般是切割出来没用的
+	shift := c[1:] // 去掉第一个元素，一般是切割出来没用的
+
+	urls := make([]string, 0)
+
+	// http://xz3-7.okzyxz.com/20190524/23916_07fb2078/死亡地带S01E01.mp4#第02集
+	// 处理链接后面的#号符
+	for _, v := range shift {
+		split := strings.Split(v, "#")
+		Smutex.Lock()
+		urls = append(urls, split[0])
+		Smutex.Unlock()
+	}
+
+	return urls
 }
 
 func inType(s int, d []int) bool {
