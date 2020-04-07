@@ -3,11 +3,10 @@ package utils
 import (
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
-	"go_movies/utils/spider"
 	"log"
 )
 
-func TimingSpider() {
+func TimingSpider(cmd func()) {
 
 	log.Println("cron TimingSpider start:")
 
@@ -19,7 +18,8 @@ func TimingSpider() {
 
 	c.AddFunc(spec, func() {
 		//go StartSpider()
-		go spider.StartApi()
+		//go spider.StartApi()
+		cmd()
 		log.Println("corn Spider ing:")
 	})
 

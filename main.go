@@ -84,7 +84,10 @@ func main() {
 	firstSpider()
 
 	// 启动定时爬虫任务
-	utils.TimingSpider()
+	utils.TimingSpider(func() {
+		go spider.StartApi()
+		return
+	})
 
 	log.Println(http.ListenAndServe(port, router))
 
