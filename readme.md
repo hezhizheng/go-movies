@@ -6,7 +6,10 @@
 
 > 内置自动爬虫，基本满足日常看片需求。
 
-
+## Tip
+- 由于爬取的目标网站最近经常出现访问失败的情况，现已增加直接请求api的形式，同时兼容旧版本（以后master只维护API版），[API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
+- [v1.0.0 爬虫版](https://github.com/hezhizheng/go-movies/releases/tag/v1.0.0) (可用，但不能保证数据稳定)
+- [v2.0.0 API版](https://github.com/hezhizheng/go-movies/releases/tag/v2.0.0)
 
 ## Github地址
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
@@ -43,7 +46,7 @@ http://127.0.0.1:8899
 ### 开启爬虫
 - ~~直接访问链接 http://127.0.0.1:8899/movies-spider (开启定时任务，定时爬取就好)~~
   - 已内置定时爬虫，默认凌晨一点开启爬虫(可修改配置文件cron.timing_spider表达式)
-- 消耗：Windows 下 cup 10% 左右，内存 40mb 左右
+- 耗时：Linux 网络正常情况下四十多分钟左右，如在配置文件添加了ding.access_token，执行完成会发送通知到钉钉
 - ~~网络正常的情况下，爬虫完毕耗时大概21分钟左右（存在部分资源爬取失败的情况）~~
 
 ## Tools
@@ -54,6 +57,7 @@ http://127.0.0.1:8899
 - json解析 jsoniter [github.com/json-iterator/go](github.com/json-iterator/go)
 - 跨平台打包：https://github.com/mitchellh/gox
 - 静态资源处理：https://github.com/rakyll/statik
+- web server 框架：https://github.com/valyala/fasthttp
 
 ## 注意
 ```
