@@ -151,7 +151,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 				Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 			})
 
-			film := []int{6, 7, 8, 9, 10, 11, 12, 20, 21, 31}
+			film := []int{6, 7, 8, 9, 10, 11, 12, 20, 21, 37}
 			tv := []int{13, 14, 15, 16, 22, 23, 24}
 			cartoon := []int{29, 30, 31, 32, 33}
 

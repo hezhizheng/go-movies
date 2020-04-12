@@ -9,7 +9,7 @@
 ## Tip
 - 由于爬取的目标网站最近经常出现访问失败的情况，现已增加直接请求api的形式，同时兼容旧版本（以后master只维护API版），[API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
 - [v1.0.0 爬虫版](https://github.com/hezhizheng/go-movies/releases/tag/v1.0.0) (可用，但不能保证数据稳定)
-- [v2.0.0 API版](https://github.com/hezhizheng/go-movies/releases/tag/v2.0.0)
+- [v2.0.1 API版](https://github.com/hezhizheng/go-movies/releases/tag/v2.0.1)
 
 ## Github地址
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
