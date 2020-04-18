@@ -165,7 +165,7 @@ func MovieDetail(link string) map[string]interface{} {
 		//go utils.MoviesInfo(link)
 		// 重新采集
 		detailId := TransformCategoryId(link)
-		go spider.Detail(detailId)
+		go spider.Detail(detailId,0)
 	}
 
 	var kuYunMap []map[string]interface{}

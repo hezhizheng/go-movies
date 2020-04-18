@@ -177,7 +177,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 			}
 
 			// 获取详情
-			Detail(strconv.Itoa(value.VodId))
+			Detail(strconv.Itoa(value.VodId), 0)
 
 		}
 	}
@@ -220,10 +220,16 @@ func pageCount(subCategoryId string, pg int) (int, string) {
 }
 
 // id与旧的网页爬虫对应不上
-func Detail(id string) {
+func Detail(id string, retry int) {
 	// movies_detail:/?m=vod-detail-id-10051.html:movie_name:第102次相亲
 
 	url := ApiHost + "?ac=" + AcDetail + "&ids=" + id + "&pg=1"
+
+	retryMax := 3
+	if retry >= retryMax {
+		fmt.Println("重试已结束", url, retry)
+		return
+	}
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -256,8 +262,19 @@ func Detail(id string) {
 	}
 
 	if len(nav.List) <= 0 {
-		// todo 验证
 		log.Println("没有list", url)
+
+		// 重试
+		for {
+			if retry > retryMax {
+				fmt.Println("超过最大重试次数，重试机制已跳出", url, retry)
+				break
+			}
+			retry++
+			Detail(id, retry)
+			fmt.Println("正在重试...", url, retry)
+		}
+
 		return
 	}
 	listDetail := nav.List[0]
