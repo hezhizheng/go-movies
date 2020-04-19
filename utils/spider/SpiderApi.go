@@ -546,6 +546,8 @@ func FormatVodPlayUrl(VodPlayUrl string) ([]string, []string) {
 
 	r, _ := regexp.Compile("https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?")
 
+	// 这里剧集好像是 kuyun 在前面 [0] m3u8 在后面 [1]  ,电影则是相反的。。。
+	// 暂时先不处理，直接在播放列表通过播放地址的后缀区分
 	kuyun := r.FindAllString(SplitVodPlayUrl[0], -1)
 
 	ckm3u8 := []string{""}

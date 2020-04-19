@@ -8,6 +8,7 @@ import (
 	heroTpl "go_movies/views/hero"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 // 首页
@@ -134,13 +135,19 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show := make(map[string]interface{})
 
 	PlayUrl := r.URL.Query()["play_url"][0]
-	PlayType := r.URL.Query()["play_type"][0]
 
 	RealPlayQuery := r.URL.Query()["real_play"]
 
 	RealPlay := "0"
 	if len(RealPlayQuery) > 0 {
 		RealPlay = "1"
+	}
+
+	PlayType := "kuyun"
+	if strings.Contains(PlayUrl, ".mp4"){
+		PlayType = "mp4"
+	} else if strings.Contains(PlayUrl, ".m3u8"){
+		PlayType = "m3u8"
 	}
 
 	show["play_url"] = PlayUrl
