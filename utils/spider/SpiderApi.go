@@ -1,7 +1,6 @@
 package spider
 
 import (
-	"fmt"
 	"github.com/go-redis/redis/v7"
 	"github.com/panjf2000/ants/v2"
 	"github.com/spf13/viper"
@@ -94,7 +93,7 @@ func list(pg int) {
 	ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', -1, 64)
 	ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', -1, 64)
 
-	fmt.Println("执行完成......")
+	log.Println("执行完成......")
 
 	// 删除已缓存的页面
 	go DelAllListCacheKey()
@@ -129,7 +128,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 		//req.SetBody(requestBody)
 
 		if err := fasthttp.Do(req, resp); err != nil {
-			fmt.Println("请求失败:", err.Error())
+			log.Println("请求失败:", err.Error())
 			return
 		}
 
@@ -203,7 +202,7 @@ func pageCount(subCategoryId string, pg int) (int, string) {
 	//req.SetBody(requestBody)
 
 	if err := fasthttp.Do(req, resp); err != nil {
-		fmt.Println("请求失败:", err.Error())
+		log.Println("请求失败:", err.Error())
 		return 0, subCategoryId
 	}
 
@@ -227,7 +226,7 @@ func Detail(id string, retry int) {
 
 	retryMax := 3
 	if retry >= retryMax {
-		fmt.Println("重试已结束", url, retry)
+		log.Println("重试已结束", url, retry)
 		return
 	}
 
@@ -249,7 +248,7 @@ func Detail(id string, retry int) {
 	//req.SetBody(requestBody)
 
 	if err := fasthttp.Do(req, resp); err != nil {
-		fmt.Println("请求失败:", err.Error())
+		log.Println("请求失败:", err.Error())
 		return
 	}
 
@@ -267,12 +266,12 @@ func Detail(id string, retry int) {
 		// 重试
 		for {
 			if retry > retryMax {
-				fmt.Println("超过最大重试次数，重试机制已跳出", url, retry)
+				log.Println("超过最大重试次数，重试机制已跳出", url, retry)
 				break
 			}
 			retry++
 			Detail(id, retry)
-			fmt.Println("正在重试...", url, retry)
+			log.Println("正在重试...", url, retry)
 		}
 
 		return
