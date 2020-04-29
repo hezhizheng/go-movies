@@ -4,10 +4,11 @@
 
 > 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
 
-> 内置自动爬虫，基本满足日常看片需求。
+> 内置自动爬虫的定时任务，基本满足日常看片需求。
 
 ## Tip
-- 由于爬取的目标网站最近经常出现访问失败的情况，现已增加直接请求api的形式，同时兼容旧版本（以后master只维护API版），[API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
+- 由于目标网站会封直接通过网页爬虫的IP,在没有找到稳定IP池的情况下，推荐先使用API版本
+- 现已增加直接请求api的形式，同时兼容旧版本（暂时master只维护API版），[API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
 - [v1.0.0 爬虫版](https://github.com/hezhizheng/go-movies/releases/tag/v1.0.0) (可用，但不能保证数据稳定)
 - [v2.0.3 API版](https://github.com/hezhizheng/go-movies/releases/tag/v2.0.3)
 
