@@ -7,10 +7,11 @@
 > 内置自动爬虫的定时任务，基本满足日常看片需求。
 
 ## Tip
-- 由于目标网站会封直接通过网页爬虫的IP,在没有找到稳定IP池的情况下，推荐先使用API版本
-- 现已增加直接请求api的形式，同时兼容旧版本（暂时master只维护API版），[API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
-- [v1.0.0 爬虫版](https://github.com/hezhizheng/go-movies/releases/tag/v1.0.0) (可用，但不能保证数据稳定)
+- 由于目标网站会封锁直接通过网页爬虫的IP,在没有找到稳定IP池的情况下，推荐先使用API版本
+- 现已增加直接请求api的形式，同时兼容旧版本（暂时master只维护API版，同时合并爬虫版的代码），[API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
+- [v1.0.0 爬虫版](https://github.com/hezhizheng/go-movies/releases/tag/v1.0.0) (可用，但可能会被封IP，爬虫暂时只在v1.0.0维护)
 - [v2.0.3 API版](https://github.com/hezhizheng/go-movies/releases/tag/v2.0.3)
+- 由于爬虫版与API版的电影ID不匹配，建议使用不同的redis DB库分别存储
 
 ## Github地址
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
