@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"github.com/julienschmidt/httprouter"
-	"github.com/panjf2000/ants/v2"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/viper"
 	"go_movies/config"
@@ -64,7 +63,6 @@ func firstSpider() {
 	// 不存在首页的key 则认为是第一次启动
 	if hasHK == 0 {
 		// 开启爬虫
-		defer ants.Release()
 		go utils.StartSpider()
 	}
 }

@@ -13,12 +13,11 @@ import (
 	"time"
 )
 
-// 爬取网站的域名
+// 爬取网站的域名，如访问不了，以下几个域名建议重复替换使用
 //const host = "http://www.jisudhw.com"
+const host = "http://www.okzy.co"
 
-//const host = "http://www.okzy.co"
-
-const host = "http://www.okzyw.com"
+//const host = "http://www.okzyw.com"
 
 // redis key
 
@@ -60,6 +59,8 @@ var (
 )
 
 func StartSpider() {
+	star := time.Now()
+	defer ants.Release()
 
 	// 获取所有分类
 	Categories := SpiderOKCategories()
@@ -72,7 +73,20 @@ func StartSpider() {
 	SpiderCategories(Categories, antPoolStartSpider)
 	// 爬取主类对应的子类
 	SpiderSubCategories(Categories, antPoolStartSpiderSubCate)
+
 	wg.Wait()
+
+	end := time.Since(star)
+
+	ExecSecondsS := strconv.FormatFloat(end.Seconds(), 'f', -1, 64)
+	ExecMinutesS := strconv.FormatFloat(end.Minutes(), 'f', -1, 64)
+	ExecHoursS := strconv.FormatFloat(end.Hours(), 'f', -1, 64)
+
+	// 清楚缓存的页面数据
+	go DelAllListCacheKey()
+
+	log.Println("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n ")
+
 }
 
 func SpiderCategories(Categories []Categories, antPoolStartSpider *ants.Pool) {
@@ -242,26 +256,11 @@ func SpiderOKMovies(cateUrl string) {
 
 		lastPageInt = lastPage // todo lastPage
 
-		antPoolForeachPage, _ := ants.NewPool(2)
-
 		for j := 1; j <= lastPageInt; j++ {
-
 			pageUrl := CategoryToPageUrl(cateUrl, strconv.Itoa(j))
-
-			wg.Add(1)
 			// 爬取所有主类下面的电影
-			antPoolForeachPage.Submit(func() {
-				ForeachPage(cateUrl, pageUrl)
-				wg.Done()
-			})
-
-			// 完成一个分类删除所有缓存
-			if j == lastPageInt {
-				DelAllListCacheKey()
-			}
+			ForeachPage(cateUrl, pageUrl)
 		}
-		wg.Wait()
-
 	})
 
 	visitError := c.Visit(host + cateUrl)
