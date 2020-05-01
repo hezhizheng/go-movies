@@ -63,10 +63,7 @@ func firstSpider() {
 	log.Println("hasHK", hasHK)
 	// 不存在首页的key 则认为是第一次启动
 	if hasHK == 0 {
-		// 开启爬虫
-		// defer ants.Release()
-		//go utils.StartSpider()
-		go spider.StartApi()
+		spider.Create().Start()
 	}
 }
 
@@ -85,7 +82,7 @@ func main() {
 
 	// 启动定时爬虫任务
 	utils.TimingSpider(func() {
-		go spider.StartApi()
+		spider.Create().Start()
 		return
 	})
 

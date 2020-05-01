@@ -9,7 +9,7 @@ import (
 
 func GoSpider(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	go spider.StartApi()
+	spider.Create().Start()
 
 	fmt.Fprint(w, "Spider ing....")
 }

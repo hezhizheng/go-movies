@@ -19,6 +19,10 @@ const ApiHost = "https://api.okzy.tv/api.php/provide/vod"
 const AcList = "list"
 const AcDetail = "detail"
 
+type SpiderApi struct {
+	utils.SpiderTask
+}
+
 type Lists struct {
 	VodId         int    `json:"vod_id"` // 如果json中vod_id不是“1”，而是 1 ，这里一定要声明为 int ！！！fuck 不愧是静态强类型
 	VodName       string `json:"vod_name"`
@@ -64,6 +68,10 @@ var (
 	Smutex sync.Mutex
 	wg     sync.WaitGroup
 )
+
+func (spiderApi *SpiderApi) Start() {
+	go StartApi()
+}
 
 func StartApi() {
 	list(1)

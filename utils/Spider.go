@@ -5,8 +5,10 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 	"github.com/panjf2000/ants/v2"
+	"github.com/spf13/viper"
 	"log"
 	"net/http"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -53,10 +55,18 @@ type MoviesDetail struct {
 	Detail   map[string]interface{} `json:"detail"`
 }
 
+type Spider struct {
+	SpiderTask
+}
+
 var (
 	Smutex sync.Mutex
 	wg     sync.WaitGroup
 )
+
+func (spider *Spider) Start() {
+	go StartSpider()
+}
 
 func StartSpider() {
 	star := time.Now()
@@ -86,6 +96,9 @@ func StartSpider() {
 	go DelAllListCacheKey()
 
 	log.Println("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n ")
+
+	// 钉钉通知
+	sendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
 
 }
 
@@ -612,4 +625,26 @@ func transformEpisode(_type, episode, linkName string) string {
 	}
 
 	return episode
+}
+
+func sendDingMsg(msg string) {
+	accessToken := viper.GetString(`ding.access_token`)
+	if accessToken == "" {
+		return
+	}
+	webhook := "https://oapi.dingtalk.com/robot/send?access_token=" + accessToken
+	robot := NewRobot(webhook)
+
+	title := "goMovies 爬虫通知API"
+	text := "#### goMovies 爬虫通知API  \n " + msg
+	atMobiles := []string{""}
+	isAtAll := true
+
+	err := robot.SendMarkdown(title, text, atMobiles, isAtAll)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("已发送钉钉通知")
 }
