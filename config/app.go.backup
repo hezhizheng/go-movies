@@ -16,7 +16,8 @@ var AppJsonConfig = []byte(`
     "spider_path": "/movies-spider",
     "spider_path_name": "MoviesSpider",
     "debug_path": "/debug",
-    "debug_path_name": "Debug"
+    "debug_path_name": "Debug",
+    "spider_mod": "api"
   },
   "redis": {
     "port": "6379",
