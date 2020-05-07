@@ -1,6 +1,7 @@
 package spider
 
 import (
+	"crypto/tls"
 	"github.com/go-redis/redis/v7"
 	"github.com/panjf2000/ants/v2"
 	"github.com/spf13/viper"
@@ -132,10 +133,8 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 
 		req.SetRequestURI(url)
 
-		//requestBody := []byte(`{"code":1}`)
-		//req.SetBody(requestBody)
-
-		if err := fasthttp.Do(req, resp); err != nil {
+		f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
+		if err := f.Do(req, resp); err != nil {
 			log.Println("请求失败:", err.Error())
 			return
 		}
@@ -206,10 +205,10 @@ func pageCount(subCategoryId string, pg int) (int, string) {
 
 	req.SetRequestURI(url)
 
-	//requestBody := []byte(`{"code":1}`)
-	//req.SetBody(requestBody)
+	// 设置tls来跳过证书检测，docker容器中会出现 x509: certificate signed by unknown authority 问题
+	f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
 
-	if err := fasthttp.Do(req, resp); err != nil {
+	if err := f.Do(req, resp); err != nil {
 		log.Println("请求失败:", err.Error())
 		return 0, subCategoryId
 	}
@@ -252,10 +251,9 @@ func Detail(id string, retry int) {
 
 	req.SetRequestURI(url)
 
-	//requestBody := []byte(`{"code":1}`)
-	//req.SetBody(requestBody)
+	f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
 
-	if err := fasthttp.Do(req, resp); err != nil {
+	if err := f.Do(req, resp); err != nil {
 		log.Println("请求失败:", err.Error())
 		return
 	}
