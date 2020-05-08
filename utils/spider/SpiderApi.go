@@ -65,6 +65,12 @@ type Categories struct {
 	Sub    []Categories `json:"sub"`
 }
 
+type FastHttp struct {
+	f    fasthttp.Client
+	req  *fasthttp.Request
+	resp *fasthttp.Response
+}
+
 var (
 	Smutex sync.Mutex
 	wg     sync.WaitGroup
@@ -72,6 +78,28 @@ var (
 
 func (spiderApi *SpiderApi) Start() {
 	go StartApi()
+}
+
+func (spiderApi *SpiderApi) PageDetail(id string) {
+	_f := initFastHttp()
+	go Detail(id, 0, _f)
+}
+
+// 初始化 fasthttp GET 的请求与响应
+func initFastHttp() FastHttp {
+	req := fasthttp.AcquireRequest()
+	resp := fasthttp.AcquireResponse()
+	defer func() {
+		// 用完需要释放资源
+		fasthttp.ReleaseResponse(resp)
+		fasthttp.ReleaseRequest(req)
+	}()
+
+	req.Header.SetMethod("GET")
+
+	f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
+
+	return FastHttp{f: f, req: req, resp: resp}
 }
 
 func StartApi() {
@@ -83,12 +111,15 @@ func list(pg int) {
 	startTime := time.Now()
 	defer ants.Release()
 	antPool, _ := ants.NewPool(300)
+
+	_f := initFastHttp()
+
 	for _, subCategoryId := range subCategoryIds() {
 		wg.Add(1)
-		pageCount, t := pageCount(subCategoryId, pg)
+		pageCount, t := pageCount(subCategoryId, pg, _f)
 
 		antPool.Submit(func() {
-			actionList(t, pg, pageCount)
+			actionList(t, pg, pageCount, _f)
 			wg.Done()
 		})
 
@@ -112,34 +143,21 @@ func list(pg int) {
 
 }
 
-func actionList(subCategoryId string, pg int, pageCount int) {
+func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
 
 	for j := pg; j <= pageCount; j++ {
 
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
 		log.Println("当前page"+strconv.Itoa(j), url)
 
-		req := fasthttp.AcquireRequest()
-		resp := fasthttp.AcquireResponse()
-		defer func() {
-			// 用完需要释放资源
-			fasthttp.ReleaseResponse(resp)
-			fasthttp.ReleaseRequest(req)
-		}()
+		_f.req.SetRequestURI(url)
 
-		// 默认是application/x-www-form-urlencoded
-		//req.Header.SetContentType("application/json")
-		req.Header.SetMethod("GET")
-
-		req.SetRequestURI(url)
-
-		f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
-		if err := f.Do(req, resp); err != nil {
+		if err := _f.f.Do(_f.req, _f.resp); err != nil {
 			log.Println("请求失败:", err.Error())
 			return
 		}
 
-		body := resp.Body()
+		body := _f.resp.Body()
 
 		var nav ResData
 		err := utils.Json.Unmarshal(body, &nav)
@@ -183,37 +201,24 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 			}
 
 			// 获取详情
-			Detail(strconv.Itoa(value.VodId), 0)
+			Detail(strconv.Itoa(value.VodId), 0, _f)
 
 		}
 	}
 
 }
 
-func pageCount(subCategoryId string, pg int) (int, string) {
+func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
 	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(pg)
 
-	req := fasthttp.AcquireRequest()
-	resp := fasthttp.AcquireResponse()
-	defer func() {
-		// 用完需要释放资源
-		fasthttp.ReleaseResponse(resp)
-		fasthttp.ReleaseRequest(req)
-	}()
+	_f.req.SetRequestURI(url)
 
-	req.Header.SetMethod("GET")
-
-	req.SetRequestURI(url)
-
-	// 设置tls来跳过证书检测，docker容器中会出现 x509: certificate signed by unknown authority 问题
-	f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
-
-	if err := f.Do(req, resp); err != nil {
-		log.Println("请求失败:", err.Error())
+	if err := _f.f.Do(_f.req, _f.resp); err != nil {
+		log.Println("请求失败:", url, err.Error())
 		return 0, subCategoryId
 	}
 
-	body := resp.Body()
+	body := _f.resp.Body()
 
 	var nav ResData
 	err := utils.Json.Unmarshal(body, &nav)
@@ -226,9 +231,8 @@ func pageCount(subCategoryId string, pg int) (int, string) {
 }
 
 // id与旧的网页爬虫对应不上
-func Detail(id string, retry int) {
+func Detail(id string, retry int, _f FastHttp) {
 	// movies_detail:/?m=vod-detail-id-10051.html:movie_name:第102次相亲
-
 	url := ApiHost + "?ac=" + AcDetail + "&ids=" + id + "&pg=1"
 
 	retryMax := 3
@@ -237,28 +241,14 @@ func Detail(id string, retry int) {
 		return
 	}
 
-	req := fasthttp.AcquireRequest()
-	resp := fasthttp.AcquireResponse()
-	defer func() {
-		// 用完需要释放资源
-		fasthttp.ReleaseResponse(resp)
-		fasthttp.ReleaseRequest(req)
-	}()
+	_f.req.SetRequestURI(url)
 
-	// 默认是application/x-www-form-urlencoded
-	//req.Header.SetContentType("application/json")
-	req.Header.SetMethod("GET")
-
-	req.SetRequestURI(url)
-
-	f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
-
-	if err := f.Do(req, resp); err != nil {
+	if err := _f.f.Do(_f.req, _f.resp); err != nil {
 		log.Println("请求失败:", err.Error())
 		return
 	}
 
-	body := resp.Body()
+	body := _f.resp.Body()
 
 	var nav ResData
 	err := utils.Json.Unmarshal(body, &nav)
@@ -276,7 +266,7 @@ func Detail(id string, retry int) {
 				break
 			}
 			retry++
-			Detail(id, retry)
+			Detail(id, retry, _f)
 			log.Println("正在重试...", url, retry)
 		}
 

@@ -68,6 +68,12 @@ func (spider *Spider) Start() {
 	go StartSpider()
 }
 
+func (spider *Spider) PageDetail(id string) {
+	// /?m=vod-detail-id-56275.html
+	url := "/?m=vod-detail-id-" + id + ".html"
+	go MoviesInfo(url)
+}
+
 func StartSpider() {
 	star := time.Now()
 	defer ants.Release()

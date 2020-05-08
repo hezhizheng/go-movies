@@ -162,10 +162,9 @@ func MovieDetail(link string) map[string]interface{} {
 	}
 
 	if detail["name"] == "" {
-		//go utils.MoviesInfo(link)
 		// 重新采集
 		detailId := TransformCategoryId(link)
-		go spider.Detail(detailId,0)
+		spider.Create().PageDetail(detailId)
 	}
 
 	var kuYunMap []map[string]interface{}
