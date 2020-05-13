@@ -71,6 +71,11 @@ type FastHttp struct {
 	resp *fasthttp.Response
 }
 
+type CatePageCount struct {
+	categoryId string
+	PageCount int
+}
+
 var (
 	Smutex sync.Mutex
 	wg     sync.WaitGroup
@@ -110,22 +115,42 @@ func list(pg int) {
 	// 执行时间标记
 	startTime := time.Now()
 	defer ants.Release()
-	antPool, _ := ants.NewPool(300)
+	antPool, _ := ants.NewPool(5)
 
 	_f := initFastHttp()
 
-	subCategoryIds := subCategoryIds()
+	catePageCounts := getCategoryPageCount(_f)
 
-	for _, subCategoryId := range subCategoryIds {
+	log.Println(catePageCounts)
+
+	//return
+	//
+	//subCategoryIds := subCategoryIds()
+	//
+	//log.Println("subCategoryIds",subCategoryIds)
+	//
+	//for _, subCategoryId := range subCategoryIds {
+	//	wg.Add(1)
+	//
+	//	pageCount, t := pageCount(subCategoryId, pg, _f)
+	//
+	//	antPool.Submit(func() {
+	//		actionList(t, pg, pageCount, _f)
+	//		wg.Done()
+	//	})
+	//
+	//}
+
+	for _, catePageCount := range catePageCounts {
 		wg.Add(1)
-		pageCount, t := pageCount(subCategoryId, pg, _f)
 
 		antPool.Submit(func() {
-			actionList(t, pg, pageCount, _f)
+			actionList(catePageCount.categoryId, pg, catePageCount.PageCount, _f)
 			wg.Done()
 		})
 
 	}
+
 	wg.Wait()
 
 	// 结束时间标记
@@ -147,10 +172,11 @@ func list(pg int) {
 
 func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
 
+	//return
 	for j := pg; j <= pageCount; j++ {
 
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
-		log.Println("当前page"+strconv.Itoa(j), url)
+		log.Println("当前page"+strconv.Itoa(j), url,pageCount)
 
 		_f.req.SetRequestURI(url)
 
@@ -228,8 +254,10 @@ func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
 		log.Println(err)
 	}
 
-	log.Println("获取总页数", url, "total", nav.PageCount)
-	return nav.PageCount, subCategoryId
+
+	PageCount := nav.PageCount
+	log.Println("获取总页数", url, "PageCount", PageCount,"subCategoryId",subCategoryId)
+	return PageCount, subCategoryId
 }
 
 // id与旧的网页爬虫对应不上
@@ -511,7 +539,7 @@ func CategoriesStr() string {
 	return categories
 }
 
-// 获取
+// 获取所有类别ID
 func subCategoryIds() []string {
 	var nav []Categories
 	categoriesStr := CategoriesStr()
@@ -535,6 +563,28 @@ func subCategoryIds() []string {
 	}
 
 	return CategoryIds
+}
+
+func getCategoryPageCount(_f FastHttp) []CatePageCount {
+	subCategoryIds := subCategoryIds()
+
+	var CatePageCounts []CatePageCount
+
+	for _, subCategoryId := range subCategoryIds {
+
+		pageCount, t := pageCount(subCategoryId, 1, _f)
+
+		CatePageCount := CatePageCount{
+			categoryId: t,
+			PageCount:  pageCount,
+		}
+
+		Smutex.Lock()
+		CatePageCounts = append(CatePageCounts, CatePageCount)
+		Smutex.Unlock()
+	}
+
+	return CatePageCounts
 }
 
 func FormatVodPlayUrl(VodPlayUrl string) ([]string, []string) {
