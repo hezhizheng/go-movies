@@ -114,7 +114,9 @@ func list(pg int) {
 
 	_f := initFastHttp()
 
-	for _, subCategoryId := range subCategoryIds() {
+	subCategoryIds := subCategoryIds()
+
+	for _, subCategoryId := range subCategoryIds {
 		wg.Add(1)
 		pageCount, t := pageCount(subCategoryId, pg, _f)
 
