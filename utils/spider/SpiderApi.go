@@ -73,7 +73,7 @@ type FastHttp struct {
 
 type CatePageCount struct {
 	categoryId string
-	PageCount int
+	PageCount  int
 }
 
 var (
@@ -100,8 +100,13 @@ func initFastHttp() FastHttp {
 		fasthttp.ReleaseRequest(req)
 	}()
 
+	// 模拟是postman发起的请求
+	req.Header.SetBytesKV([]byte("User-Agent"), []byte("PostmanRuntime/7.24.1"))
+	req.Header.SetBytesKV([]byte("Accept"), []byte("*/*"))
+
 	req.Header.SetMethod("GET")
 
+	// 不验证https证书
 	f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
 
 	return FastHttp{f: f, req: req, resp: resp}
@@ -123,29 +128,15 @@ func list(pg int) {
 
 	log.Println(catePageCounts)
 
-	//return
-	//
-	//subCategoryIds := subCategoryIds()
-	//
-	//log.Println("subCategoryIds",subCategoryIds)
-	//
-	//for _, subCategoryId := range subCategoryIds {
-	//	wg.Add(1)
-	//
-	//	pageCount, t := pageCount(subCategoryId, pg, _f)
-	//
-	//	antPool.Submit(func() {
-	//		actionList(t, pg, pageCount, _f)
-	//		wg.Done()
-	//	})
-	//
-	//}
-
 	for _, catePageCount := range catePageCounts {
 		wg.Add(1)
+		categoryId := catePageCount.categoryId
+		PageCount := catePageCount.PageCount
 
 		antPool.Submit(func() {
-			actionList(catePageCount.categoryId, pg, catePageCount.PageCount, _f)
+			// 这里不用直接使用 catePageCount.categoryId 、catePageCount.PageCount
+			// 在 submit 之前赋值变量传进来
+			actionList(categoryId, pg, PageCount, _f)
 			wg.Done()
 		})
 
@@ -176,12 +167,19 @@ func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
 	for j := pg; j <= pageCount; j++ {
 
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
-		log.Println("当前page"+strconv.Itoa(j), url,pageCount)
+		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
 
 		_f.req.SetRequestURI(url)
 
 		if err := _f.f.Do(_f.req, _f.resp); err != nil {
 			log.Println("请求失败:", err.Error())
+			return
+		}
+
+		// 10秒超时
+		e := _f.f.DoTimeout(_f.req, _f.resp, 10*time.Second)
+		if e != nil {
+			log.Println("DoTimeout 请求超时", url)
 			return
 		}
 
@@ -246,6 +244,13 @@ func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
 		return 0, subCategoryId
 	}
 
+	// 10秒超时
+	e := _f.f.DoTimeout(_f.req, _f.resp, 10*time.Second)
+	if e != nil {
+		log.Println("DoTimeout 请求超时", url)
+		return 0, subCategoryId
+	}
+
 	body := _f.resp.Body()
 
 	var nav ResData
@@ -254,9 +259,8 @@ func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
 		log.Println(err)
 	}
 
-
 	PageCount := nav.PageCount
-	log.Println("获取总页数", url, "PageCount", PageCount,"subCategoryId",subCategoryId)
+	log.Println("获取总页数", url, "PageCount", PageCount, "subCategoryId", subCategoryId)
 	return PageCount, subCategoryId
 }
 
@@ -275,6 +279,13 @@ func Detail(id string, retry int, _f FastHttp) {
 
 	if err := _f.f.Do(_f.req, _f.resp); err != nil {
 		log.Println("请求失败:", err.Error())
+		return
+	}
+
+	// 10秒超时
+	e := _f.f.DoTimeout(_f.req, _f.resp, 10*time.Second)
+	if e != nil {
+		log.Println("DoTimeout 请求超时", url)
 		return
 	}
 
@@ -378,167 +389,6 @@ func Detail(id string, retry int, _f FastHttp) {
 	log.Println("当前详情", url, t)
 }
 
-// 定义主类与子类的关系
-func CategoriesStr() string {
-	categories := `[
-    {
-        "link": "/?m=vod-type-id-1.html",
-        "name": "电影片",
-        "type_id": "1",
-        "sub": [
-            {
-                "link": "/?m=vod-type-id-6.html",
-                "name": "动作片",
-                "type_id": "6",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-7.html",
-                "name": "喜剧片",
-                "type_id": "7",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-8.html",
-                "name": "爱情片",
-                "type_id": "8",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-9.html",
-                "name": "科幻片",
-                "type_id": "9",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-10.html",
-                "name": "恐怖片",
-                "type_id": "10",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-11.html",
-                "name": "剧情片",
-                "type_id": "11",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-12.html",
-                "name": "战争片",
-                "type_id": "12",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-20.html",
-                "name": "纪录片",
-                "type_id": "20",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-21.html",
-                "name": "微电影",
-                "type_id": "21",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-37.html",
-                "name": "伦理片",
-                "type_id": "37",
-                "sub": null
-            }
-        ]
-    },
-    {
-        "link": "/?m=vod-type-id-2.html",
-        "name": "连续剧",
-        "type_id": "2",
-        "sub": [
-            {
-                "link": "/?m=vod-type-id-13.html",
-                "name": "国产剧",
-                "type_id": "13",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-14.html",
-                "name": "香港剧",
-                "type_id": "14",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-15.html",
-                "name": "韩国剧",
-                "type_id": "15",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-16.html",
-                "name": "欧美剧",
-                "type_id": "16",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-22.html",
-                "name": "台湾剧",
-                "type_id": "22",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-23.html",
-                "name": "日本剧",
-                "type_id": "23",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-24.html",
-                "name": "海外剧",
-                "type_id": "24",
-                "sub": null
-            }
-        ]
-    },
-    {
-        "link": "/?m=vod-type-id-4.html",
-        "name": "动漫片",
-        "type_id": "4",
-        "sub": [
-            {
-                "link": "/?m=vod-type-id-29.html",
-                "name": "国产动漫",
-                "type_id": "29",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-30.html",
-                "name": "日韩动漫",
-                "type_id": "30",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-31.html",
-                "name": "欧美动漫",
-                "type_id": "31",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-32.html",
-                "name": "港台动漫",
-                "type_id": "32",
-                "sub": null
-            },
-            {
-                "link": "/?m=vod-type-id-33.html",
-                "name": "海外动漫",
-                "type_id": "33",
-                "sub": null
-            }
-        ]
-    }
-]`
-
-	return categories
-}
-
 // 获取所有类别ID
 func subCategoryIds() []string {
 	var nav []Categories
@@ -565,6 +415,7 @@ func subCategoryIds() []string {
 	return CategoryIds
 }
 
+// 获取每个类别对应的总数
 func getCategoryPageCount(_f FastHttp) []CatePageCount {
 	subCategoryIds := subCategoryIds()
 
