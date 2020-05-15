@@ -77,8 +77,9 @@ type CatePageCount struct {
 }
 
 var (
-	Smutex sync.Mutex
-	wg     sync.WaitGroup
+	Smutex  sync.Mutex
+	wg      sync.WaitGroup
+	timeOut = 10 * time.Second // 请求超时时间
 )
 
 func (spiderApi *SpiderApi) Start() {
@@ -99,10 +100,6 @@ func initFastHttp() FastHttp {
 		fasthttp.ReleaseResponse(resp)
 		fasthttp.ReleaseRequest(req)
 	}()
-
-	// 模拟是postman发起的请求
-	req.Header.SetBytesKV([]byte("User-Agent"), []byte("PostmanRuntime/7.24.1"))
-	req.Header.SetBytesKV([]byte("Accept"), []byte("*/*"))
 
 	req.Header.SetMethod("GET")
 
@@ -169,6 +166,9 @@ func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
 		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
 
+		RandomUserAgent := RandomUserAgent()
+		_f.req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+
 		_f.req.SetRequestURI(url)
 
 		if err := _f.f.Do(_f.req, _f.resp); err != nil {
@@ -176,10 +176,9 @@ func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
 			return
 		}
 
-		// 10秒超时
-		e := _f.f.DoTimeout(_f.req, _f.resp, 10*time.Second)
+		e := _f.f.DoTimeout(_f.req, _f.resp, timeOut)
 		if e != nil {
-			log.Println("DoTimeout 请求超时", url)
+			log.Println("DoTimeout actionList 请求超时", url, e)
 			return
 		}
 
@@ -237,6 +236,9 @@ func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
 func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
 	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(pg)
 
+	RandomUserAgent := RandomUserAgent()
+	_f.req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+
 	_f.req.SetRequestURI(url)
 
 	if err := _f.f.Do(_f.req, _f.resp); err != nil {
@@ -244,11 +246,10 @@ func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
 		return 0, subCategoryId
 	}
 
-	// 10秒超时
-	e := _f.f.DoTimeout(_f.req, _f.resp, 10*time.Second)
+	e := _f.f.DoTimeout(_f.req, _f.resp, timeOut)
 	if e != nil {
-		log.Println("DoTimeout 请求超时", url)
-		return 0, subCategoryId
+		log.Println("DoTimeout pageCount 请求超时", url, e)
+		pageCount(subCategoryId, pg, _f)
 	}
 
 	body := _f.resp.Body()
@@ -275,6 +276,9 @@ func Detail(id string, retry int, _f FastHttp) {
 		return
 	}
 
+	RandomUserAgent := RandomUserAgent()
+	_f.req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+
 	_f.req.SetRequestURI(url)
 
 	if err := _f.f.Do(_f.req, _f.resp); err != nil {
@@ -282,10 +286,9 @@ func Detail(id string, retry int, _f FastHttp) {
 		return
 	}
 
-	// 10秒超时
-	e := _f.f.DoTimeout(_f.req, _f.resp, 10*time.Second)
+	e := _f.f.DoTimeout(_f.req, _f.resp, timeOut)
 	if e != nil {
-		log.Println("DoTimeout 请求超时", url)
+		log.Println("DoTimeout Detail 请求超时", url, e)
 		return
 	}
 
