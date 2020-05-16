@@ -1,7 +1,6 @@
 package spider
 
 import (
-	"crypto/tls"
 	"github.com/go-redis/redis/v7"
 	"github.com/panjf2000/ants/v2"
 	"github.com/spf13/viper"
@@ -103,8 +102,9 @@ func initFastHttp() FastHttp {
 
 	req.Header.SetMethod("GET")
 
-	// 不验证https证书
-	f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
+	// 不验证https证书 todo 这里根据实际情况是否选择
+	//f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
+	f := fasthttp.Client{}
 
 	return FastHttp{f: f, req: req, resp: resp}
 }
