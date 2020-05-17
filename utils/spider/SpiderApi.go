@@ -86,11 +86,11 @@ func (spiderApi *SpiderApi) Start() {
 }
 
 func (spiderApi *SpiderApi) PageDetail(id string) {
-	_f := initFastHttp()
-	go Detail(id, 0, _f)
+	go Detail(id, 0)
 }
 
 // 初始化 fasthttp GET 的请求与响应
+// @deprecated
 func initFastHttp() FastHttp {
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -117,11 +117,11 @@ func list(pg int) {
 	// 执行时间标记
 	startTime := time.Now()
 	defer ants.Release()
-	antPool, _ := ants.NewPool(5)
+	antPool, _ := ants.NewPool(100)
 
-	_f := initFastHttp()
+	//_f := initFastHttp()
 
-	catePageCounts := getCategoryPageCount(_f)
+	catePageCounts := getCategoryPageCount()
 
 	log.Println(catePageCounts)
 
@@ -131,9 +131,9 @@ func list(pg int) {
 		PageCount := catePageCount.PageCount
 
 		antPool.Submit(func() {
-			// 这里不用直接使用 catePageCount.categoryId 、catePageCount.PageCount
+			// 这里不能直接使用 catePageCount.categoryId 、catePageCount.PageCount
 			// 在 submit 之前赋值变量传进来
-			actionList(categoryId, pg, PageCount, _f)
+			actionList(categoryId, pg, PageCount)
 			wg.Done()
 		})
 
@@ -158,31 +158,36 @@ func list(pg int) {
 
 }
 
-func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
+func actionList(subCategoryId string, pg int, pageCount int) {
 
 	//return
 	for j := pg; j <= pageCount; j++ {
 
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
+		req := fasthttp.AcquireRequest()
+		resp := fasthttp.AcquireResponse()
+		defer func() {
+			// 用完需要释放资源
+			fasthttp.ReleaseResponse(resp)
+			fasthttp.ReleaseRequest(req)
+		}()
+
+		req.Header.SetMethod("GET")
+
+
 		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
 
 		RandomUserAgent := RandomUserAgent()
-		_f.req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+		req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
 
-		_f.req.SetRequestURI(url)
+		req.SetRequestURI(url)
 
-		if err := _f.f.Do(_f.req, _f.resp); err != nil {
-			log.Println("请求失败:", err.Error())
+		if err := fasthttp.Do(req, resp); err != nil {
+			log.Println("actionList 请求失败:", err.Error())
 			return
 		}
 
-		e := _f.f.DoTimeout(_f.req, _f.resp, timeOut)
-		if e != nil {
-			log.Println("DoTimeout actionList 请求超时", url, e)
-			return
-		}
-
-		body := _f.resp.Body()
+		body := resp.Body()
 
 		var nav ResData
 		err := utils.Json.Unmarshal(body, &nav)
@@ -226,33 +231,38 @@ func actionList(subCategoryId string, pg int, pageCount int, _f FastHttp) {
 			}
 
 			// 获取详情
-			Detail(strconv.Itoa(value.VodId), 0, _f)
+			Detail(strconv.Itoa(value.VodId), 0)
 
 		}
 	}
 
 }
 
-func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
-	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(pg)
+func pageCount(subCategoryId string) (int, string) {
+	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=1"
+
+	req := fasthttp.AcquireRequest()
+	resp := fasthttp.AcquireResponse()
+	defer func() {
+		// 用完需要释放资源
+		fasthttp.ReleaseResponse(resp)
+		fasthttp.ReleaseRequest(req)
+	}()
+
+	req.Header.SetMethod("GET")
 
 	RandomUserAgent := RandomUserAgent()
-	_f.req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+	req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
 
-	_f.req.SetRequestURI(url)
+	req.SetRequestURI(url)
 
-	if err := _f.f.Do(_f.req, _f.resp); err != nil {
-		log.Println("请求失败:", url, err.Error())
-		return 0, subCategoryId
+	if err := fasthttp.Do(req, resp); err != nil {
+		log.Println("pageCount 请求失败:", url, err.Error())
+		pageCount(subCategoryId)
+		//return 0, subCategoryId
 	}
 
-	e := _f.f.DoTimeout(_f.req, _f.resp, timeOut)
-	if e != nil {
-		log.Println("DoTimeout pageCount 请求超时", url, e)
-		pageCount(subCategoryId, pg, _f)
-	}
-
-	body := _f.resp.Body()
+	body := resp.Body()
 
 	var nav ResData
 	err := utils.Json.Unmarshal(body, &nav)
@@ -266,7 +276,7 @@ func pageCount(subCategoryId string, pg int, _f FastHttp) (int, string) {
 }
 
 // id与旧的网页爬虫对应不上
-func Detail(id string, retry int, _f FastHttp) {
+func Detail(id string, retry int) {
 	// movies_detail:/?m=vod-detail-id-10051.html:movie_name:第102次相亲
 	url := ApiHost + "?ac=" + AcDetail + "&ids=" + id + "&pg=1"
 
@@ -276,23 +286,27 @@ func Detail(id string, retry int, _f FastHttp) {
 		return
 	}
 
+	req := fasthttp.AcquireRequest()
+	resp := fasthttp.AcquireResponse()
+	defer func() {
+		// 用完需要释放资源
+		fasthttp.ReleaseResponse(resp)
+		fasthttp.ReleaseRequest(req)
+	}()
+
+	req.Header.SetMethod("GET")
+
 	RandomUserAgent := RandomUserAgent()
-	_f.req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+	req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
 
-	_f.req.SetRequestURI(url)
+	req.SetRequestURI(url)
 
-	if err := _f.f.Do(_f.req, _f.resp); err != nil {
-		log.Println("请求失败:", err.Error())
+	if err := fasthttp.Do(req, resp); err != nil {
+		log.Println("Detail 请求失败:", err.Error())
 		return
 	}
 
-	e := _f.f.DoTimeout(_f.req, _f.resp, timeOut)
-	if e != nil {
-		log.Println("DoTimeout Detail 请求超时", url, e)
-		return
-	}
-
-	body := _f.resp.Body()
+	body := resp.Body()
 
 	var nav ResData
 	err := utils.Json.Unmarshal(body, &nav)
@@ -310,7 +324,7 @@ func Detail(id string, retry int, _f FastHttp) {
 				break
 			}
 			retry++
-			Detail(id, retry, _f)
+			Detail(id, retry)
 			log.Println("正在重试...", url, retry)
 		}
 
@@ -419,14 +433,14 @@ func subCategoryIds() []string {
 }
 
 // 获取每个类别对应的总数
-func getCategoryPageCount(_f FastHttp) []CatePageCount {
+func getCategoryPageCount() []CatePageCount {
 	subCategoryIds := subCategoryIds()
 
 	var CatePageCounts []CatePageCount
 
 	for _, subCategoryId := range subCategoryIds {
 
-		pageCount, t := pageCount(subCategoryId, 1, _f)
+		pageCount, t := pageCount(subCategoryId)
 
 		CatePageCount := CatePageCount{
 			categoryId: t,
