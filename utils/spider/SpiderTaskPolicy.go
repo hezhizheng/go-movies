@@ -5,17 +5,14 @@ import (
 	"go_movies/utils"
 )
 
+// 定义 mod 的映射关系
+var spiderModMap = map[string]utils.SpiderTask{
+	"api":     &SpiderApi{},
+	"WebPage": &utils.Spider{}}
+
 func Create() utils.SpiderTask {
 
 	mod := viper.GetString(`app.spider_mod`)
 
-	switch mod {
-	case "api":
-		//return &SpiderApi{}
-		return new(SpiderApi)
-	case "WebPage":
-		return new(utils.Spider)
-	default:
-		return new(SpiderApi)
-	}
+	return spiderModMap[mod]
 }
