@@ -62,6 +62,11 @@ http://127.0.0.1:8899
 - [https://github.com/gocolly/colly](https://github.com/gocolly/colly) 爬虫框架
 - 模板引擎：https://github.com/shiyanhui/hero
 - 数据库 redis 缓存/持久 [https://github.com/Go-redis/redis](https://github.com/Go-redis/redis)
+  - Zset：每个分类为一个有序集合
+    - score：电影更新的时间戳
+    - member：电影对应的实际URL
+  - Hash：电影具体信息(名称、封面图等)
+  - String：每页数据的缓存
 - 路由 [https://github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter)
 - json解析 jsoniter [github.com/json-iterator/go](github.com/json-iterator/go)
 - 跨平台打包：https://github.com/mitchellh/gox
