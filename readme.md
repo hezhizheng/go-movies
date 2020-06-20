@@ -158,4 +158,4 @@ sudo docker-compose up -d
 许多Go的原理还没弄懂，有精力会慢慢深究下。写得很潦草，多多包涵。
 
 ## License
-[MIT](./LICENSE)
+[MIT](./LICENSE.txt)
