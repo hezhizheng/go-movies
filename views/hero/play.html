@@ -55,13 +55,31 @@
 
                         <% }else if show["type"].(string) == "mp4" { %>
 
-                        <iframe id="real_play" width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
-                                frameborder="0" scrolling="no"
-                                src=""></iframe>
+                        <video id="mp4-video"
+                               class="video-js vjs-default-skin vjs-fluid vjs-big-play-centered "
+                               width="100%"
+                               height="100%"
+                               controls
+                               preload="none"
+                               x5-video-player-type='h5'
+                               x5-video-player-fullscreen='true'
+                               x5-video-player-orientation="landscape"
+                               autoplay
+                               data-setup='{ "html5" : { "nativeTextTracks" : false } }'>
+                            <source src="<%= show["play_url"].(string) %>" type="video/mp4">
+                            <p class="vjs-no-js">  播放视频需要启用 JavaScript，推荐使用<a href="http://videojs.com/html5-video-support/" target="_blank">支持HTML5</a>的浏览器访问。</p>
+                        </video>
 
                         <% }else{ %>
 
-                        <video id=example-video  class="video-js vjs-default-skin" controls preload="none">
+                        <video id=example-video
+                               class="video-js vjs-default-skin"
+                               controls
+                               x5-video-player-type='h5'
+                               x5-video-player-fullscreen='true'
+                               x5-video-player-orientation="landscape"
+                               autoplay
+                               preload="none">
                             <source
                                     src="<%= show["play_url"].(string) %>"
                             type="application/x-mpegURL">
@@ -162,11 +180,6 @@
 <%+ "footer.html" %>
 
 <script>
-    document.getElementById("real_play").src="//" +location.host + "/play?play_url=<%= show["play_url"].(string) %>&play_type=<%= show["type"].(string) %>";
-    // document.getElementById("real_play").src="<%= show["play_url"].(string) %>";
-</script>
-
-<script>
     $('.lBtn').on('click', function(){
         let play_url = $(this).attr("play-link");
         let play_type = $(this).attr("play-type");
@@ -182,7 +195,9 @@
 
 <script>
     var player = videojs('example-video', { fluid: true });
+    var ma4_player = videojs('mp4-video', { fluid: true });
     player.play();
+    ma4_player.play();
 </script>
 
 </html>

@@ -136,13 +136,6 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	PlayUrl := r.URL.Query()["play_url"][0]
 
-	RealPlayQuery := r.URL.Query()["real_play"]
-
-	RealPlay := "0"
-	if len(RealPlayQuery) > 0 {
-		RealPlay = "1"
-	}
-
 	PlayType := "kuyun"
 	if strings.Contains(PlayUrl, ".mp4"){
 		PlayType = "mp4"
@@ -155,16 +148,12 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	buffer := new(bytes.Buffer)
 
-	if RealPlay == "1" {
-		Categories := services.AllCategoryDate()
-		link := r.URL.Query()["link"][0]
-		MovieDetail := services.MovieDetail(link)
-		show["MovieDetail"] = MovieDetail
-		show["categories"] = Categories
-		heroTpl.Play(show, buffer)
-	} else if PlayType == "mp4" {
-		heroTpl.Mp4(show, buffer)
-	}
+	Categories := services.AllCategoryDate()
+	link := r.URL.Query()["link"][0]
+	MovieDetail := services.MovieDetail(link)
+	show["MovieDetail"] = MovieDetail
+	show["categories"] = Categories
+	heroTpl.Play(show, buffer)
 
 	w.Write(buffer.Bytes())
 }
