@@ -234,9 +234,6 @@ func Play(show map[string]interface{}, buffer *bytes.Buffer) {
                                height="100%"
                                controls
                                preload="none"
-                               x5-video-player-type='h5'
-                               x5-video-player-fullscreen='true'
-                               x5-video-player-orientation="landscape"
                                autoplay
                                data-setup='{ "html5" : { "nativeTextTracks" : false } }'>
                             <source src="`)
@@ -252,9 +249,6 @@ func Play(show map[string]interface{}, buffer *bytes.Buffer) {
                         <video id=example-video
                                class="video-js vjs-default-skin"
                                controls
-                               x5-video-player-type='h5'
-                               x5-video-player-fullscreen='true'
-                               x5-video-player-orientation="landscape"
                                autoplay
                                preload="none">
                             <source
