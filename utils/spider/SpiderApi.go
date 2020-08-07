@@ -27,6 +27,7 @@ type Lists struct {
 	VodId         int    `json:"vod_id"` // 如果json中vod_id不是“1”，而是 1 ，这里一定要声明为 int ！！！fuck 不愧是静态强类型
 	VodName       string `json:"vod_name"`
 	TypeId        int    `json:"type_id"`
+	TypeId1       int    `json:"type_id_1"`
 	TypeName      string `json:"type_name"`
 	VodEn         string `json:"vod_en"`
 	VodTime       string `json:"vod_time"`
@@ -173,7 +174,6 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 		}()
 
 		req.Header.SetMethod("GET")
-
 
 		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
 
@@ -345,8 +345,10 @@ func Detail(id string, retry int) {
 	mp4 := FormatVodPDownUrl(listDetail.VodPDownUrl)
 
 	for ik, kuyunValue := range kuyun {
+		episode := strconv.Itoa(ik + 1)
+		episode = Lang(listDetail.TypeId1, kuyunValue, listDetail.VodPlayUrl, episode)
 		k := map[string]string{
-			"episode":   strconv.Itoa(ik + 1),
+			"episode":   episode,
 			"play_link": kuyunValue}
 		Smutex.Lock()
 		kuyunAry = append(kuyunAry, k)
@@ -354,8 +356,10 @@ func Detail(id string, retry int) {
 	}
 
 	for ic, ckm3u8Value := range ckm3u8 {
+		episode := strconv.Itoa(ic + 1)
+		episode = Lang(listDetail.TypeId1, ckm3u8Value, listDetail.VodPlayUrl, episode)
 		c := map[string]string{
-			"episode":   strconv.Itoa(ic + 1),
+			"episode":   episode,
 			"play_link": ckm3u8Value}
 		Smutex.Lock()
 		ckm3u8Ary = append(ckm3u8Ary, c)
@@ -363,8 +367,10 @@ func Detail(id string, retry int) {
 	}
 
 	for im, mp4Value := range mp4 {
+		episode := strconv.Itoa(im + 1)
+		episode = Lang(listDetail.TypeId1, mp4Value, listDetail.VodPDownUrl, episode)
 		m := map[string]string{
-			"episode":   strconv.Itoa(im + 1),
+			"episode":   episode,
 			"play_link": mp4Value}
 		Smutex.Lock()
 		downloadAry = append(downloadAry, m)
@@ -453,6 +459,22 @@ func getCategoryPageCount() []CatePageCount {
 	}
 
 	return CatePageCounts
+}
+
+// 区分电影的广东话跟国语
+func Lang(vodType int, resourcesUrl, allResource, episode string) string {
+
+	if vodType == 1 {
+		cantonese := "粤语$" + resourcesUrl
+		mandarin := "国语$" + resourcesUrl
+		if strings.Contains(allResource, cantonese) {
+			episode = "粤语"
+		} else if strings.Contains(allResource, mandarin) {
+			episode = "国语"
+		}
+	}
+
+	return episode
 }
 
 func FormatVodPlayUrl(VodPlayUrl string) ([]string, []string) {
