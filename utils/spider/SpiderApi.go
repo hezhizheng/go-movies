@@ -467,9 +467,13 @@ func Lang(vodType int, resourcesUrl, allResource, episode string) string {
 	if vodType == 1 {
 		cantonese := "粤语$" + resourcesUrl
 		mandarin := "国语$" + resourcesUrl
-		if strings.Contains(allResource, cantonese) {
+		hdCantonese := "HD粤语高清$" + resourcesUrl
+		hdMandarin := "HD国语高清$" + resourcesUrl
+		if strings.Contains(allResource, cantonese) ||
+			strings.Contains(allResource, hdCantonese) {
 			episode = "粤语"
-		} else if strings.Contains(allResource, mandarin) {
+		} else if strings.Contains(allResource, mandarin) ||
+			strings.Contains(allResource, hdMandarin) {
 			episode = "国语"
 		}
 	}
