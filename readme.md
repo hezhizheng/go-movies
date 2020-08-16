@@ -157,5 +157,11 @@ sudo docker-compose up -d
 ## Other
 许多Go的原理还没弄懂，有精力会慢慢深究下。写得很潦草，多多包涵。
 
+## 🔋 JetBrains 开源证书支持
+
+`go-movies` 项目一直以来都是在 JetBrains 公司旗下的 GoLand 集成开发环境中进行开发，基于 **free JetBrains Open Source license(s)** 正版免费授权，在此表达我的谢意。
+
+<a href="https://www.jetbrains.com/?from=go-movies" target="_blank"><img src="https://i.loli.net/2020/08/16/Brce57tU4SQWspm.png" width="250" align="middle"/></a>
+
 ## License
 [MIT](./LICENSE.txt)
