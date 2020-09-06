@@ -605,13 +605,8 @@ func TransformId(Url string) string {
 }
 
 func DelAllListCacheKey() {
-
-	AllListCacheKey := RedisDB.Keys("movie_lists_key:detail_links:*").Val()
-
-	// 删除已经缓存的数据
-	for _, val := range AllListCacheKey {
-		RedisDB.Del(val)
-	}
+	//services.DelMoviesPaginateCache()
+	RedisDB.Del("paginate")
 }
 
 func isFilm(_type string) bool {

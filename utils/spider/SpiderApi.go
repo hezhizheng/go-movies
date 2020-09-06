@@ -559,11 +559,5 @@ func SendDingMsg(msg string) {
 }
 
 func DelAllListCacheKey() {
-
-	AllListCacheKey := utils.RedisDB.Keys("movie_lists_key:detail_links:*").Val()
-
-	// 删除已经缓存的数据
-	for _, val := range AllListCacheKey {
-		utils.RedisDB.Del(val)
-	}
+	utils.RedisDB.Del("paginate")
 }

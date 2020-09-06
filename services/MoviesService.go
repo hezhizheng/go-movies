@@ -14,6 +14,8 @@ import (
 
 //var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
+const paginateCacheKey  = "paginate"
+
 type MovieListStruct struct {
 	Link      string `json:"link"`
 	Name      string `json:"name"`
@@ -103,9 +105,11 @@ func MovieListsRange(key string, start, stop int64) []MovieListStruct {
 	sStart := strconv.FormatInt(start, 10)
 	sStop := strconv.FormatInt(stop, 10)
 
+	// field
 	cacheKey := "movie_lists_key:" + key + ":start:" + sStart + ":stop:" + sStop
+	cacheHashKey := paginateCacheKey
 
-	movieList := models.FindMoviesStringValue(cacheKey)
+	movieList := models.FindMoviesHashFieldValue(cacheHashKey,cacheKey)
 
 	if movieList != "" {
 		utils.Json.Unmarshal([]byte(movieList), &data)
@@ -138,9 +142,11 @@ func MovieListsRange(key string, start, stop int64) []MovieListStruct {
 		data = append(data, movieKeyMap)
 		mutex.Unlock()
 
-		byteData, _ := utils.Json.MarshalIndent(data, "", " ")
-		models.SaveMovies(cacheKey, string(byteData))
 	}
+
+	// 这个应该是在for外面调用才对，之前居然也不报错。。。。。。
+	byteData, _ := utils.Json.MarshalIndent(data, "", " ")
+	models.SaveMoviesHash(cacheHashKey, cacheKey ,string(byteData))
 
 	return data
 }

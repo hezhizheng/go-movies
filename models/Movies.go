@@ -25,5 +25,13 @@ func FindMoviesHashValue(key string) map[string]string {
 }
 
 func SaveMovies(key string, value string) error {
-	return utils.RedisDB.Set(key, value, 0).Err()
+	return utils.RedisDB.SetNX(key, value, 0).Err()
+}
+
+func SaveMoviesHash(key, field string, value interface{}) error {
+	return utils.RedisDB.HSetNX(key, field, value).Err()
+}
+
+func FindMoviesHashFieldValue(key, field string) string {
+	return utils.RedisDB.HGet(key,field).Val()
 }
