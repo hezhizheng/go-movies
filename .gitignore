@@ -2,5 +2,6 @@
 /config/*.conf
 /config/*.json
 /config/*.go
+/tmp
 *.exe
 *.exe~

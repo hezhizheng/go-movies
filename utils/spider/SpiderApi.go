@@ -111,6 +111,10 @@ func initFastHttp() FastHttp {
 }
 
 func StartApi() {
+	allMoviesDoneKeyExists := utils.RedisDB.Exists("all_movies_done").Val()
+	if allMoviesDoneKeyExists > 0 {
+		return
+	}
 	list(1)
 }
 
@@ -154,13 +158,150 @@ func list(pg int) {
 	// 删除已缓存的页面
 	go DelAllListCacheKey()
 
+	// 全量 done -> set done 永久Redis 标识 -> new corntab every min ( done key exist && recent_update_key expire ) -> set recent_update_key 1h expire -> do recent 3h update
+	utils.RedisDB.SetNX("all_movies_done","done", 0)
+
 	// 钉钉通知
 	SendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
 
 }
 
-func actionList(subCategoryId string, pg int, pageCount int) {
+func DoRecentUpdate()  {
+	allMoviesDoneKeyExists := utils.RedisDB.Exists("all_movies_done").Val()
+	recentUpdateKeyExists := utils.RedisDB.Exists("recent_update_key").Val()
 
+	if allMoviesDoneKeyExists > 0 && recentUpdateKeyExists == 0 {
+		utils.RedisDB.SetNX("recent_update_key","done", time.Second*3600).Err()
+		go actionRecentUpdateList()
+	}
+}
+
+func actionRecentUpdateList() {
+
+	pageCount := RecentUpdatePageCount()
+	//return
+	for j := 1; j <= pageCount; j++ {
+
+		url := ApiHost + "?h=3" + "&pg=" + strconv.Itoa(j)
+		req := fasthttp.AcquireRequest()
+		resp := fasthttp.AcquireResponse()
+		defer func() {
+			// 用完需要释放资源
+			fasthttp.ReleaseResponse(resp)
+			fasthttp.ReleaseRequest(req)
+		}()
+
+		req.Header.SetMethod("GET")
+
+		log.Println("actionRecentUpdateList 当前page"+strconv.Itoa(j), url, pageCount)
+
+		RandomUserAgent := RandomUserAgent()
+		req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+
+		req.SetRequestURI(url)
+
+		if err := fasthttp.Do(req, resp); err != nil {
+			log.Println("actionList 请求失败:", err.Error())
+			return
+		}
+
+		body := resp.Body()
+
+		var nav ResData
+		err := utils.Json.Unmarshal(body, &nav)
+		if err != nil {
+			log.Println(err)
+		}
+
+		for _, value := range nav.List {
+			// 不保存的类别 // 34,35,36,25,26,27,28,17,18,5
+			types := []int{34,35,36,25,26,27,28,17,18,5}
+			if inType(value.TypeId,types){
+				continue
+			}
+
+			// 模板时间
+			timeTemplate := "2006-01-02 15:04:05"
+			stamp1, _ := time.ParseInLocation(timeTemplate, value.VodTime, time.Local)
+
+			utils.RedisDB.ZAdd("detail_links:id:"+strconv.Itoa(value.TypeId), &redis.Z{
+				Score:  float64(stamp1.Unix()),
+				Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+			})
+
+			film := []int{6, 7, 8, 9, 10, 11, 12, 20, 21, 37}
+			tv := []int{13, 14, 15, 16, 22, 23, 24}
+			cartoon := []int{29, 30, 31, 32, 33}
+
+			if inType(value.TypeId, film) {
+				utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
+					Score:  float64(stamp1.Unix()),
+					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+				})
+			}
+
+			if inType(value.TypeId, tv) {
+				utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
+					Score:  float64(stamp1.Unix()),
+					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+				})
+			}
+
+			if inType(value.TypeId, cartoon) {
+				utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
+					Score:  float64(stamp1.Unix()),
+					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+				})
+			}
+
+			// 获取详情
+			Detail(strconv.Itoa(value.VodId), 0)
+
+		}
+	}
+
+}
+
+func RecentUpdatePageCount() int {
+	url := ApiHost + "?h=3&pg=1"
+
+	req := fasthttp.AcquireRequest()
+	resp := fasthttp.AcquireResponse()
+	defer func() {
+		// 用完需要释放资源
+		fasthttp.ReleaseResponse(resp)
+		fasthttp.ReleaseRequest(req)
+	}()
+
+	req.Header.SetMethod("GET")
+
+	RandomUserAgent := RandomUserAgent()
+	req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+
+	req.SetRequestURI(url)
+
+	if err := fasthttp.Do(req, resp); err != nil {
+		log.Println("pageCount 请求失败:", url, err.Error())
+		RecentUpdatePageCount()
+		//return 0, subCategoryId
+	}
+
+	body := resp.Body()
+	log.Println(string(body))
+
+	var nav ResData
+	err := utils.Json.Unmarshal(body, &nav)
+	if err != nil {
+		log.Println(err,"1111111111111111111111111")
+	}
+
+	PageCount := nav.PageCount
+	log.Println("获取最近更新总页数", url, "PageCount", PageCount)
+	return PageCount
+}
+
+
+func actionList(subCategoryId string, pg int, pageCount int) {
 	//return
 	for j := pg; j <= pageCount; j++ {
 

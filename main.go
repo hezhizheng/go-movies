@@ -86,6 +86,11 @@ func main() {
 		return
 	})
 
+	utils.RecentUpdate(func() {
+		spider.DoRecentUpdate()
+		return
+	})
+
 	log.Println(http.ListenAndServe(port, router))
 
 }

@@ -31,3 +31,16 @@ func TimingSpider(cmd func()) {
 	// 阻塞
 	//select {}
 }
+
+func RecentUpdate(cmd func())  {
+	c := cron.New()
+	// 每天定时执行的条件
+	spec := "* * * * *"
+
+	c.AddFunc(spec, func() {
+		log.Println("RecentUpdate corn start")
+		cmd()
+	})
+
+	go c.Start()
+}
