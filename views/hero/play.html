@@ -47,6 +47,9 @@
 
 
                 <div id="post_content" style="padding:0px;">
+                    <div class="video-title">
+                        <h1> <%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["name"] %> </h1>
+                    </div>
                     <div class="video">
                         <% if show["type"].(string) == "kuyun" { %>
                         <iframe width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
