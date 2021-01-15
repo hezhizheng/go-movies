@@ -159,10 +159,11 @@
     $('.lBtn').on('click', function(){
         let play_url = $(this).attr("play-link");
         let play_type = $(this).attr("play-type");
+        let episode = $(this).text()
 
         let link = "<%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["link"] %>";
 
-        window.open("//" +location.host + '/play?play_url=' + play_url + '&play_type=' + play_type + '&real_play=1'+'&link='+ link);
+        window.open("//" +location.host + '/play?play_url=' + play_url + '&play_type=' + play_type + '&real_play=1'+'&link='+ link+'&episode='+episode);
     });
 </script>
 

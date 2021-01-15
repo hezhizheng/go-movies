@@ -1740,7 +1740,7 @@ var (
 
 func RandomUserAgent() string {
 
-	count := len(UserAgents)
+	count := 1720
 	n := count - 1
 
 	index := rand.Intn(n)

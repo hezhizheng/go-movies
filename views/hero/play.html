@@ -26,6 +26,12 @@
         width: 100%;
         height: 100%;
     }
+
+    /*#mp4-video {*/
+    /*    width: 100%;*/
+    /*    height: 737px;*/
+    /*}*/
+
     .lBtn_h {
         background-color: red !important;
     }
@@ -48,7 +54,8 @@
 
                 <div id="post_content" style="padding:0px;">
                     <div class="video-title">
-                        <h1> <%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["name"] %> </h1>
+                        <h1 style="text-align: center"> <%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["name"] %> </h1>
+                        <h2 style="text-align: center" class="episode"></h2>
                     </div>
                     <div class="video">
                         <% if show["type"].(string) == "kuyun" { %>
@@ -58,29 +65,31 @@
 
                         <% }else if show["type"].(string) == "mp4" { %>
 
-                        <video id="mp4-video"
-                               class="video-js vjs-default-skin vjs-fluid vjs-big-play-centered "
-                               width="100%"
-                               height="100%"
-                               controls
-                               preload="none"
-                               autoplay
-                               data-setup='{ "html5" : { "nativeTextTracks" : false } }'>
-                            <source src="<%= show["play_url"].(string) %>" type="video/mp4">
-                            <p class="vjs-no-js">  播放视频需要启用 JavaScript，推荐使用<a href="http://videojs.com/html5-video-support/" target="_blank">支持HTML5</a>的浏览器访问。</p>
-                        </video>
+                        <div id="mp4-video" ></div>
+<!--                        <video id="mp4-video"-->
+<!--                               class="video-js vjs-default-skin vjs-fluid vjs-big-play-centered "-->
+<!--                               width="100%"-->
+<!--                               height="100%"-->
+<!--                               controls-->
+<!--                               preload="none"-->
+<!--                               autoplay-->
+<!--                               data-setup='{ "html5" : { "nativeTextTracks" : false } }'>-->
+<!--                            <source src="<%= show["play_url"].(string) %>" type="video/mp4">-->
+<!--                            <p class="vjs-no-js">  播放视频需要启用 JavaScript，推荐使用<a href="http://videojs.com/html5-video-support/" target="_blank">支持HTML5</a>的浏览器访问。</p>-->
+<!--                        </video>-->
 
                         <% }else{ %>
 
-                        <video id=example-video
-                               class="video-js vjs-default-skin"
-                               controls
-                               autoplay
-                               preload="none">
-                            <source
-                                    src="<%= show["play_url"].(string) %>"
-                            type="application/x-mpegURL">
-                        </video>
+                        <div id="hls-video" ></div>
+<!--                        <video id=example-video-->
+<!--                               class="video-js vjs-default-skin"-->
+<!--                               controls-->
+<!--                               autoplay-->
+<!--                               preload="none">-->
+<!--                            <source-->
+<!--                                    src="<%= show["play_url"].(string) %>"-->
+<!--                            type="application/x-mpegURL">-->
+<!--                        </video>-->
 
                         <% } %>
 
@@ -180,21 +189,63 @@
     $('.lBtn').on('click', function(){
         let play_url = $(this).attr("play-link");
         let play_type = $(this).attr("play-type");
+        let episode = $(this).text()
 
         let link = "<%= show["MovieDetail"].(map[string]interface{})["info"].(map[string]string)["link"] %>";
 
-        window.location.href = "//" +location.host + '/play?play_url=' + play_url + '&play_type=' + play_type + '&real_play=1'+'&link='+ link;
+        window.location.href = "//" +location.host + '/play?play_url=' + play_url + '&play_type=' + play_type + '&real_play=1'+'&link='+ link+'&episode='+episode;
     });
+
+
+    $('.episode').text(decodeURI(getQueryVariable('episode')))
+
+
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
+
 </script>
 
-<script src="//cdn.bootcss.com/video.js/7.6.0/alt/video.core.min.js"></script>
-<script src="//cdn.bootcss.com/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+<% if show["type"].(string) == "mp4" || show["type"].(string) == "m3u8" { %>
+<script src="//cdn.jsdelivr.net/npm/xgplayer@2.9.6/browser/index.js" type="text/javascript"></script>
+<script src="//sf1-ttcdn-tos.pstatp.com/obj/unpkg/xgplayer-hls.js/2.2.2/browser/index.js" charset="utf-8"></script>
+<% } %>
 
 <script>
-    var player = videojs('example-video', { fluid: true });
-    var ma4_player = videojs('mp4-video', { fluid: true });
-    player.play();
-    ma4_player.play();
+
+    <% if show["type"].(string) == "mp4" { %>
+    let playerMp4 = new Player({
+        id: 'mp4-video',
+        url: '<%= show["play_url"].(string) %>',
+        fluid: true,
+        autoplay: true,
+        playbackRate: [0.5, 0.75, 1, 1.5, 2],
+        defaultPlaybackRate: 1
+    });
+     <% } %>
+
+<% if show["type"].(string) == "m3u8" { %>
+new window.HlsJsPlayer({
+          id: 'hls-video',
+          url: '<%= show["play_url"].(string) %>',
+          fluid: true,
+          autoplay: true,
+        playbackRate: [0.5, 0.75, 1, 1.5, 2],
+        defaultPlaybackRate: 1
+      });
+<% } %>
+
+
+
 </script>
+
 
 </html>

@@ -173,6 +173,7 @@ func DoRecentUpdate()  {
 	if allMoviesDoneKeyExists > 0 && recentUpdateKeyExists == 0 {
 		utils.RedisDB.SetNX("recent_update_key","done", time.Second*3600).Err()
 		go actionRecentUpdateList()
+		SendDingMsg("actionRecentUpdateList 执行")
 	}
 }
 
