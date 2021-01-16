@@ -87,6 +87,7 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["prev_status"] = prevStatus
 	show["next_status"] = nextStatus
 	show["nav_link"] = navLink
+	show["film_title"] = ""
 
 	buffer := new(bytes.Buffer)
 	heroTpl.Index(show, buffer)
@@ -124,7 +125,7 @@ func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["new_film"] = NewFilm
 	show["new_tv"] = NewTV
 	show["nav_link"] = "/"
-
+	show["film_title"] = MovieDetail["info"].(map[string]string)["name"]
 	buffer := new(bytes.Buffer)
 	heroTpl.MDetail(show, buffer)
 	w.Write(buffer.Bytes())
@@ -153,6 +154,7 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	MovieDetail := services.MovieDetail(link)
 	show["MovieDetail"] = MovieDetail
 	show["categories"] = Categories
+	show["film_title"] = MovieDetail["info"].(map[string]string)["name"]
 	heroTpl.Play(show, buffer)
 
 	w.Write(buffer.Bytes())
@@ -188,6 +190,7 @@ func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["new_film"] = NewFilm
 	show["new_tv"] = NewTV
 	show["nav_link"] = "/"
+	show["film_title"] = ""
 
 	buffer := new(bytes.Buffer)
 	heroTpl.Search(show, buffer)
@@ -205,6 +208,7 @@ func About(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["categories"] = Categories
 
 	show["nav_link"] = "/about"
+	show["film_title"] = ""
 
 	buffer := new(bytes.Buffer)
 	heroTpl.About(show, buffer)

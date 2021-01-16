@@ -19,9 +19,17 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>GoMovies-电影</title>
-    <meta name="keywords" content="GoMovies-电影">
-    <meta name="description" content="GoMovies-电影">
+
+    <title>`)
+	hero.EscapeHTML(show["film_title"].(string), buffer)
+	buffer.WriteString(` GoMovies-电影-永久免费的福利超清影视站，没有套路，完全免费！ - 最新电视剧,最新电影</title>
+    <meta name="keywords" content="`)
+	hero.EscapeHTML(show["film_title"].(string), buffer)
+	buffer.WriteString(` 高清，在线观看">
+    <meta name="description" content="`)
+	hero.EscapeHTML(show["film_title"].(string), buffer)
+	buffer.WriteString(` GoMovies-电影提供电影电视剧在线观看，免费高清高速电影电视剧在线观看。">
+
     <meta property="wb:webmaster" content="bec25808">
     <meta name="referrer" content="never">
     <link rel="canonical" href="/static/css/css">
@@ -335,7 +343,7 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
 
             <li class="post box row fixed-hight">
                 <div class="post_hover">
-                    <div class="thumbnail">
+                    <div class="thumbnail" >
                         <a href="/movie?link=`)
 		hero.EscapeHTML(movieLists.Link, buffer)
 		buffer.WriteString(`" class="zoom" rel="bookmark" title="`)
@@ -349,7 +357,7 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
                                 onerror="this.src='/static/image/golang.png'"
                                 alt="`)
 		hero.EscapeHTML(movieLists.Name, buffer)
-		buffer.WriteString(`" >
+		buffer.WriteString(`" style="width: 100%;height: 450px; object-fit:cover">
                         </a>
                     </div>
                     <div class="article">
@@ -471,7 +479,7 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
     <script type='text/javascript' src='/static/js/jquery.min-3.8.1.js'></script>
     <script type='text/javascript' src='/static/js/lets-kill-ie6-3.8.1.js'></script>
 
-    <script type="text/javascript" src="/static/js/jquery.masonry.js"></script>
+<!--    <script type="text/javascript" src="/static/js/jquery.masonry.js"></script>-->
     <script type="text/javascript" src="/static/js/loostrive.js"></script>
 
     <script language="javascript" type="text/javascript">

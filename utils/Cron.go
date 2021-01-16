@@ -20,7 +20,6 @@ func TimingSpider(cmd func()) {
 		//go StartSpider()
 		//go spider.StartApi()
 		cmd()
-		log.Println("corn Spider ing:")
 	})
 
 	go c.Start()
@@ -38,7 +37,6 @@ func RecentUpdate(cmd func())  {
 	spec := "* * * * *"
 
 	c.AddFunc(spec, func() {
-		log.Println("RecentUpdate corn start")
 		cmd()
 	})
 

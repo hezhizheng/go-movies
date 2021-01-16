@@ -6,13 +6,13 @@
 
             <li class="post box row fixed-hight">
                 <div class="post_hover">
-                    <div class="thumbnail">
+                    <div class="thumbnail" >
                         <a href="/movie?link=<%= movieLists.Link %>" class="zoom" rel="bookmark" title="<%= movieLists.Name %>">
                             <img
                                 src="/static/image/golang.png"
                                 data-url="<%= movieLists.Cover %>"
                                 onerror="this.src='/static/image/golang.png'"
-                                alt="<%= movieLists.Name %>" >
+                                alt="<%= movieLists.Name %>" style="width: 100%;height: 450px; object-fit:cover">
                         </a>
                     </div>
                     <div class="article">

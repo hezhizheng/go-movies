@@ -149,9 +149,9 @@ func list(pg int) {
 	// 结束时间标记
 	endTime := time.Since(startTime)
 
-	ExecSecondsS := strconv.FormatFloat(endTime.Seconds(), 'f', -1, 64)
-	ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', -1, 64)
-	ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', -1, 64)
+	ExecSecondsS := strconv.FormatFloat(endTime.Seconds(), 'f', 2, 64)
+	ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', 2, 64)
+	ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', 2, 64)
 
 	log.Println("执行完成......")
 
@@ -163,7 +163,6 @@ func list(pg int) {
 
 	// 钉钉通知
 	SendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
-
 }
 
 func DoRecentUpdate()  {
@@ -171,17 +170,33 @@ func DoRecentUpdate()  {
 	recentUpdateKeyExists := utils.RedisDB.Exists("recent_update_key").Val()
 
 	if allMoviesDoneKeyExists > 0 && recentUpdateKeyExists == 0 {
+		startTime := time.Now()
+
 		utils.RedisDB.SetNX("recent_update_key","done", time.Second*3600).Err()
+
+		wg.Add(1)
 		go actionRecentUpdateList()
-		SendDingMsg("actionRecentUpdateList 执行")
+		wg.Wait()
+
+
+		// 结束时间标记
+		endTime := time.Since(startTime)
+		ExecSecondsS := strconv.FormatFloat(endTime.Seconds(), 'f', 2, 64)
+		ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', 2, 64)
+		ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', 2, 64)
+
+		DelAllListCacheKey()
+
+		SendDingMsg("最近更新执行完成，耗时："+ ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
 	}
 }
 
 func actionRecentUpdateList() {
-
 	pageCount := RecentUpdatePageCount()
-	//return
+	//pageCount := 5
 	for j := 1; j <= pageCount; j++ {
+		//log.Println("jj",j)
+		//time.Sleep(time.Second*2)
 
 		url := ApiHost + "?h=3" + "&pg=" + strconv.Itoa(j)
 		req := fasthttp.AcquireRequest()
@@ -254,13 +269,11 @@ func actionRecentUpdateList() {
 					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 				})
 			}
-
 			// 获取详情
 			Detail(strconv.Itoa(value.VodId), 0)
-
 		}
 	}
-
+	wg.Done()
 }
 
 func RecentUpdatePageCount() int {
