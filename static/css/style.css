@@ -296,7 +296,7 @@ select#select-menu-nav { display: block; height: 30px; width: 60%; vertical-alig
 #comment-author-info input { width: 60.5%; margin-bottom: 5px; }
 .search_phone { display: block }
 #post_container{ margin-left:0}
-/*#post_container li{ width:32%; margin-left:0; max-width:100%}*/
+#post_container li{ width:32%; margin-left:0; max-width:100%}
 #post_container li .thumbnail a{ text-align:center}
 #post_container li .arrow-catpanel-top{ display:none}
 #post_container li .zoomOverlay{ display:none !important}

@@ -36,7 +36,7 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/static/css/kube.css">
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=2021116232931">
     <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="/static/image/favicon.ico" type="image/x-icon" />
     <script>var killIE6ImgUrl = "/skin/66scc/images";</script>
@@ -334,6 +334,20 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
     </div>
 `)
 	buffer.WriteString(`
+<style>
+    .thumbnail img {
+        width: 100%;
+        height: 450px;
+        object-fit:cover;
+    }
+
+    @media only screen and (max-width: 640px) {
+        .thumbnail img {
+            height: 200px;
+            object-fit:cover;
+        }
+    }
+</style>
     <div class="mainleft">
         <ul id="post_container" class="masonry clearfix">
 
@@ -357,7 +371,7 @@ func Index(show map[string]interface{}, buffer *bytes.Buffer) {
                                 onerror="this.src='/static/image/golang.png'"
                                 alt="`)
 		hero.EscapeHTML(movieLists.Name, buffer)
-		buffer.WriteString(`" style="width: 100%;height: 450px; object-fit:cover">
+		buffer.WriteString(`" >
                         </a>
                     </div>
                     <div class="article">

@@ -174,10 +174,7 @@ func DoRecentUpdate()  {
 
 		utils.RedisDB.SetNX("recent_update_key","done", time.Second*3600).Err()
 
-		wg.Add(1)
-		go actionRecentUpdateList()
-		wg.Wait()
-
+		actionRecentUpdateList()
 
 		// 结束时间标记
 		endTime := time.Since(startTime)
@@ -192,88 +189,97 @@ func DoRecentUpdate()  {
 }
 
 func actionRecentUpdateList() {
+
+	defer ants.Release()
+	antPool, _ := ants.NewPool(100)
+
 	pageCount := RecentUpdatePageCount()
 	//pageCount := 5
-	for j := 1; j <= pageCount; j++ {
+	for _j := 1; _j <= pageCount; _j++ {
 		//log.Println("jj",j)
 		//time.Sleep(time.Second*2)
+		wg.Add(1)
+		j := _j
+		antPool.Submit(func() {
+			url := ApiHost + "?h=3" + "&pg=" + strconv.Itoa(j)
+			req := fasthttp.AcquireRequest()
+			resp := fasthttp.AcquireResponse()
+			defer func() {
+				// 用完需要释放资源
+				fasthttp.ReleaseResponse(resp)
+				fasthttp.ReleaseRequest(req)
+			}()
 
-		url := ApiHost + "?h=3" + "&pg=" + strconv.Itoa(j)
-		req := fasthttp.AcquireRequest()
-		resp := fasthttp.AcquireResponse()
-		defer func() {
-			// 用完需要释放资源
-			fasthttp.ReleaseResponse(resp)
-			fasthttp.ReleaseRequest(req)
-		}()
+			req.Header.SetMethod("GET")
 
-		req.Header.SetMethod("GET")
+			log.Println("actionRecentUpdateList 当前page"+strconv.Itoa(j), url, pageCount)
 
-		log.Println("actionRecentUpdateList 当前page"+strconv.Itoa(j), url, pageCount)
+			RandomUserAgent := RandomUserAgent()
+			req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
 
-		RandomUserAgent := RandomUserAgent()
-		req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+			req.SetRequestURI(url)
 
-		req.SetRequestURI(url)
-
-		if err := fasthttp.Do(req, resp); err != nil {
-			log.Println("actionList 请求失败:", err.Error())
-			return
-		}
-
-		body := resp.Body()
-
-		var nav ResData
-		err := utils.Json.Unmarshal(body, &nav)
-		if err != nil {
-			log.Println(err)
-		}
-
-		for _, value := range nav.List {
-			// 不保存的类别 // 34,35,36,25,26,27,28,17,18,5
-			types := []int{34,35,36,25,26,27,28,17,18,5}
-			if inType(value.TypeId,types){
-				continue
+			if err := fasthttp.Do(req, resp); err != nil {
+				log.Println("actionList 请求失败:", err.Error())
+				wg.Done()
+				return
 			}
 
-			// 模板时间
-			timeTemplate := "2006-01-02 15:04:05"
-			stamp1, _ := time.ParseInLocation(timeTemplate, value.VodTime, time.Local)
+			body := resp.Body()
 
-			utils.RedisDB.ZAdd("detail_links:id:"+strconv.Itoa(value.TypeId), &redis.Z{
-				Score:  float64(stamp1.Unix()),
-				Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
-			})
+			var nav ResData
+			err := utils.Json.Unmarshal(body, &nav)
+			if err != nil {
+				log.Println(err)
+			}
 
-			film := []int{6, 7, 8, 9, 10, 11, 12, 20, 21, 37}
-			tv := []int{13, 14, 15, 16, 22, 23, 24}
-			cartoon := []int{29, 30, 31, 32, 33}
+			for _, value := range nav.List {
+				// 不保存的类别 // 34,35,36,25,26,27,28,17,18,5
+				types := []int{34,35,36,25,26,27,28,17,18,5}
+				if inType(value.TypeId,types){
+					continue
+				}
 
-			if inType(value.TypeId, film) {
-				utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
+				// 模板时间
+				timeTemplate := "2006-01-02 15:04:05"
+				stamp1, _ := time.ParseInLocation(timeTemplate, value.VodTime, time.Local)
+
+				utils.RedisDB.ZAdd("detail_links:id:"+strconv.Itoa(value.TypeId), &redis.Z{
 					Score:  float64(stamp1.Unix()),
 					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 				})
-			}
 
-			if inType(value.TypeId, tv) {
-				utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
-					Score:  float64(stamp1.Unix()),
-					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
-				})
-			}
+				film := []int{6, 7, 8, 9, 10, 11, 12, 20, 21, 37}
+				tv := []int{13, 14, 15, 16, 22, 23, 24}
+				cartoon := []int{29, 30, 31, 32, 33}
 
-			if inType(value.TypeId, cartoon) {
-				utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
-					Score:  float64(stamp1.Unix()),
-					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
-				})
+				if inType(value.TypeId, film) {
+					utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
+						Score:  float64(stamp1.Unix()),
+						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+					})
+				}
+
+				if inType(value.TypeId, tv) {
+					utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
+						Score:  float64(stamp1.Unix()),
+						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+					})
+				}
+
+				if inType(value.TypeId, cartoon) {
+					utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
+						Score:  float64(stamp1.Unix()),
+						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+					})
+				}
+				// 获取详情
+				Detail(strconv.Itoa(value.VodId), 0)
 			}
-			// 获取详情
-			Detail(strconv.Itoa(value.VodId), 0)
-		}
+			wg.Done()
+		})
 	}
-	wg.Done()
+	wg.Wait()
 }
 
 func RecentUpdatePageCount() int {
@@ -301,7 +307,6 @@ func RecentUpdatePageCount() int {
 	}
 
 	body := resp.Body()
-	log.Println(string(body))
 
 	var nav ResData
 	err := utils.Json.Unmarshal(body, &nav)
