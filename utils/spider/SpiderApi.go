@@ -189,18 +189,19 @@ func DoRecentUpdate()  {
 }
 
 func actionRecentUpdateList() {
-
 	defer ants.Release()
 	antPool, _ := ants.NewPool(100)
 
 	pageCount := RecentUpdatePageCount()
 	//pageCount := 5
 	for _j := 1; _j <= pageCount; _j++ {
-		//log.Println("jj",j)
-		//time.Sleep(time.Second*2)
 		wg.Add(1)
 		j := _j
-		antPool.Submit(func() {
+		// 使用 goroutine 执行的任务
+		task := func() {
+			//log.Println("jj",j)
+			//time.Sleep(time.Second * 2)
+			//return
 			url := ApiHost + "?h=3" + "&pg=" + strconv.Itoa(j)
 			req := fasthttp.AcquireRequest()
 			resp := fasthttp.AcquireResponse()
@@ -221,7 +222,7 @@ func actionRecentUpdateList() {
 
 			if err := fasthttp.Do(req, resp); err != nil {
 				log.Println("actionRecentUpdateList 请求失败:", err.Error())
-				wg.Done()
+				//wg.Done()
 				return
 			}
 
@@ -231,7 +232,7 @@ func actionRecentUpdateList() {
 			err := utils.Json.Unmarshal(body, &nav)
 			if err != nil {
 				log.Println("json 序列化错误",err)
-				wg.Done()
+				//wg.Done()
 				return
 			}
 
@@ -278,10 +279,16 @@ func actionRecentUpdateList() {
 					Detail(strconv.Itoa(value.VodId), 0)
 				}
 			}
+		}
+
+		// 提交任务
+		antPool.Submit(func() {
+			task()
 			wg.Done()
 		})
 	}
 	wg.Wait()
+	//log.Println("all actionRecentUpdateList done")
 }
 
 func RecentUpdatePageCount() int {
