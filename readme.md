@@ -2,15 +2,18 @@
 
 > golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/) 支持手机端访问播放
 
-> 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
-
-> 内置自动爬虫的定时任务，基本满足日常看片需求。
+## features
+- 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
+- 支持docker启动方式
+- 支持网页爬虫与API请求的形式，可通过 config/app.go 配置定义选择使用的版本
+- 内置自动爬虫、自动更新最新资源的定时任务，基本满足日常看片需求。
 
 ## Tip
-- 支持网页爬虫与API请求的形式，可通过 config/app.go 配置定义选择使用的版本
 - 由于目标网站会封锁直接通过网页爬虫的IP,在没有找到稳定IP池的情况下，推荐优先使用API版本（PS：网页爬虫版可用，但可能会被封IP）
 - master同时维护网页爬虫与API的两个版本 [API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
 - 由于爬虫版与API版的电影ID不匹配，建议使用不同的redis DB库分别存储
+- API版本首次启动会全量请求并存储到redis，之后每小时定时爬取最近更新的影视资源
+- MP4 资源暂时只有http的，如网站配置了 https 的可能会导致在浏览器中播放不了
 
 ## Github地址
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
