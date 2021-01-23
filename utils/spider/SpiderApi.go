@@ -159,7 +159,8 @@ func list(pg int) {
 	go DelAllListCacheKey()
 
 	// 全量 done -> set done 永久Redis 标识 -> new corntab every min ( done key exist && recent_update_key expire ) -> set recent_update_key 1h expire -> do recent 3h update
-	utils.RedisDB.SetNX("all_movies_done","done", 0)
+	// 一周进行一次全量爬取，资源网站的电影ID是会变的，fuck!!!
+	utils.RedisDB.SetNX("all_movies_done","done", time.Second*604800)
 
 	// 钉钉通知
 	SendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
