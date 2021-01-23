@@ -170,11 +170,11 @@ func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		q = _q[0]
 	}
 
-	if q == "" {
-		q = "[]"
-	}
+	var MovieLists []services.MovieListStruct
 
-	MovieLists := services.SearchMovies(q)
+	if strings.TrimSpace(q) != "" {
+		MovieLists = services.SearchMovies(q)
+	}
 
 	// 所有类别/导航
 	Categories := services.AllCategoryDate()

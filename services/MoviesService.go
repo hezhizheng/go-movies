@@ -4,15 +4,10 @@ import (
 	"go_movies/models"
 	"go_movies/utils"
 	"go_movies/utils/spider"
-	"log"
-	"sort"
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 )
-
-//var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const paginateCacheKey  = "paginate"
 
@@ -27,74 +22,9 @@ type MovieListStruct struct {
 
 type SortMovieListStruct []MovieListStruct
 
-// 获取此 slice 的长度 @deprecated
-func (p SortMovieListStruct) Len() int { return len(p) }
-
-// 根据元素的年龄降序排序 （此处按照自己的业务逻辑写）@deprecated
-func (p SortMovieListStruct) Less(i, j int) bool {
-
-	// 模板时间
-	timeTemplate := "2006-01-02"
-
-	stamp1, _ := time.ParseInLocation(timeTemplate, p[i].UpdatedAt, time.Local)
-	stamp2, _ := time.ParseInLocation(timeTemplate, p[j].UpdatedAt, time.Local)
-
-	return stamp1.Unix() > stamp2.Unix()
-}
-
-// 交换数据 @deprecated
-func (p SortMovieListStruct) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
-
 var (
 	mutex sync.Mutex
 )
-
-// @deprecated
-func MovieLists(key string) []MovieListStruct {
-	//mutex.Lock() //对共享资源加锁
-	//defer mutex.Unlock()
-
-	var data []MovieListStruct
-	var NewData []MovieListStruct
-
-	//movieKeys := models.FindMoviesKey(key)
-	movieKeys := RangeSCanMoviesKey(key)
-
-	for _, val := range movieKeys {
-		movieKey := models.FindMoviesStringValue(val) // json
-
-		var movieKeyMap MovieListStruct
-		err := utils.Json.Unmarshal([]byte(movieKey), &movieKeyMap)
-		if err != nil {
-			log.Println("movieKeyMap err: ", err)
-		}
-
-		mutex.Lock()
-		data = append(data, movieKeyMap)
-		mutex.Unlock()
-	}
-
-	for _, dataMapVal := range data {
-		link := dataMapVal.Link
-
-		detail := models.FindMoviesHashValue("movies_detail:" + link)
-
-		//if detail["name"] == "" {
-		//	go utils.MoviesInfo(link) // 重新采集
-		//}
-
-		dataMapVal.Cover = detail["cover"] // 重新赋值
-
-		mutex.Lock()
-		NewData = append(NewData, dataMapVal)
-		mutex.Unlock()
-	}
-
-	// golang 处理排序也.....
-	sort.Sort(SortMovieListStruct(NewData))
-
-	return NewData
-}
 
 // 查询指定范围的数据
 func MovieListsRange(key string, start, stop int64) []MovieListStruct {
@@ -160,7 +90,8 @@ func MovieDetail(link string) map[string]interface{} {
 	defer mutex.Unlock()
 	data := make(map[string]interface{})
 
-	details := models.FindMoviesKey("movies_detail:" + link + "*")
+	//details := models.FindMoviesKey("movies_detail:" + link + "*")
+	details := models.RangeSCanMoviesKey("movies_detail:" + link + "*")
 
 	detail := make(map[string]string)
 	if len(details) > 0 {
@@ -210,40 +141,6 @@ func MovieDetail(link string) map[string]interface{} {
 	return data
 }
 
-// SCan 代替 keys
-func RangeSCanMoviesKey(key string) []string {
-	var (
-		all []string
-		i   uint64
-	)
-
-	i = 0
-	for {
-		s, c, _ := models.SCanMoviesKey(i, key, 1000)
-
-		log.Println("s c",s, c)
-		// 游标为0，停止循环
-		if c == 0 {
-			for _, val := range s {
-				mutex.Lock()
-				all = append(all, val)
-				mutex.Unlock()
-			}
-			break
-		} else {
-			i = c
-			for _, val := range s {
-				mutex.Lock()
-				all = append(all, val)
-				mutex.Unlock()
-			}
-		}
-
-	}
-
-	return all
-}
-
 // 搜索影片
 func SearchMovies(key string) []MovieListStruct {
 
@@ -252,7 +149,7 @@ func SearchMovies(key string) []MovieListStruct {
 	var movieKeyMap MovieListStruct
 
 	//movieKeys := models.FindMoviesKey("*" + ":movie_name:" + key + "*")
-	movieKeys := RangeSCanMoviesKey("*" + ":movie_name:" + key + "*")
+	movieKeys := models.RangeSCanMoviesKey("*" + ":movie_name:" + key + "*")
 
 	for _, val := range movieKeys {
 

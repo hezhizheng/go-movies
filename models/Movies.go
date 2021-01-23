@@ -2,6 +2,7 @@ package models
 
 import (
 	"go_movies/utils"
+	"sync"
 )
 
 func FindMoviesKey(key string) []string {
@@ -34,4 +35,35 @@ func SaveMoviesHash(key, field string, value interface{}) error {
 
 func FindMoviesHashFieldValue(key, field string) string {
 	return utils.RedisDB.HGet(key,field).Val()
+}
+
+func RangeSCanMoviesKey(key string) []string {
+	var (
+		all []string
+		i   uint64
+		mutex sync.Mutex
+	)
+
+	i = 0
+	for {
+		s, c, _ := SCanMoviesKey(i, key, 1000)
+		//log.Println("s c",s, c)
+		// 游标为0，停止循环
+		if c == 0 {
+			for _, val := range s {
+				mutex.Lock()
+				all = append(all, val)
+				mutex.Unlock()
+			}
+			break
+		} else {
+			i = c
+			for _, val := range s {
+				mutex.Lock()
+				all = append(all, val)
+				mutex.Unlock()
+			}
+		}
+	}
+	return all
 }
