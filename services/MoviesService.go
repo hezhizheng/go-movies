@@ -210,7 +210,7 @@ func MovieDetail(link string) map[string]interface{} {
 	return data
 }
 
-// SCan 代替 keys @deprecated
+// SCan 代替 keys
 func RangeSCanMoviesKey(key string) []string {
 	var (
 		all []string
@@ -219,12 +219,16 @@ func RangeSCanMoviesKey(key string) []string {
 
 	i = 0
 	for {
-		s, c, _ := models.SCanMoviesKey(i, key+"*", 1000)
+		s, c, _ := models.SCanMoviesKey(i, key, 1000)
 
-		log.Println(s, c)
-		// 如果只有一个，停止循环
-		if len(s) == 1 {
-			all = s
+		log.Println("s c",s, c)
+		// 游标为0，停止循环
+		if c == 0 {
+			for _, val := range s {
+				mutex.Lock()
+				all = append(all, val)
+				mutex.Unlock()
+			}
 			break
 		} else {
 			i = c
@@ -247,7 +251,8 @@ func SearchMovies(key string) []MovieListStruct {
 
 	var movieKeyMap MovieListStruct
 
-	movieKeys := models.FindMoviesKey("*" + ":movie_name:" + key + "*")
+	//movieKeys := models.FindMoviesKey("*" + ":movie_name:" + key + "*")
+	movieKeys := RangeSCanMoviesKey("*" + ":movie_name:" + key + "*")
 
 	for _, val := range movieKeys {
 
