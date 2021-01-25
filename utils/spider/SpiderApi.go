@@ -283,10 +283,14 @@ func actionRecentUpdateList() {
 		}
 
 		// 提交任务
-		antPool.Submit(func() {
+		submitErr := antPool.Submit(func() {
 			task()
 			wg.Done()
 		})
+
+		if submitErr != nil{
+			log.Println("antPool submitErr：",submitErr)
+		}
 	}
 	wg.Wait()
 	//log.Println("all actionRecentUpdateList done")
