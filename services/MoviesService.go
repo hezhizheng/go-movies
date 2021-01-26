@@ -189,5 +189,10 @@ func TransformLink(Url string) string {
 }
 
 func MoviesRecommend() interface{} {
-	return viper.Get(`recommend`)
+	recommend := viper.Get(`recommend`)
+	c := new([]interface{})
+	if recommend == nil {
+		return *c
+	}
+	return recommend
 }
