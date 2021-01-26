@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/spf13/viper"
 	"go_movies/models"
 	"go_movies/utils"
 	"go_movies/utils/spider"
@@ -185,4 +186,8 @@ func TransformLink(Url string) string {
 	UrlStrSplit := strings.Split(Url, "movies_detail:")[1]
 
 	return strings.Split(UrlStrSplit, ":movie_name:")[0]
+}
+
+func MoviesRecommend() interface{} {
+	return viper.Get(`recommend`)
 }

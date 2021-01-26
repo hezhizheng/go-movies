@@ -1,0 +1,32 @@
+{
+  "app": {
+    "port": ":8899",
+    "spider_path": "/movies-spider22",
+    "spider_path_name": "MoviesSpider",
+    "debug_path": "/debug",
+    "debug_path_name": "Debug",
+    "spider_mod": "api"
+  },
+  "redis": {
+    "port": "6379",
+    "addr": "localhost",
+    "password": "",
+    "db": 10
+  },
+  "cron": {
+    "timing_spider": "0 0 1 * * ?"
+  },
+  "ding": {
+    "access_token": ""
+  },
+  "recommend": [
+    {
+      "name": "111",
+      "link": "asdasd"
+    },
+    {
+      "name": "3333",
+      "link": "111111"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/viper"
@@ -12,6 +13,7 @@ import (
 	"go_movies/utils/spider"
 	"log"
 	"net/http"
+	"os"
 )
 
 // Reads from the routes slice to translate the values to httprouter.Handle
@@ -44,7 +46,17 @@ func TraversingRouter() *httprouter.Router {
 func init() {
 	viper.SetConfigType("json") // 设置配置文件的类型
 
-	if err := viper.ReadConfig(bytes.NewBuffer(config.AppJsonConfig)); err != nil {
+	readConfig := errors.New("未定义配置文件")
+
+	if _, err := os.Stat("./app.json"); os.IsNotExist(err) {
+		readConfig = viper.ReadConfig(bytes.NewBuffer(config.AppJsonConfig))
+	} else {
+		viper.SetConfigName("app")
+		viper.AddConfigPath(".")
+		readConfig = viper.ReadInConfig()
+	}
+
+	if err := readConfig; err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// Config file not found; ignore error if desired
 			log.Println("no such config file")
