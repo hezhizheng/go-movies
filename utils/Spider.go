@@ -15,15 +15,8 @@ import (
 	"time"
 )
 
-// 爬取网站的域名，如访问不了，以下几个域名建议重复替换使用
-//const host = "http://www.jisudhw.com"
-//const host = "http://www.okzy.co"
 const host = "https://api.okzy.tv"
-
-//const host = "http://www.okzyw.com"
-
 // redis key
-
 // 分类key
 const CategoriesKey = "categories"
 
@@ -82,10 +75,6 @@ func StartSpider() {
 	// 获取所有分类
 	Categories := SpiderOKCategories()
 
-	log.Println("Categories",Categories)
-
-	//return
-
 	antPoolStartSpiderSubCate, _ := ants.NewPool(25)
 
 	antPoolStartSpider := antPoolStartSpiderSubCate
@@ -99,9 +88,9 @@ func StartSpider() {
 
 	end := time.Since(star)
 
-	ExecSecondsS := strconv.FormatFloat(end.Seconds(), 'f', -1, 64)
-	ExecMinutesS := strconv.FormatFloat(end.Minutes(), 'f', -1, 64)
-	ExecHoursS := strconv.FormatFloat(end.Hours(), 'f', -1, 64)
+	ExecSecondsS := strconv.FormatFloat(end.Seconds(), 'f', 2, 64)
+	ExecMinutesS := strconv.FormatFloat(end.Minutes(), 'f', 2, 64)
+	ExecHoursS := strconv.FormatFloat(end.Hours(), 'f', 2, 64)
 
 	// 清楚缓存的页面数据
 	go DelAllListCacheKey()
@@ -279,8 +268,6 @@ func SpiderOKMovies(cateUrl string) {
 
 		lastPageStr := e.Attr("data-total")
 
-		//lastPageStrSplit := strings.Split(lastPageStr, ",")[1]
-
 		// 最后一页
 		lastPage, _ := strconv.Atoi(lastPageStr)
 
@@ -414,59 +401,16 @@ func MoviesInfo(url string) MoviesDetail {
 			}
 		})
 
-		// 有些页面 1 是 ckm3u8  2 是 kuyun  wtf!
+		// 有些页面 0 是 ckm3u8  1 是 kuyun
 		e.ForEach("div .vodplayinfo ul", func(i int, element *colly.HTMLElement) {
-
 			if i == 0 {
 				element.ForEach("li", func(i int, element *colly.HTMLElement) {
-					playLink := element.ChildAttr("input", "value")
-
-					Episode := strconv.Itoa(i + 1)
-					Episode = transformEpisode(_type, Episode, element.Text)
-
-					if strings.Index(playLink, "m3u8") == -1 {
-						kuyun := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
-
-						Smutex.Lock()
-						kuyunAry = append(kuyunAry, kuyun)
-						Smutex.Unlock()
-					} else {
-						ckm3u8 := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
-						Smutex.Lock()
-						ckm3u8Ary = append(ckm3u8Ary, ckm3u8)
-						Smutex.Unlock()
-					}
+					kuyunAry, ckm3u8Ary = formatKuYunAndM3u8Data(i, element, _type, kuyunAry, ckm3u8Ary)
 				})
 			}
-
-
 			if i == 1 {
 				element.ForEach("li", func(i int, element *colly.HTMLElement) {
-					playLink := element.ChildAttr("input", "value")
-
-					Episode := strconv.Itoa(i + 1)
-					Episode = transformEpisode(_type, Episode, element.Text)
-
-					if strings.Index(playLink, "m3u8") == -1 {
-						kuyun := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
-
-						Smutex.Lock()
-						kuyunAry = append(kuyunAry, kuyun)
-						Smutex.Unlock()
-					} else {
-						ckm3u8 := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
-						Smutex.Lock()
-						ckm3u8Ary = append(ckm3u8Ary, ckm3u8)
-						Smutex.Unlock()
-					}
+					kuyunAry, ckm3u8Ary = formatKuYunAndM3u8Data(i, element, _type, kuyunAry, ckm3u8Ary)
 				})
 			}
 		})
@@ -577,16 +521,37 @@ func MoviesInfo(url string) MoviesDetail {
 			log.Println(t)
 			Smutex.Unlock()
 		}
-
 	})
 
 	visitError := c.Visit(host + url)
-
 	log.Println(visitError)
-
 	c.Wait()
-
 	return md
+}
+
+func formatKuYunAndM3u8Data(i int, element *colly.HTMLElement, _type string, kuyunAry , ckm3u8Ary []map[string]string) ([]map[string]string, []map[string]string) {
+	playLink := element.ChildAttr("input", "value")
+
+	Episode := strconv.Itoa(i + 1)
+	Episode = transformEpisode(_type, Episode, element.Text)
+
+	if strings.Index(playLink, "m3u8") == -1 {
+		kuyun := map[string]string{
+			"episode":   Episode,
+			"play_link": playLink}
+
+		Smutex.Lock()
+		kuyunAry = append(kuyunAry, kuyun)
+		Smutex.Unlock()
+	} else {
+		ckm3u8 := map[string]string{
+			"episode":   Episode,
+			"play_link": playLink}
+		Smutex.Lock()
+		ckm3u8Ary = append(ckm3u8Ary, ckm3u8)
+		Smutex.Unlock()
+	}
+	return kuyunAry, ckm3u8Ary
 }
 
 // /?m=vod-type-id-1.html  => /?m=vod-type-id-1-pg-1
