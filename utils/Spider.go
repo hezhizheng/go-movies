@@ -71,7 +71,7 @@ func (spider *Spider) Start() {
 
 func (spider *Spider) PageDetail(id string) {
 	// /?m=vod-detail-id-56275.html
-	url := "/?m=vod-detail-id-" + id + ".html"
+	url := "/index.php/vod/detail/id/"+id+".html"
 	go MoviesInfo(url)
 }
 
