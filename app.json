@@ -5,13 +5,13 @@
     "spider_path_name": "MoviesSpider",
     "debug_path": "/debug",
     "debug_path_name": "Debug",
-    "spider_mod": "api"
+    "spider_mod": "WebPage"
   },
   "redis": {
     "port": "6379",
     "addr": "localhost",
     "password": "",
-    "db": 10
+    "db": 7
   },
   "cron": {
     "timing_spider": "0 0 1 * * ?"

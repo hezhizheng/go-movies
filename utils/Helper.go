@@ -1,6 +1,8 @@
 package utils
 
-import "strings"
+import (
+	"strings"
+)
 
 func InArray(needle interface{}, hystack interface{}) bool {
 	switch key := needle.(type) {
@@ -31,15 +33,49 @@ func InArray(needle interface{}, hystack interface{}) bool {
 //
 // /index.php/vod/detail/id/1405.html => /?m=vod-detail-id-16250.html
 func Index2vod(Url string) string {
-	UrlStrSplit := strings.Split(Url, "/id/")[1]
-	id := strings.TrimRight(UrlStrSplit, ".html")
 
-	return "/?m=vod-detail-id-"+id+".html"
+	UrlStrSplit := strings.Split(Url, "/id/")
+
+	if len(UrlStrSplit) >= 2 {
+		id := strings.TrimRight(UrlStrSplit[1], ".html")
+
+		return "/?m=vod-detail-id-"+id+".html"
+	}
+
+	return Url
+
+}
+
+func Index2vodList(Url string) string {
+	UrlStrSplit := strings.Split(Url, "/id/")
+
+	if len(UrlStrSplit) >= 2 {
+		id := strings.TrimRight(UrlStrSplit[1], ".html")
+
+		return "/?m=vod-type-id-"+id+".html"
+	}
+	return Url
 }
 
 // /?m=vod-detail-id-16250.html => /index.php/vod/detail/id/1405.html
 func Vod2index(Url string) string {
-	UrlStrSplit := strings.Split(Url, "-id-")[1]
-	id := strings.TrimRight(UrlStrSplit, ".html")
-	return "/index.php/vod/detail/id/"+id+".html"
+	UrlStrSplit := strings.Split(Url, "-id-")
+
+	if len(UrlStrSplit) >= 2 {
+		id := strings.TrimRight(UrlStrSplit[1], ".html")
+		return "/index.php/vod/detail/id/"+id+".html"
+	}
+
+	return Url
+}
+
+func Vod2indexList(Url string) string {
+	UrlStrSplit := strings.Split(Url, "-id-")
+
+	if len(UrlStrSplit) >= 2 {
+		id := strings.TrimRight(UrlStrSplit[1], ".html")
+		return "/index.php/vod/type/id/"+id+".html"
+	}
+
+	return Url
 }

@@ -188,7 +188,7 @@ func SpiderOKCategories() []Categories {
 			subCategoryName := element.Text
 
 			_subCate := Categories{
-				Link: Index2vod(subCategoryLink),
+				Link: Index2vodList(subCategoryLink),
 				Name: subCategoryName,
 			}
 
@@ -206,7 +206,7 @@ func SpiderOKCategories() []Categories {
 
 		// 主类别
 		_cate := Categories{
-			Link: Index2vod(categoryLink),
+			Link: Index2vodList(categoryLink),
 			Name: categoryName,
 			Sub:  SubCate,
 		}
@@ -246,7 +246,7 @@ func SpiderOKCategories() []Categories {
 // 爬取所有类别的电影
 func SpiderOKMovies(cateUrl string) {
 
-	cateUrl = Vod2index(cateUrl)
+	cateUrl = Vod2indexList(cateUrl)
 
 	c := colly.NewCollector(
 		colly.Async(true),
@@ -343,7 +343,7 @@ func ForeachPage(cateUrl string, url string) {
 			stamp1, _ := time.ParseInLocation(timeTemplate, updateAt, time.Local)
 
 			Smutex.Lock()
-			RedisDB.ZAdd("detail_links:id:"+TransformId(cateUrl), &redis.Z{
+			RedisDB.ZAdd("detail_links:id:"+TransformId(Index2vodList(cateUrl)), &redis.Z{
 				Score:  float64(stamp1.Unix()),
 				Member: Index2vod(link),
 			})
@@ -478,16 +478,19 @@ func MoviesInfo(url string) MoviesDetail {
 		// detail["alias"] = e.ChildText("div .vodinfobox>ul>li:eq(0)") // WTF 不支持这样的选择器
 		// xpath 还是靠谱
 		// 别名
+		detail["alias"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[1]/span", func(e *colly.XMLElement) {
 			detail["alias"] = e.Text
 		})
 
 		// 导演
+		detail["director"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[2]/span", func(e *colly.XMLElement) {
 			detail["director"] = e.Text
 		})
 
 		// 主演
+		detail["starring"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[3]/span", func(e *colly.XMLElement) {
 			detail["starring"] = e.Text
 		})
@@ -496,35 +499,42 @@ func MoviesInfo(url string) MoviesDetail {
 		detail["type"] = _type
 
 		// 地区
+		detail["area"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[5]/span", func(e *colly.XMLElement) {
 			detail["area"] = e.Text
 		})
 
+		detail["language"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[6]/span", func(e *colly.XMLElement) {
 			detail["language"] = e.Text
 		})
 
 		// 上映时间
+		detail["released"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[7]/span", func(e *colly.XMLElement) {
 			detail["released"] = e.Text
 		})
 
 		// 片长
+		detail["length"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[8]/span", func(e *colly.XMLElement) {
 			detail["length"] = e.Text
 		})
 
 		// 更新时间
+		detail["update"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[9]/span", func(e *colly.XMLElement) {
 			detail["update"] = e.Text
 		})
 
 		// 总播放量
+		detail["total_playback"] = ""
 		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[10]/span", func(e *colly.XMLElement) {
 			detail["total_playback"] = e.Text
 		})
 
 		// 剧情简介
+		detail["vod_play_info"] = ""
 		c.OnXML("/html/body/div[4]/div[2]/div[2]", func(e *colly.XMLElement) {
 			detail["vod_play_info"] = e.Text
 		})
@@ -548,7 +558,7 @@ func MoviesInfo(url string) MoviesDetail {
 
 		_moviesInfo := make(map[string]interface{})
 
-		_moviesInfo["link"] = md.Link
+		_moviesInfo["link"] = Index2vod(md.Link)
 		_moviesInfo["cover"] = md.Cover
 		_moviesInfo["name"] = md.Name
 		_moviesInfo["quality"] = md.Quality
