@@ -8,6 +8,7 @@ app.debug_path: debug的路由
 app.debug_path_name: debug的路由名称
 cron.timing_spider: 定时爬虫的CRON表达式
 ding.access_token: 钉钉机器人token
+recommend: 推荐电影列表
 */
 var AppJsonConfig = []byte(`
 {
@@ -30,6 +31,28 @@ var AppJsonConfig = []byte(`
   },
   "ding": {
      "access_token": ""
-  }
+  },
+  "recommend": [
+      {
+        "name": "表姐，你好嘢！",
+        "link": "/?m=vod-detail-id-24542.html"
+      },
+      {
+        "name": "维多利亚一号",
+        "link": "/?m=vod-detail-id-66993.html"
+      },
+      {
+        "name": "树大招风",
+        "link": "/?m=vod-detail-id-9254.html"
+      },
+      {
+        "name": "绝命毒师第一季",
+        "link": "/?m=vod-detail-id-13725.html"
+      },
+      {
+        "name": "风骚律师第一季",
+        "link": "/?m=vod-detail-id-27941.html"
+      }
+    ]
 }
 `)

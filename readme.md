@@ -5,7 +5,7 @@
 ## features
 - 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
 - 支持docker启动方式
-- 支持网页爬虫与API请求的形式，可通过 config/app.go 配置定义选择使用的版本
+- 支持网页爬虫与API请求的形式，可通过 config/app.go 或 app.json 文件配置定义选择使用的版本(PS:存在app.json文件则以app.json为准)
 - 内置自动爬虫、自动更新最新资源的定时任务，基本满足日常看片需求。
 
 ## Tip
