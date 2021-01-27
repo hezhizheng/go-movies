@@ -17,8 +17,7 @@ import (
 
 // 爬取网站的域名，如访问不了，以下几个域名建议重复替换使用
 //const host = "http://www.jisudhw.com"
-//const host = "http://www.okzy.co"
-const host = "https://api.okzy.tv"
+const host = "http://www.okzy.co"
 
 //const host = "http://www.okzyw.com"
 
@@ -81,10 +80,6 @@ func StartSpider() {
 
 	// 获取所有分类
 	Categories := SpiderOKCategories()
-
-	log.Println("Categories",Categories)
-
-	//return
 
 	antPoolStartSpiderSubCate, _ := ants.NewPool(25)
 
@@ -188,32 +183,28 @@ func SpiderOKCategories() []Categories {
 			subCategoryName := element.Text
 
 			_subCate := Categories{
-				Link: Index2vod(subCategoryLink),
+				Link: subCategoryLink,
 				Name: subCategoryName,
 			}
 
 			if subCategoryName != categoryName {
-
-				if !InArray(subCategoryName,[]string{"福利片"}) {
-					// 追加
-					Smutex.Lock()
-					SubCate = append(SubCate, _subCate)
-					Smutex.Unlock()
-				}
+				// 追加
+				Smutex.Lock()
+				SubCate = append(SubCate, _subCate)
+				Smutex.Unlock()
 			}
 
 		})
 
 		// 主类别
 		_cate := Categories{
-			Link: Index2vod(categoryLink),
+			Link: categoryLink,
 			Name: categoryName,
 			Sub:  SubCate,
 		}
 
 		// 去掉首页、福利、综艺片、解说 链接
-
-		if !InArray(categoryName,[]string{"","福利片","综艺","解说"}) {
+		if categoryName != "" && categoryName != "福利片" && categoryName != "综艺片" && categoryName != "解说" {
 			// 追加
 			Smutex.Lock()
 			Cate = append(Cate, _cate)
@@ -246,8 +237,6 @@ func SpiderOKCategories() []Categories {
 // 爬取所有类别的电影
 func SpiderOKMovies(cateUrl string) {
 
-	cateUrl = Vod2index(cateUrl)
-
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -275,14 +264,14 @@ func SpiderOKMovies(cateUrl string) {
 
 	var lastPageInt int
 
-	c.OnHTML(".pages button", func(e *colly.HTMLElement) {
+	c.OnHTML(".pages input[type=button]", func(e *colly.HTMLElement) {
 
-		lastPageStr := e.Attr("data-total")
+		lastPageStr := e.Attr("onclick")
 
-		//lastPageStrSplit := strings.Split(lastPageStr, ",")[1]
+		lastPageStrSplit := strings.Split(lastPageStr, ",")[1]
 
 		// 最后一页
-		lastPage, _ := strconv.Atoi(lastPageStr)
+		lastPage, _ := strconv.Atoi(strings.Split(lastPageStrSplit, ")")[0])
 
 		lastPageInt = lastPage // todo lastPage
 
@@ -336,16 +325,16 @@ func ForeachPage(cateUrl string, url string) {
 		// 列表数据
 		if spanClass == "tt" {
 			link := e.ChildAttr("a", "href")
-			updateAt := e.ChildText(".xing_vb7")
+			updateAt := e.ChildText(".xing_vb6")
 
 			// 模板时间
-			timeTemplate := "2006-01-02 15:04:05"
+			timeTemplate := "2006-01-02"
 			stamp1, _ := time.ParseInLocation(timeTemplate, updateAt, time.Local)
 
 			Smutex.Lock()
 			RedisDB.ZAdd("detail_links:id:"+TransformId(cateUrl), &redis.Z{
 				Score:  float64(stamp1.Unix()),
-				Member: Index2vod(link),
+				Member: link,
 			})
 			Smutex.Unlock()
 
@@ -415,60 +404,72 @@ func MoviesInfo(url string) MoviesDetail {
 		})
 
 		// 有些页面 1 是 ckm3u8  2 是 kuyun  wtf!
-		e.ForEach("div .vodplayinfo ul", func(i int, element *colly.HTMLElement) {
 
-			if i == 0 {
-				element.ForEach("li", func(i int, element *colly.HTMLElement) {
-					playLink := element.ChildAttr("input", "value")
+		e.ForEach("div #1 ul li", func(i int, element *colly.HTMLElement) {
 
-					Episode := strconv.Itoa(i + 1)
-					Episode = transformEpisode(_type, Episode, element.Text)
+			playLink := element.ChildAttr("input", "value")
 
-					if strings.Index(playLink, "m3u8") == -1 {
-						kuyun := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
+			Episode := strconv.Itoa(i + 1)
+			Episode = transformEpisode(_type, Episode, element.Text)
 
-						Smutex.Lock()
-						kuyunAry = append(kuyunAry, kuyun)
-						Smutex.Unlock()
-					} else {
-						ckm3u8 := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
-						Smutex.Lock()
-						ckm3u8Ary = append(ckm3u8Ary, ckm3u8)
-						Smutex.Unlock()
-					}
-				})
+			if strings.Index(playLink, "m3u8") == -1 {
+				kuyun := map[string]string{
+					"episode":   Episode,
+					"play_link": playLink}
+
+				Smutex.Lock()
+				kuyunAry = append(kuyunAry, kuyun)
+				Smutex.Unlock()
+			} else {
+				ckm3u8 := map[string]string{
+					"episode":   Episode,
+					"play_link": playLink}
+				Smutex.Lock()
+				ckm3u8Ary = append(ckm3u8Ary, ckm3u8)
+				Smutex.Unlock()
 			}
 
+		})
 
-			if i == 1 {
-				element.ForEach("li", func(i int, element *colly.HTMLElement) {
-					playLink := element.ChildAttr("input", "value")
+		e.ForEach("div #2 ul li", func(i int, element *colly.HTMLElement) {
 
-					Episode := strconv.Itoa(i + 1)
-					Episode = transformEpisode(_type, Episode, element.Text)
+			playLink := element.ChildAttr("input", "value")
 
-					if strings.Index(playLink, "m3u8") == -1 {
-						kuyun := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
+			Episode := strconv.Itoa(i + 1)
+			Episode = transformEpisode(_type, Episode, element.Text)
 
-						Smutex.Lock()
-						kuyunAry = append(kuyunAry, kuyun)
-						Smutex.Unlock()
-					} else {
-						ckm3u8 := map[string]string{
-							"episode":   Episode,
-							"play_link": playLink}
-						Smutex.Lock()
-						ckm3u8Ary = append(ckm3u8Ary, ckm3u8)
-						Smutex.Unlock()
-					}
-				})
+			if strings.Index(playLink, "m3u8") == -1 {
+				kuyun := map[string]string{
+					"episode":   Episode,
+					"play_link": playLink}
+
+				Smutex.Lock()
+				kuyunAry = append(kuyunAry, kuyun)
+				Smutex.Unlock()
+			} else {
+				ckm3u8 := map[string]string{
+					"episode":   Episode,
+					"play_link": playLink}
+				Smutex.Lock()
+				ckm3u8Ary = append(ckm3u8Ary, ckm3u8)
+				Smutex.Unlock()
 			}
+		})
+
+		e.ForEach("div #down_1 ul li", func(i int, element *colly.HTMLElement) {
+
+			playLink := element.ChildAttr("input", "value")
+
+			Episode := strconv.Itoa(i + 1)
+			Episode = transformEpisode(_type, Episode, element.Text)
+
+			download := map[string]string{
+				"episode":   Episode,
+				"play_link": playLink}
+
+			Smutex.Lock()
+			downloadAry = append(downloadAry, download)
+			Smutex.Unlock()
 		})
 
 		kuyunAryJson, _ := Json.MarshalIndent(kuyunAry, "", " ")
@@ -478,17 +479,17 @@ func MoviesInfo(url string) MoviesDetail {
 		// detail["alias"] = e.ChildText("div .vodinfobox>ul>li:eq(0)") // WTF 不支持这样的选择器
 		// xpath 还是靠谱
 		// 别名
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[1]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[1]/span", func(e *colly.XMLElement) {
 			detail["alias"] = e.Text
 		})
 
 		// 导演
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[2]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[2]/span", func(e *colly.XMLElement) {
 			detail["director"] = e.Text
 		})
 
 		// 主演
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[3]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[3]/span", func(e *colly.XMLElement) {
 			detail["starring"] = e.Text
 		})
 
@@ -496,38 +497,44 @@ func MoviesInfo(url string) MoviesDetail {
 		detail["type"] = _type
 
 		// 地区
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[5]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[5]/span", func(e *colly.XMLElement) {
 			detail["area"] = e.Text
 		})
 
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[6]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[6]/span", func(e *colly.XMLElement) {
 			detail["language"] = e.Text
 		})
 
 		// 上映时间
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[7]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[7]/span", func(e *colly.XMLElement) {
 			detail["released"] = e.Text
 		})
 
 		// 片长
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[8]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[8]/span", func(e *colly.XMLElement) {
 			detail["length"] = e.Text
 		})
 
 		// 更新时间
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[9]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[9]/span", func(e *colly.XMLElement) {
 			detail["update"] = e.Text
 		})
 
 		// 总播放量
-		c.OnXML("/html/body/div[4]/div[1]/div/div/div[2]/div[2]/ul/li[10]/span", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[1]/div/div/div[2]/div[2]/ul/li[10]/span", func(e *colly.XMLElement) {
 			detail["total_playback"] = e.Text
 		})
 
 		// 剧情简介
-		c.OnXML("/html/body/div[4]/div[2]/div[2]", func(e *colly.XMLElement) {
+		c.OnXML("/html/body/div[5]/div[3]/div[2]", func(e *colly.XMLElement) {
 			detail["vod_play_info"] = e.Text
 		})
+
+		if detail["vod_play_info"] == "" || detail["vod_play_info"] == nil {
+			c.OnXML("/html/body/div[5]/div[2]/div[2]/text()", func(e *colly.XMLElement) {
+				detail["vod_play_info"] = e.Text
+			})
+		}
 
 		md = MoviesDetail{
 			Link:     url,
@@ -563,7 +570,7 @@ func MoviesInfo(url string) MoviesDetail {
 
 		if md.Name != "" {
 			Smutex.Lock()
-			t := RedisDB.HMSet(moviesDetail+Index2vod(url)+":movie_name:"+md.Name, _moviesInfo).Err()
+			t := RedisDB.HMSet(moviesDetail+url+":movie_name:"+md.Name, _moviesInfo).Err()
 			log.Println(t)
 			Smutex.Unlock()
 		}
@@ -581,7 +588,12 @@ func MoviesInfo(url string) MoviesDetail {
 
 // /?m=vod-type-id-1.html  => /?m=vod-type-id-1-pg-1
 func CategoryToPageUrl(categoryUrl string, page string) string {
-	pageUrl := strings.Replace(categoryUrl, ".html", "/page/" + page + ".html", -1)
+	// 主类链接： /?m=vod-type-id-1.html
+	// 主类的页面链接 /?m=vod-type-id-1-pg-
+	categoryUrlStrSplit := strings.Split(categoryUrl, ".html")[0]
+
+	pageUrl := categoryUrlStrSplit + "-pg-" + page + ".html"
+
 	return pageUrl
 }
 
