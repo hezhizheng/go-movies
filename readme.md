@@ -1,4 +1,6 @@
-<center><img src="https://files.catbox.moe/rpdbb6.png"></center>
+<p align="center">
+<img src="https://files.catbox.moe/rpdbb6.png">
+</p>
 
 > golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/) 支持手机端访问播放
 
