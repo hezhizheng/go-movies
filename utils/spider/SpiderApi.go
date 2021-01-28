@@ -90,26 +90,6 @@ func (spiderApi *SpiderApi) PageDetail(id string) {
 	go Detail(id, 0)
 }
 
-// 初始化 fasthttp GET 的请求与响应
-// @deprecated
-func initFastHttp() FastHttp {
-	req := fasthttp.AcquireRequest()
-	resp := fasthttp.AcquireResponse()
-	defer func() {
-		// 用完需要释放资源
-		fasthttp.ReleaseResponse(resp)
-		fasthttp.ReleaseRequest(req)
-	}()
-
-	req.Header.SetMethod("GET")
-
-	// 不验证https证书 todo 这里根据实际情况是否选择
-	//f := fasthttp.Client{TLSConfig: &tls.Config{InsecureSkipVerify: true}}
-	f := fasthttp.Client{}
-
-	return FastHttp{f: f, req: req, resp: resp}
-}
-
 func StartApi() {
 	allMoviesDoneKeyExists := utils.RedisDB.Exists("all_movies_done").Val()
 	if allMoviesDoneKeyExists > 0 {

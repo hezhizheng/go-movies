@@ -1,17 +1,17 @@
 {
   "app": {
     "port": ":8899",
-    "spider_path": "/movies-spider22",
+    "spider_path": "/movies-spider",
     "spider_path_name": "MoviesSpider",
     "debug_path": "/debug",
     "debug_path_name": "Debug",
-    "spider_mod": "WebPage"
+    "spider_mod": "api"
   },
   "redis": {
     "port": "6379",
     "addr": "localhost",
     "password": "",
-    "db": 7
+    "db": 10
   },
   "cron": {
     "timing_spider": "0 0 1 * * ?"

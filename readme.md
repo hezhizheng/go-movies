@@ -1,22 +1,74 @@
-# Go Movies
+<center><img src="https://files.catbox.moe/rpdbb6.png"></center>
 
 > golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/) 支持手机端访问播放
+
+## Github地址
+[https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
 
 ## features
 - 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
 - 支持docker启动方式
 - 支持网页爬虫与API请求的形式，可通过 config/app.go 或 app.json 文件配置定义选择使用的版本(PS:存在app.json文件则以app.json为准)
 - 兼容网页爬虫与API请求的数据，redis共用一套数据结构与DB库。
+- 简单影片分类、搜索的支持
 - 内置自动爬虫、自动更新最新资源的定时任务，基本满足日常看片需求。
 
 ## Tip
 - 由于目标网站会封锁直接通过网页爬虫的IP,在没有找到稳定IP池的情况下，推荐优先使用API版本（PS：网页爬虫版可用，但可能会被封IP）
-- master同时维护网页爬虫与API的两个版本 [API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt)
+- master同时维护网页爬虫与API的两个版本 [API接口说明.txt](http://www.jisudhw.com/help/API%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E.txt) [爬虫目标网站](https://api.okzy.tv)
 - API版本首次启动会全量请求并存储到redis，之后每小时定时爬取最近更新的影视资源
 - MP4 资源暂时只有http的，如网站配置了 https 的可能会导致在浏览器中播放不了 (PS:网页爬虫版暂无MP4资源)
 
-## Github地址
-[https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
+## 目录结构
+
+```
+|-- Dockerfile
+|-- LICENSE.txt
+|-- app.json #程序配置文件，优先级最高
+|-- config #程序配置文件，根目录下没有app.json文件则配置以app.go为准
+|   |-- app.go 
+|   `-- app.go.backup
+|-- controller # controller层，基本的页面渲染
+|   |-- DebugController.go
+|   |-- IndexController.go
+|   `-- SpiderController.go
+|-- docker-compose.yml
+|-- go.mod
+|-- go.sum
+|-- main.go
+|-- models # 定义一些redis查询的方法
+|   |-- Category.go
+|   |-- Movies.go
+|   `-- readme.md
+|-- readme.md
+|-- repository
+|   `-- readme.md
+|-- routes
+|   `-- route.go
+|-- services # 普通业务处理类 
+|   |-- CategoryService.go
+|   |-- MoviesService.go
+|   `-- readme.md
+|-- static # js、css、image等静态资源文件夹
+|-- statik # 静态资源嵌入编译，由命令生成
+|   `-- statik.go
+|-- utils # 一些工具类
+    |-- Cron.go
+    |-- Dingrobot.go
+    |-- Helper.go
+    |-- JsonUtil.go
+    |-- Pagination.go
+    |-- RedisUtil.go
+    |-- Spider.1go
+    |-- Spider.go # 爬虫网页版主要功能代码
+    |-- SpiderTask.go
+    `-- spider # 爬虫api版主要功能代码
+        |-- CategoriesStr.go
+        |-- SpiderApi.go
+        |-- SpiderTaskPolicy.go
+        `-- useragents.go
+`-- views  # html模板目录
+```
 
 ## 首页效果
 ![img](https://i.loli.net/2019/12/05/Qzqv4HWoMp2DByi.png)
@@ -57,8 +109,8 @@ http://127.0.0.1:8899
 ```
 
 ### 开启爬虫
-- ~~直接访问链接 http://127.0.0.1:8899/movies-spider (开启定时任务，定时爬取就好)~~
-  - 已内置定时爬虫，默认凌晨一点开启爬虫(可修改配置文件cron.timing_spider表达式)
+- 已内置定时爬虫，默认凌晨一点开启爬虫(可修改配置文件cron.timing_spider表达式)
+- 主动运行：直接访问链接 http://127.0.0.1:8899/movies-spider
 - 耗时：具体时间受目标网站/接口的响应速度影响
 
 ## Tools
@@ -91,14 +143,13 @@ hero -source="./views/hero"
 ```
 # 用法参考 https://github.com/mitchellh/gox
 # 生成文件可直接执行 Linux
-gox -osarch="linux/amd64" 
+gox -osarch="linux/amd64" -ldflags "-s -w"
 ......
 ```
-- ~~提供win64、Linux64的已编译的文件下载~~ （请自行编译）
+
+- 提供win64的已编译的文件下载 [release](https://github.com/hezhizheng/go-movies/releases)
 
 `使用请确保redis为开启状态，默认使用 DB10，启动成功之后会自动执行爬虫，可自行访问 http://127.0.0.1:8899/movies-spider 进行爬虫`
-
-[微云](https://share.weiyun.com/5iLGksd)  （推荐微云+[proxyee-down](https://github.com/proxyee-down-org/proxyee-down),  原来go版本已经在开发中了...）
 
 ![img](https://i.loli.net/2020/01/04/OxsqRunwliy31zN.png)
 
@@ -140,14 +191,16 @@ sudo docker-compose up -d
 打开游览器访问 http://127.0.0.1:8899 即可看见网站效果
 ```
 
-## 目录结构参考beego设置
+
+
 
 ## TODO
 - [x] 跨平台编译,模板路径不正确
   - 使用 https://github.com/rakyll/statik 处理 js、css、image等静态资源
   - 使用 https://github.com/shiyanhui/hero 替换 html/template 模板引擎
-- [x] redis查询问题
-  - 缓存页面数据
+- [x] redis查询慢问题
+  - 使用 hash 缓存页面数据
+  - 使用scan 代替 keys*
 - [x] 增加配置文件读取
   - 使用 https://github.com/spf13/viper
 - [x] Docker 部署
