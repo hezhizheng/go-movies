@@ -241,6 +241,8 @@ func actionRecentUpdateList() {
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
+						// 获取详情
+						Detail(strconv.Itoa(value.VodId), 0)
 					}
 
 					if inType(value.TypeId, tv) {
@@ -248,6 +250,8 @@ func actionRecentUpdateList() {
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
+						// 获取详情
+						Detail(strconv.Itoa(value.VodId), 0)
 					}
 
 					if inType(value.TypeId, cartoon) {
@@ -255,9 +259,9 @@ func actionRecentUpdateList() {
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
+						// 获取详情
+						Detail(strconv.Itoa(value.VodId), 0)
 					}
-					// 获取详情
-					Detail(strconv.Itoa(value.VodId), 0)
 				}
 			}
 		}
@@ -368,6 +372,8 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 					Score:  float64(stamp1.Unix()),
 					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 				})
+				// 获取详情
+				Detail(strconv.Itoa(value.VodId), 0)
 			}
 
 			if inType(value.TypeId, tv) {
@@ -375,6 +381,8 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 					Score:  float64(stamp1.Unix()),
 					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 				})
+				// 获取详情
+				Detail(strconv.Itoa(value.VodId), 0)
 			}
 
 			if inType(value.TypeId, cartoon) {
@@ -382,14 +390,11 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 					Score:  float64(stamp1.Unix()),
 					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 				})
+				// 获取详情
+				Detail(strconv.Itoa(value.VodId), 0)
 			}
-
-			// 获取详情
-			Detail(strconv.Itoa(value.VodId), 0)
-
 		}
 	}
-
 }
 
 func pageCount(subCategoryId string) (int, string) {
