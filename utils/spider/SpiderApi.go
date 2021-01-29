@@ -185,6 +185,7 @@ func actionRecentUpdateList() {
 			//return
 			url := ApiHost + "?h=3" + "&pg=" + strconv.Itoa(j)
 			req := fasthttp.AcquireRequest()
+			req.SetConnectionClose()
 			resp := fasthttp.AcquireResponse()
 			defer func() {
 				// 用完需要释放资源
@@ -284,6 +285,7 @@ func RecentUpdatePageCount() int {
 	url := ApiHost + "?h=3&pg=1"
 
 	req := fasthttp.AcquireRequest()
+	req.SetConnectionClose()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
 		// 用完需要释放资源
@@ -320,24 +322,22 @@ func RecentUpdatePageCount() int {
 
 func actionList(subCategoryId string, pg int, pageCount int) {
 	//return
+	req := fasthttp.AcquireRequest()
+	req.SetConnectionClose()
+	resp := fasthttp.AcquireResponse()
+	defer func() {
+		// 用完需要释放资源
+		fasthttp.ReleaseResponse(resp)
+		fasthttp.ReleaseRequest(req)
+	}()
+
+	req.Header.SetMethod("GET")
+	RandomUserAgent := RandomUserAgent()
+	req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
+
 	for j := pg; j <= pageCount; j++ {
-
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
-		req := fasthttp.AcquireRequest()
-		resp := fasthttp.AcquireResponse()
-		defer func() {
-			// 用完需要释放资源
-			fasthttp.ReleaseResponse(resp)
-			fasthttp.ReleaseRequest(req)
-		}()
-
-		req.Header.SetMethod("GET")
-
 		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
-
-		RandomUserAgent := RandomUserAgent()
-		req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
-
 		req.SetRequestURI(url)
 
 		if err := fasthttp.Do(req, resp); err != nil {
@@ -401,6 +401,7 @@ func pageCount(subCategoryId string) (int, string) {
 	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=1"
 
 	req := fasthttp.AcquireRequest()
+	req.SetConnectionClose()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
 		// 用完需要释放资源
@@ -409,7 +410,6 @@ func pageCount(subCategoryId string) (int, string) {
 	}()
 
 	req.Header.SetMethod("GET")
-
 	RandomUserAgent := RandomUserAgent()
 	req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
 
@@ -446,6 +446,7 @@ func Detail(id string, retry int) {
 	}
 
 	req := fasthttp.AcquireRequest()
+	req.SetConnectionClose()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
 		// 用完需要释放资源
@@ -454,7 +455,6 @@ func Detail(id string, retry int) {
 	}()
 
 	req.Header.SetMethod("GET")
-
 	RandomUserAgent := RandomUserAgent()
 	req.Header.SetBytesKV([]byte("User-Agent"), []byte(RandomUserAgent))
 
