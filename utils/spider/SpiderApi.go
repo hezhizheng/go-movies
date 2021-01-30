@@ -175,8 +175,8 @@ func actionRecentUpdateList() {
 
 	pageCount := RecentUpdatePageCount()
 	//pageCount := 5
+	wg.Add(pageCount)
 	for _j := 1; _j <= pageCount; _j++ {
-		wg.Add(1)
 		j := _j
 		// 使用 goroutine 执行的任务
 		task := func() {
@@ -204,7 +204,6 @@ func actionRecentUpdateList() {
 
 			if err := fasthttp.Do(req, resp); err != nil {
 				log.Println("actionRecentUpdateList 请求失败:", err.Error())
-				//wg.Done()
 				return
 			}
 
@@ -214,7 +213,6 @@ func actionRecentUpdateList() {
 			err := utils.Json.Unmarshal(body, &nav)
 			if err != nil {
 				log.Println("json 序列化错误",err)
-				//wg.Done()
 				return
 			}
 
