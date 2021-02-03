@@ -2,7 +2,10 @@
 <img src="https://files.catbox.moe/rpdbb6.png">
 </p>
 
-> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站： [https://go-movies.hzz.cool/](https://go-movies.hzz.cool/) 支持手机端访问播放
+> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站：~~[https://go-movies.hzz.cool/](https://go-movies.hzz.cool/)~~ 支持手机端访问播放
+
+
+> https://go-movies.hzz.cool/ 这个域名被阿里云警告了，访问新演示地址 http://f33864596141ee999f8986fd48dd7b81.hzz.cool
 
 ## Github地址
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
