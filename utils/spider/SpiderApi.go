@@ -267,8 +267,8 @@ func actionRecentUpdateList() {
 
 		// 提交任务
 		submitErr := antPool.Submit(func() {
+			defer wg.Done()
 			task()
-			wg.Done()
 		})
 
 		if submitErr != nil{
