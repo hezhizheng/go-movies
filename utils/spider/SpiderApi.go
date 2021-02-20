@@ -175,7 +175,8 @@ func actionRecentUpdateList() {
 
 	pageCount := RecentUpdatePageCount()
 	//pageCount := 5
-	wg.Add(pageCount)
+	wg2 := sync.WaitGroup{}
+	wg2.Add(pageCount)
 	for _j := 1; _j <= pageCount; _j++ {
 		j := _j
 		// 使用 goroutine 执行的任务
@@ -267,7 +268,7 @@ func actionRecentUpdateList() {
 
 		// 提交任务
 		submitErr := antPool.Submit(func() {
-			defer wg.Done()
+			defer wg2.Done()
 			task()
 		})
 
@@ -275,8 +276,8 @@ func actionRecentUpdateList() {
 			log.Println("antPool submitErr：",submitErr)
 		}
 	}
-	wg.Wait()
-	//log.Println("all actionRecentUpdateList done")
+	wg2.Wait()
+	log.Println("all actionRecentUpdateList done")
 }
 
 func RecentUpdatePageCount() int {

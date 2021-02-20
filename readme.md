@@ -185,7 +185,7 @@ sudo docker run --link redis-test:redis -p 8899:8899 -d go-movies-docker-scratch
 "addr":"redis-test"
 
 # 编译go-movies
-gox -osarch="linux/amd64"
+gox -osarch="linux/amd64" -ldflags "-s -w"
 
 # 运行
 sudo docker-compose up -d
