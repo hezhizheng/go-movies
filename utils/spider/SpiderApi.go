@@ -171,7 +171,7 @@ func DoRecentUpdate()  {
 
 func actionRecentUpdateList() {
 	defer ants.Release()
-	antPool, _ := ants.NewPool(100)
+	antPool, _ := ants.NewPool(2000)
 
 	pageCount := RecentUpdatePageCount()
 	//pageCount := 5
