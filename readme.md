@@ -172,7 +172,7 @@ sudo docker run -itd --name redis-test -p 6379:6379 redis
 "addr":"redis-test"
 
 # 编译go-movies
-gox -osarch="linux/amd64"
+gox -osarch="linux/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
 
 # 构造镜像
 sudo docker build -t go-movies-docker-scratch .

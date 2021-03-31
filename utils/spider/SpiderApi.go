@@ -173,7 +173,7 @@ func actionRecentUpdateList() {
 	defer ants.Release()
 	antPool, _ := ants.NewPool(2000)
 
-	pageCount := RecentUpdatePageCount()
+	pageCount := RecentUpdatePageCount(0)
 	//pageCount := 5
 	wg2 := sync.WaitGroup{}
 	wg2.Add(pageCount)
@@ -280,7 +280,10 @@ func actionRecentUpdateList() {
 	log.Println("all actionRecentUpdateList done")
 }
 
-func RecentUpdatePageCount() int {
+func RecentUpdatePageCount(retry int) int {
+	if retry >= 4 {
+		return 0
+	}
 	url := ApiHost + "?h=3&pg=1"
 
 	req := fasthttp.AcquireRequest()
@@ -300,8 +303,9 @@ func RecentUpdatePageCount() int {
 	req.SetRequestURI(url)
 
 	if err := fasthttp.Do(req, resp); err != nil {
-		log.Println("pageCount 请求失败:", url, err.Error())
-		RecentUpdatePageCount()
+		retry++
+		log.Println("pageCount 请求失败:", retry,url, err.Error())
+		return RecentUpdatePageCount(retry)
 		//return 0, subCategoryId
 	}
 
@@ -310,7 +314,7 @@ func RecentUpdatePageCount() int {
 	var nav ResData
 	err := utils.Json.Unmarshal(body, &nav)
 	if err != nil {
-		log.Println(err,"1111111111111111111111111")
+		log.Println(err,"json解析失败")
 	}
 
 	PageCount := nav.PageCount
@@ -396,7 +400,10 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 	}
 }
 
-func pageCount(subCategoryId string) (int, string) {
+func pageCount(subCategoryId string , retry int) (int, string) {
+	if retry >= 4 {
+		return 0, subCategoryId
+	}
 	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=1"
 
 	req := fasthttp.AcquireRequest()
@@ -415,8 +422,9 @@ func pageCount(subCategoryId string) (int, string) {
 	req.SetRequestURI(url)
 
 	if err := fasthttp.Do(req, resp); err != nil {
-		log.Println("pageCount 请求失败:", url, err.Error())
-		pageCount(subCategoryId)
+		retry++
+		log.Println("pageCount 请求失败:", retry,url, err.Error())
+		return pageCount(subCategoryId,retry)
 		//return 0, subCategoryId
 	}
 
@@ -604,7 +612,7 @@ func getCategoryPageCount() []CatePageCount {
 
 	for _, subCategoryId := range subCategoryIds {
 
-		pageCount, t := pageCount(subCategoryId)
+		pageCount, t := pageCount(subCategoryId,0)
 
 		CatePageCount := CatePageCount{
 			categoryId: t,
