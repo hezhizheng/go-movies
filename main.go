@@ -99,7 +99,7 @@ func main() {
 	})
 
 	utils.RecentUpdate(func() {
-		spider.DoRecentUpdate()
+		spider.Create().DoRecentUpdate()
 		return
 	})
 

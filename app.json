@@ -5,7 +5,7 @@
     "spider_path_name": "MoviesSpider",
     "debug_path": "/debug",
     "debug_path_name": "Debug",
-    "spider_mod": "api"
+    "spider_mod": "TianKongApi"
   },
   "redis": {
     "port": "6379",
@@ -21,24 +21,20 @@
   },
   "recommend": [
     {
-      "name": "表姐，你好嘢！",
-      "link": "/?m=vod-detail-id-24542.html"
-    },
-    {
-      "name": "维多利亚一号",
-      "link": "/?m=vod-detail-id-66993.html"
-    },
-    {
-      "name": "树大招风",
-      "link": "/?m=vod-detail-id-9254.html"
-    },
-    {
       "name": "绝命毒师第一季",
-      "link": "/?m=vod-detail-id-13725.html"
+      "link": "/?m=vod-detail-id-27290.html"
     },
     {
       "name": "风骚律师第一季",
-      "link": "/?m=vod-detail-id-27941.html"
+      "link": "/?m=vod-detail-id-47868.html"
+    },
+    {
+      "name": "维多利亚一号",
+      "link": "/?m=vod-detail-id-41939.html"
+    },
+    {
+      "name": "树大招风",
+      "link": "/?m=vod-detail-id-47948.html"
     }
   ]
 }

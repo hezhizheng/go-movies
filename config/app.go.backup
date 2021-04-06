@@ -9,6 +9,7 @@ app.debug_path_name: debug的路由名称
 cron.timing_spider: 定时爬虫的CRON表达式
 ding.access_token: 钉钉机器人token
 recommend: 推荐电影列表
+app.spider_mod: 固定参数为 TianKongApi
 */
 var AppJsonConfig = []byte(`
 {
@@ -18,7 +19,7 @@ var AppJsonConfig = []byte(`
     "spider_path_name": "MoviesSpider",
     "debug_path": "/debug",
     "debug_path_name": "Debug",
-    "spider_mod": "api"
+    "spider_mod": "TianKongApi"
   },
   "redis": {
     "port": "6379",
@@ -27,32 +28,28 @@ var AppJsonConfig = []byte(`
     "db": 10
   },
   "cron": {
-     "timing_spider": "0 0 1 * * ?"
+    "timing_spider": "0 0 1 * * ?"
   },
   "ding": {
-     "access_token": ""
+    "access_token": ""
   },
   "recommend": [
-      {
-        "name": "表姐，你好嘢！",
-        "link": "/?m=vod-detail-id-24542.html"
-      },
-      {
-        "name": "维多利亚一号",
-        "link": "/?m=vod-detail-id-66993.html"
-      },
-      {
-        "name": "树大招风",
-        "link": "/?m=vod-detail-id-9254.html"
-      },
-      {
-        "name": "绝命毒师第一季",
-        "link": "/?m=vod-detail-id-13725.html"
-      },
-      {
-        "name": "风骚律师第一季",
-        "link": "/?m=vod-detail-id-27941.html"
-      }
-    ]
+    {
+      "name": "绝命毒师第一季",
+      "link": "/?m=vod-detail-id-27290.html"
+    },
+    {
+      "name": "风骚律师第一季",
+      "link": "/?m=vod-detail-id-47868.html"
+    },
+    {
+      "name": "维多利亚一号",
+      "link": "/?m=vod-detail-id-41939.html"
+    },
+    {
+      "name": "树大招风",
+      "link": "/?m=vod-detail-id-47948.html"
+    }
+  ]
 }
 `)
