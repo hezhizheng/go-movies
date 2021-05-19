@@ -106,7 +106,7 @@ func list(pg int) {
 	// 执行时间标记
 	startTime := time.Now()
 	defer ants.Release()
-	antPool, _ := ants.NewPool(100)
+	antPool, _ := ants.NewPool(1000)
 
 	//_f := initFastHttp()
 
