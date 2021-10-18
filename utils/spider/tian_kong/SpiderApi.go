@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-const ApiHost = "https://api.tiankongapi.com/api.php/provide/vod"
+const ApiHost = "http://api.tiankongapi.com/api.php/provide/vod"
 const AcList = "list"
 const AcDetail = "detail"
 
@@ -188,31 +188,15 @@ func actionRecentUpdateList() {
 			//log.Println("jj",j)
 			//time.Sleep(time.Second * 2)
 			//return
-			url := ApiHost + "?h=3" + "&pg=" + strconv.Itoa(j)
-			req := fasthttp.AcquireRequest()
-			req.SetConnectionClose()
-			resp := fasthttp.AcquireResponse()
-			defer func() {
-				// 用完需要释放资源
-				fasthttp.ReleaseResponse(resp)
-				fasthttp.ReleaseRequest(req)
-			}()
-
-			req.Header.SetMethod("GET")
-
-			log.Println("actionRecentUpdateList 当前page"+strconv.Itoa(j), url, pageCount)
-
-			req.SetRequestURI(url)
-
-			if err := fasthttp.Do(req, resp); err != nil {
-				log.Println("actionRecentUpdateList 请求失败:", err.Error())
+			url := ApiHost + "?h=6" + "&pg=" + strconv.Itoa(j)
+			_, resp, gErr := fasthttp.Get(nil, url)
+			if gErr != nil {
+				log.Println("actionRecentUpdateList 请求失败:", gErr.Error())
 				return
 			}
 
-			body := resp.Body()
-
 			var nav ResData
-			err := utils.Json.Unmarshal(body, &nav)
+			err := utils.Json.Unmarshal(resp, &nav)
 			if err != nil {
 				log.Println("json 序列化错误",err)
 				return
@@ -287,30 +271,15 @@ func RecentUpdatePageCount(retry int) int {
 	}
 	url := ApiHost + "?h=3&pg=1"
 
-	req := fasthttp.AcquireRequest()
-	req.SetConnectionClose()
-	resp := fasthttp.AcquireResponse()
-	defer func() {
-		// 用完需要释放资源
-		fasthttp.ReleaseResponse(resp)
-		fasthttp.ReleaseRequest(req)
-	}()
-
-	req.Header.SetMethod("GET")
-
-	req.SetRequestURI(url)
-
-	if err := fasthttp.Do(req, resp); err != nil {
+	_, resp, gErr := fasthttp.Get(nil, url)
+	if gErr != nil {
 		retry++
-		log.Println("pageCount 请求失败:", retry,url, err.Error())
+		log.Println("RecentUpdatePageCount 请求失败:", retry,url, gErr.Error())
 		return RecentUpdatePageCount(retry)
-		//return 0, subCategoryId
 	}
 
-	body := resp.Body()
-
 	var nav ResData
-	err := utils.Json.Unmarshal(body, &nav)
+	err := utils.Json.Unmarshal(resp, &nav)
 	if err != nil {
 		log.Println(err,"json解析失败")
 	}
@@ -323,31 +292,19 @@ func RecentUpdatePageCount(retry int) int {
 
 func actionList(subCategoryId string, pg int, pageCount int) {
 	//return
-	req := fasthttp.AcquireRequest()
-	req.SetConnectionClose()
-	resp := fasthttp.AcquireResponse()
-	defer func() {
-		// 用完需要释放资源
-		fasthttp.ReleaseResponse(resp)
-		fasthttp.ReleaseRequest(req)
-	}()
-
-	req.Header.SetMethod("GET")
 
 	for j := pg; j <= pageCount; j++ {
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
 		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
-		req.SetRequestURI(url)
 
-		if err := fasthttp.Do(req, resp); err != nil {
-			log.Println("actionList 请求失败:", err.Error())
+		_, resp, gErr := fasthttp.Get(nil, url)
+		if gErr != nil {
+			log.Println("actionList 请求失败:", gErr.Error())
 			return
 		}
 
-		body := resp.Body()
-
 		var nav ResData
-		err := utils.Json.Unmarshal(body, &nav)
+		err := utils.Json.Unmarshal(resp, &nav)
 		if err != nil {
 			log.Println(err)
 		}
@@ -402,32 +359,17 @@ func pageCount(subCategoryId string , retry int) (int, string) {
 	}
 	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=1"
 
-	req := fasthttp.AcquireRequest()
-	req.SetConnectionClose()
-	resp := fasthttp.AcquireResponse()
-	defer func() {
-		// 用完需要释放资源
-		fasthttp.ReleaseResponse(resp)
-		fasthttp.ReleaseRequest(req)
-	}()
-
-	req.Header.SetMethod("GET")
-
-	req.SetRequestURI(url)
-
-	if err := fasthttp.Do(req, resp); err != nil {
+	_, resp, err := fasthttp.Get(nil, url)
+	if err != nil {
 		retry++
 		log.Println("pageCount 请求失败:", retry,url, err.Error())
 		return pageCount(subCategoryId,retry)
-		//return 0, subCategoryId
 	}
 
-	body := resp.Body()
-
 	var nav ResData
-	err := utils.Json.Unmarshal(body, &nav)
-	if err != nil {
-		log.Println(err)
+	jErr := utils.Json.Unmarshal(resp, &nav)
+	if jErr != nil {
+		log.Println(jErr)
 	}
 
 	PageCount := nav.PageCount
@@ -446,28 +388,14 @@ func Detail(id string, retry int) {
 		return
 	}
 
-	req := fasthttp.AcquireRequest()
-	req.SetConnectionClose()
-	resp := fasthttp.AcquireResponse()
-	defer func() {
-		// 用完需要释放资源
-		fasthttp.ReleaseResponse(resp)
-		fasthttp.ReleaseRequest(req)
-	}()
-
-	req.Header.SetMethod("GET")
-
-	req.SetRequestURI(url)
-
-	if err := fasthttp.Do(req, resp); err != nil {
-		log.Println("Detail 请求失败:", err.Error())
+	_, resp, gErr := fasthttp.Get(nil, url)
+	if gErr != nil {
+		log.Println("Detail 请求失败:", gErr.Error())
 		return
 	}
 
-	body := resp.Body()
-
 	var nav ResData
-	err := utils.Json.Unmarshal(body, &nav)
+	err := utils.Json.Unmarshal(resp, &nav)
 	if err != nil {
 		log.Println(err)
 	}
