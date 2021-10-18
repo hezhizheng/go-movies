@@ -102,7 +102,7 @@ func list(pg int) {
 	// 执行时间标记
 	startTime := time.Now()
 	defer ants.Release()
-	antPool, _ := ants.NewPool(100)
+	antPool, _ := ants.NewPool(200)
 
 	//_f := initFastHttp()
 
@@ -171,7 +171,7 @@ func DoRecentUpdate()  {
 
 func actionRecentUpdateList() {
 	defer ants.Release()
-	antPool, _ := ants.NewPool(2000)
+	antPool, _ := ants.NewPool(200)
 
 	pageCount := RecentUpdatePageCount(0)
 	//pageCount := 5
