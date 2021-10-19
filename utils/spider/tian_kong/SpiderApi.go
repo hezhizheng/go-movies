@@ -269,7 +269,7 @@ func RecentUpdatePageCount(retry int) int {
 	if retry >= 4 {
 		return 0
 	}
-	url := ApiHost + "?h=3&pg=1"
+	url := ApiHost + "?h=6&pg=1"
 
 	_, resp, gErr := fasthttp.Get(nil, url)
 	if gErr != nil {
@@ -299,14 +299,15 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 
 		_, resp, gErr := fasthttp.Get(nil, url)
 		if gErr != nil {
-			log.Println("actionList 请求失败:", gErr.Error())
+			log.Println("actionList 请求失败:", url,gErr.Error())
 			return
 		}
 
 		var nav ResData
 		err := utils.Json.Unmarshal(resp, &nav)
 		if err != nil {
-			log.Println(err)
+			log.Println("actionList json 解析失败",url,err)
+			return
 		}
 
 		for _, value := range nav.List {
