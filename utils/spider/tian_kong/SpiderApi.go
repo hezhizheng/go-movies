@@ -352,6 +352,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 			}
 		}
 	}
+	return
 }
 
 func pageCount(subCategoryId string , retry int) (int, string) {
