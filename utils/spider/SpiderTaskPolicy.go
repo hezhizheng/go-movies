@@ -8,13 +8,10 @@ import (
 
 // 定义 mod 的映射关系
 var spiderModMap = map[string]utils.SpiderTask{
-	"api":     &SpiderApi{},
-	"TianKongApi" : &tian_kong.SpiderApi{},
-	"WebPage": &utils.Spider{}}
+	"TianKongApi": &tian_kong.SpiderApi{},
+}
 
 func Create() utils.SpiderTask {
-
 	mod := viper.GetString(`app.spider_mod`)
-
 	return spiderModMap[mod]
 }
