@@ -167,8 +167,6 @@ func DoRecentUpdate()  {
 		ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', 2, 64)
 		ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', 2, 64)
 
-		DelAllListCacheKey()
-
 		SendDingMsg("最近更新执行完成，耗时："+ ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
 	}
 }
@@ -198,7 +196,7 @@ func actionRecentUpdateList() {
 			var nav ResData
 			err := utils.Json.Unmarshal(resp, &nav)
 			if err != nil {
-				log.Println("json 序列化错误",err)
+				log.Println("actionRecentUpdateList json 序列化错误",err)
 				return
 			}
 
@@ -262,6 +260,12 @@ func actionRecentUpdateList() {
 		}
 	}
 	wg2.Wait()
+
+
+	if pageCount > 0 {
+		go DelAllListCacheKey()
+	}
+
 	log.Println("all actionRecentUpdateList done")
 }
 
@@ -281,7 +285,8 @@ func RecentUpdatePageCount(retry int) int {
 	var nav ResData
 	err := utils.Json.Unmarshal(resp, &nav)
 	if err != nil {
-		log.Println(err,"json解析失败")
+		log.Println(err,"RecentUpdatePageCount json解析失败")
+		return 0
 	}
 
 	PageCount := nav.PageCount
@@ -371,7 +376,8 @@ func pageCount(subCategoryId string , retry int) (int, string) {
 	var nav ResData
 	jErr := utils.Json.Unmarshal(resp, &nav)
 	if jErr != nil {
-		log.Println(jErr)
+		log.Println(jErr,"pageCount json 解析失败")
+		return 0, subCategoryId
 	}
 
 	PageCount := nav.PageCount
@@ -399,7 +405,8 @@ func Detail(id string, retry int) {
 	var nav ResData
 	err := utils.Json.Unmarshal(resp, &nav)
 	if err != nil {
-		log.Println(err)
+		log.Println(err,"detail json 解析失败")
+		return
 	}
 
 	if len(nav.List) <= 0 {
@@ -509,12 +516,14 @@ func subCategoryIds() []string {
 		utils.RedisDB.Set("categories", categoriesStr, 0).Err()
 	}
 
+	CategoryIds := make([]string, 0)
+
 	err := utils.Json.Unmarshal([]byte(categoriesStr), &nav)
 	if err != nil {
-		log.Println(err)
+		log.Println("subCategoryIds json 解析失败",err)
+		return CategoryIds
 	}
 
-	CategoryIds := make([]string, 0)
 	for _, value := range nav {
 		for _, subValue := range value.Sub {
 			Smutex.Lock()
