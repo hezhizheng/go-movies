@@ -2,10 +2,7 @@
 <img src="https://files.catbox.moe/rpdbb6.png">
 </p>
 
-> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站：~~[https://go-movies.hzz.cool/](https://go-movies.hzz.cool/)~~ 支持手机端访问播放
-
-
-> https://go-movies.hzz.cool/ 这个域名被阿里云警告了，访问新演示地址 http://film.hzz.cool
+> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站：[http://film.hzz.cool](http://film.hzz.cool) 支持手机端访问播放
 
 ## Github地址
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
@@ -13,12 +10,11 @@
 ## features
 - 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
 - 支持docker启动方式
-- 暂时只支持API请求的形式(第三方源存在不稳定性)，config/app.go 或 app.json 为配置文件(PS:存在app.json文件则以app.json为准)
 - 简单影片分类、搜索的支持
 - 内置自动爬虫、自动更新最新资源的定时任务，基本满足日常看片需求。
+- 钉钉机器人通知
 
 ## Tip
-- ~~由于目标网站会封锁直接通过网页爬虫的IP,在没有找到稳定IP池的情况下，推荐优先使用API版本（PS：网页爬虫版可用，但可能会被封IP）~~
 - 暂时只维护API请求版本 [API接口说明.txt](https://api.tiankongapi.com)，后续可能追加其他资源支持
 - API版本首次启动会全量请求并存储到redis，之后每小时定时爬取最近更新的影视资源
 
@@ -88,7 +84,8 @@ git clone https://github.com/hezhizheng/go-movies
 # 进入目录
 cd go-movies
 
-# 生成配置文件(默认使用redis db10的库，可自行修改app.go中的配置)
+# 配置文件(默认使用redis db10的库，可自行修改app.go中的配置)
+# config/app.go 或 app.json 为配置文件(PS:存在app.json文件则以app.json为准)
 cp ./config/app.go.backup ./config/app.go
 
 # 配置说明
@@ -116,7 +113,7 @@ http://127.0.0.1:8899
 ```
 
 ### 开启爬虫
-- 已内置定时爬虫，默认凌晨一点开启爬虫(可修改配置文件cron.timing_spider表达式)
+- 已内置定时爬虫，首次全量请求之后，每小时定时爬取最近更新的影视资源(可自行修改配置文件cron.timing_spider表达式来控制间隔)
 - 主动运行：直接访问链接 http://127.0.0.1:8899/movies-spider
 - 耗时：具体时间受目标网站/接口的响应速度影响
 
