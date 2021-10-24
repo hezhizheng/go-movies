@@ -1,0 +1,48 @@
+{{define "footer"}}
+<div class="stui-foot clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-pd text-center hidden-xs">
+                <p>Copyright © 2019- 2021 GoMovies</p>
+                <p>本站所有视频均由程序自动采集而来，版权归原创者所有，如果侵犯了你的权益，请通知我删除侵权内容，谢谢合作。</p>
+                <p>视频内所有广告均来自采集视频中自带广告，与本站无关！</p>
+                <p>power by hzz.cool</p>
+            </div>
+            <p class="text-muted text-center visible-xs">
+                Copyright © 2019- 2021 GoMovies <br>
+                本站所有视频均由程序自动采集而来，版权归原创者所有，<br>
+                如果侵犯了你的权益，请通知我删除侵权内容，谢谢合作。<br>
+                视频内所有广告均来自采集视频中自带广告，与本站无关！<br>
+                power by hzz.cool<br>
+            </p>
+        </div>
+    </div>
+</div>
+
+<ul class="stui-extra clearfix">
+    <li>
+        <a class="backtop" href="javascript:scroll(0,0)" style="display: none;"><i class="icon iconfont icon-less"></i></a>
+    </li>
+</ul>
+
+<script src="//lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"
+        type="application/javascript"></script>
+<script type="text/javascript" src="static2/js/stui_default.js"></script>
+<script type="text/javascript" src="static2/js/stui_block.js"></script>
+<script type="text/javascript" src="//lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js"></script>
+<script type="text/javascript" src="static2/js/jquery.autocomplete.js"></script>
+
+<script type="text/javascript">
+    $(".stui-header__user li,.stui-header__menu li").click(function () {
+        $(this).find(".dropdown").toggle();
+    });
+    $(".open-search").click(function () {
+        var Seacrh = $(".stui-header__search");
+        Seacrh.addClass("active").siblings().hide();
+        Seacrh.find(".form-control").focus();
+        $(".search-close").click(function () {
+            Seacrh.removeClass("active").siblings().show();
+        });
+    });
+</script>
+{{end}}

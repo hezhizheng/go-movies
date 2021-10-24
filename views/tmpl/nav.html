@@ -1,0 +1,65 @@
+{{define "nav"}}
+<header class="stui-header__top clearfix" id="header-top">
+    <div class="container">
+        <div class="row">
+            <div class="stui-header_bd clearfix">
+                <div class="stui-header__logo">
+                    <a class="logo" href=""></a>
+                </div>
+                <ul class="stui-header__menu">
+                    <li><a href="">首页1{{.}}456</a></li>
+                    <li class="hidden-xs"><a href="display.html">电影</a></li>
+                    <li class="hidden-xs"><a href="index2.html">剧集</a></li>
+                    <li class="hidden-xs"><a href="index3.html">综艺</a></li>
+                    <li class="hidden-xs"><a href="index4.html">动漫</a></li>
+                    <li class="hidden-xs"><a href="index5.html">专题</a></li>
+                    <li>
+                        <a href="javascript:;">导航 <i class="icon iconfont icon-moreunfold"></i></a>
+                        <ul class="dropdown">
+                            <li><a href="display.html">电影</a></li>
+                            <li><a href="index2.html">剧集</a></li>
+                            <li><a href="index3.html">综艺</a></li>
+                            <li><a href="index4.html">动漫</a></li>
+                            <li><a href="index6.html">动作片</a></li>
+                            <li><a href="index7.html">喜剧片</a></li>
+                            <li><a href="index8.html">爱情片</a></li>
+                            <li><a href="index9.html">科幻片</a></li>
+                            <li><a href="index10.html">恐怖片</a></li>
+                            <li><a href="index11.html">剧情片</a></li>
+                            <li><a href="index12.html">战争片</a></li>
+                            <li><a href="index13.html">国产剧</a></li>
+                            <li><a href="index14.html">港台剧</a></li>
+                            <li><a href="index15.html">日韩剧</a></li>
+                            <li><a href="index16.html">欧美剧</a></li>
+                            <li><a href="index17.html">海外剧</a></li>
+                            <li><a href="index5.html">专题</a></li>
+                            <li><a href="about.html">关于</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="stui-header__search">
+                    <form id="search" name="search" method="get" action="/vodsearch/-------------/">
+                        <input type="text" id="wd" name="wd" class="mac_wd form-control" value=""
+                               placeholder="今日更新5部视频">
+                        <button class="submit" id="searchbutton" type="submit" name="submit"><i
+                                class="icon iconfont icon-search"></i></button>
+                    </form>
+
+
+                    <a rel="nofollow" class="search-close visible-xs" href="javascript:;"><i
+                            class="icon iconfont icon-close"></i></a>
+                </div>
+
+
+                <ul class="stui-header__user">
+                    <li class="visible-xs">
+                        <a rel="nofollow" class="open-search" href="javascript:;"> <i
+                                class="icon iconfont icon-search"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+{{end}}

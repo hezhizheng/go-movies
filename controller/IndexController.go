@@ -6,13 +6,20 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"go_movies/services"
 	heroTpl "go_movies/views/hero"
+	"go_movies/views/tmpl"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
+//var xc = tmpl.EmbedTmpl
+
+//var GoTpl = template.Must(template.ParseGlob("./views/tmpl/*.html"))
+
 // 首页
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
 
 	path := r.URL.Path
 	cate := r.URL.Query()["cate"]
@@ -92,9 +99,23 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["film_title"] = ""
 
 
-	buffer := new(bytes.Buffer)
-	heroTpl.Index(show, buffer)
-	w.Write(buffer.Bytes())
+
+	//GoTpl.ExecuteTemplate(os.Stdout, "index", "hzz go movies")
+	//display ,rc:= tmpl.GoTpl.ParseFiles("./views/tmpl/index.html","./views/tmpl/nav.html")
+
+	vv := tmpl.GoTpl.ExecuteTemplate(w,"index","hzz go movies33")
+	log.Println("eeeeeeee",vv)
+
+	//display.ExecuteTemplate(w,"nav","hzz go movies33")
+	//tmpl.GoTpl.ExecuteTemplate(w,"nav","hzz go movies2")
+
+	//tmpl.GoTpl.Execute(w,"hzz go movies2")
+
+	//GoTpl.ParseFiles("index.html")
+	//buffer := new(bytes.Buffer)
+	//heroTpl.Index(show, buffer)
+	//w.Write([]byte(`fdsfsdfs`))
+
 
 }
 

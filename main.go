@@ -2,13 +2,12 @@ package main
 
 import (
 	"bytes"
+	"embed"
 	"errors"
 	"github.com/julienschmidt/httprouter"
-	"github.com/rakyll/statik/fs"
 	"github.com/spf13/viper"
 	"go_movies/config"
 	"go_movies/routes"
-	_ "go_movies/statik"
 	"go_movies/utils"
 	"go_movies/utils/spider"
 	"log"
@@ -16,9 +15,14 @@ import (
 	"os"
 )
 
+//go:embed static2/*
+var embedStatic2 embed.FS
+
+
+
 // Reads from the routes slice to translate the values to httprouter.Handle
 // 遍历路由
-func TraversingRouter() *httprouter.Router {
+func traversingRouter() *httprouter.Router {
 
 	AllRoutes := routes.AllRoutes()
 
@@ -32,13 +36,21 @@ func TraversingRouter() *httprouter.Router {
 		router.Handle(route.Method, route.Path, handle)
 	}
 
-	statikFS, err := fs.New()
-	if err != nil {
-		log.Fatal(err)
-	}
+	//statikFS, err := fs.New()
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+
 
 	// 配置静态文件访问
-	router.ServeFiles("/static/*filepath", statikFS)
+	//router.ServeFiles("/static2/*filepath", statikFS)
+
+	// live 模式 打包用
+	//fsys, _ := fs.Sub(embedStatic2, "static2")
+	//router.ServeFiles("/static2/*filepath", http.FS(fsys))
+
+	// dev 开发用 避免修改静态资源需要重启服务
+	router.ServeFiles("/static2/*filepath", http.Dir("static2"))
 	return router
 }
 
@@ -81,7 +93,7 @@ func firstSpider() {
 
 func main() {
 	// 注册所有路由
-	router := TraversingRouter()
+	router := traversingRouter()
 
 	// 初始化 redis 连接
 	utils.InitRedisDB()
@@ -90,7 +102,7 @@ func main() {
 	port := viper.GetString(`app.port`)
 	log.Println("监听端口", "http://127.0.0.1"+port)
 
-	firstSpider()
+	//firstSpider()
 
 	// 启动定时爬虫任务
 	utils.TimingSpider(func() {

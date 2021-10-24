@@ -1,0 +1,395 @@
+{{define "index"}}
+
+{{template "head"}}
+
+<body style="padding: 0;">
+
+{{/* 注释 子模板后面的 . 一点要加上 否则将获取不到数据 */}}
+{{template "nav" .}}
+
+<div class="container">
+    <div class="row">
+
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <a class="more text-muted pull-right" href="index30.html">更多{{.}} <i
+                                class="icon iconfont icon-more"></i></a>
+                        <h3 class="title">
+                            <img src="static2/picture/icon_1.png" alt="电影推荐">
+                            <a href="index30.html">电影</a>
+                        </h3>
+                        <ul class="nav nav-text pull-right hidden-sm hidden-xs">
+                            <li><a href="index40.html" class="text-muted">动作片</a> <span class="split-line"></span></li>
+                            <li><a href="index41.html" class="text-muted">喜剧片</a> <span class="split-line"></span></li>
+                            <li><a href="index42.html" class="text-muted">爱情片</a> <span class="split-line"></span></li>
+                            <li><a href="index43.html" class="text-muted">科幻片</a> <span class="split-line"></span></li>
+                            <li><a href="index44.html" class="text-muted">恐怖片</a> <span class="split-line"></span></li>
+                            <li><a href="index45.html" class="text-muted">剧情片</a> <span class="split-line"></span></li>
+                            <li><a href="index46.html" class="text-muted">犯罪片</a> <span class="split-line"></span></li>
+                            <li><a href="index47.html" class="text-muted">战争片</a> <span class="split-line"></span></li>
+                            <li><a href="index48.html" class="text-muted">动画片</a> <span class="split-line"></span></li>
+                            <li><a href="index49.html" class="text-muted">纪录片</a> <span class="split-line"></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="stui-pannel_bd clearfix">
+                    <div class="col-lg-wide-8 col-xs-1 padding-0">
+                        <ul class="stui-vodlist clearfix">
+
+                            <!--                            12 个 -->
+                            <li class="col-md-6 col-sm-4 col-xs-3">
+                                <div class="stui-vodlist__box stui-vodlist__bg">
+                                    <a class="stui-vodlist__thumb lazyload" href="detail.html" title="摩加迪沙"
+                                       data-original="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/meme.jpg">
+                                        <span class="play hidden-xs"></span>
+                                        <span class="pic-text text-right">1080P</span>
+                                    </a>
+                                    <div class="stui-vodlist__detail active">
+                                        <h4 class="title text-overflow"><a href="detail.html" title="摩加迪沙">摩加迪沙</a>
+                                        </h4>
+                                        <p class="text text-overflow text-muted hidden-xs">金允石,赵寅成,许峻豪,具教焕,金素真</p>
+                                    </div>
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-wide-2 hidden-md hidden-sm hidden-xs">
+                        <ul class="stui-vodlist__media active col-pd clearfix">
+                            <li>
+                                <div class="thumb">
+                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="index62.html" title="中国营长"
+                                       data-original="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/meme.jpg"></a>
+                                </div>
+                                <div class="detail detail-side">
+                                    <h4 class="title"><a href="index62.html"><i
+                                            class="icon iconfont icon-more text-muted pull-right"></i> 中国营长</a></h4>
+                                    <p class="font-12"><span class="text-muted">类型：</span>战争,剧情片,剧情，<span
+                                            class="text-muted"><span class="text-muted">地区：</span>中国大陆</span></p>
+                                    <p class="font-12 margin-0"><span class="text-muted">主演：</span>封柏,Bai,Fen</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="stui-vodlist__text col-pd clearfix" style="padding-top: 0;">
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index63.html" title="探索发现2021"><span
+                                        class="text-muted pull-right">更新至20211</span> <em class="text-red">2 . </em>探索发现2021</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="detail.html" title="摩加迪沙"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">3
+                                    . </em>摩加迪沙</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index51.html" title="妈妈的神奇小子"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">4 . </em>妈妈的神奇小子</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index64.html" title="我来自北京之玛尼堆的秋天"><span
+                                        class="text-muted pull-right">超清</span> <em class="text-red">5 . </em>我来自北京之玛尼堆的秋天</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index65.html" title="昆仑谜宫"><span
+                                        class="text-muted pull-right">超清</span> <em class="text-red">6 . </em>昆仑谜宫</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index66.html" title="我和我的祖国"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">7 . </em>我和我的祖国</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index67.html" title="终极代码"><span
+                                        class="text-muted pull-right">超清</span> <em class="text-red">8 . </em>终极代码</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index68.html" title="亚当斯一家2"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">9 . </em>亚当斯一家2</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index52.html" title="青蛇"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">10 . </em>青蛇</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index69.html" title="宋慈之河神案"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">11 . </em>宋慈之河神案</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index70.html" title="全境封锁"><span
+                                        class="text-muted pull-right">HD</span> <em class="text-red">12 . </em>全境封锁</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index53.html" title="哈利波特7：死亡圣器下"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">13 . </em>哈利波特7：死亡圣器下</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index54.html" title="哈利波特7：死亡圣器上"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">14 . </em>哈利波特7：死亡圣器上</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index55.html" title="哈利波特6：混血王子"><span
+                                        class="text-muted pull-right">1080P</span> <em class="text-red">15 . </em>哈利波特6：混血王子</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <a class="more text-muted pull-right" href="index31.html">更多 <i
+                                class="icon iconfont icon-more"></i></a>
+                        <h3 class="title">
+                            <img src="static2/picture/icon_2.png" alt="剧集推荐">
+                            <a href="index31.html">剧集</a>
+                        </h3>
+                        <ul class="nav nav-text pull-right hidden-sm hidden-xs">
+                            <li><a href="index71.html" class="text-muted">国产剧</a> <span class="split-line"></span></li>
+                            <li><a href="index72.html" class="text-muted">港台剧</a> <span class="split-line"></span></li>
+                            <li><a href="index73.html" class="text-muted">日韩剧</a> <span class="split-line"></span></li>
+                            <li><a href="index74.html" class="text-muted">欧美剧</a> <span class="split-line"></span></li>
+                            <li><a href="index75.html" class="text-muted">海外剧</a> <span class="split-line"></span></li>
+                            <li><a href="index76.html" class="text-muted">纪录片</a> <span class="split-line"></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="stui-pannel_bd clearfix">
+                    <div class="col-lg-wide-8 col-xs-1 padding-0">
+                        <ul class="stui-vodlist clearfix">
+
+                            <li class="col-md-6 col-sm-4 col-xs-3">
+                                <div class="stui-vodlist__box stui-vodlist__bg">
+                                    <a class="stui-vodlist__thumb lazyload" href="index77.html" title="亲爱的吾兄"
+                                       data-original="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/meme.jpg">
+                                        <span class="play hidden-xs"></span>
+                                        <span class="pic-text text-right">更新至28集</span>
+                                    </a>
+                                    <div class="stui-vodlist__detail active">
+                                        <h4 class="title text-overflow"><a href="index77.html" title="亲爱的吾兄">亲爱的吾兄</a>
+                                        </h4>
+                                        <p class="text text-overflow text-muted hidden-xs">赵英博,代云帆,吴芊盈</p>
+                                    </div>
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="col-lg-wide-2 hidden-md hidden-sm hidden-xs">
+                        <ul class="stui-vodlist__media active col-pd clearfix">
+                            <li>
+                                <div class="thumb">
+                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="index77.html" title="亲爱的吾兄"
+                                       data-original="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/meme.jpg"></a>
+                                </div>
+                                <div class="detail detail-side">
+                                    <h4 class="title"><a href="index77.html"><i
+                                            class="icon iconfont icon-more text-muted pull-right"></i> 亲爱的吾兄</a></h4>
+                                    <p class="font-12"><span class="text-muted">类型：</span>古装,喜剧,奇幻,爱情,芒果出品,国产，<span
+                                            class="text-muted"><span class="text-muted">地区：</span>中国大陆</span></p>
+                                    <p class="font-12 margin-0"><span class="text-muted">主演：</span>赵英博,代云帆,吴芊</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="stui-vodlist__text col-pd clearfix" style="padding-top: 0;">
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index78.html" title="您好!母亲大人"><span
+                                        class="text-muted pull-right">更新至8集</span> <em class="text-red">2 . </em>您好!母亲大人</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index35.html" title="功勋"><span
+                                        class="text-muted pull-right">更新至36集</span> <em class="text-red">3 . </em>功勋</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index88.html" title="国家代表老婆"><span
+                                        class="text-muted pull-right">更新至8集</span> <em class="text-red">4 . </em>国家代表老婆</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index89.html" title="红皮鞋"><span
+                                        class="text-muted pull-right">共100集,更新</span> <em class="text-red">5 . </em>红皮鞋</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index90.html" title="心灵闪耀的瞬间"><span
+                                        class="text-muted pull-right">更新至3集</span> <em class="text-red">6 . </em>心灵闪耀的瞬间</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index91.html" title="人间有爱2"><span
+                                        class="text-muted pull-right">更新至6集</span> <em class="text-red">7
+                                    . </em>人间有爱2</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index92.html" title="农民的根"><span
+                                        class="text-muted pull-right">更新至6集</span> <em class="text-red">8
+                                    . </em>农民的根</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index93.html" title="医者仁心"><span
+                                        class="text-muted pull-right">更新至6集</span> <em class="text-red">9
+                                    . </em>医者仁心</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index94.html" title="我的泪珠儿"><span
+                                        class="text-muted pull-right">更新至6集</span> <em class="text-red">10 . </em>我的泪珠儿</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index95.html" title="生命因你而美丽"><span
+                                        class="text-muted pull-right">更新至6集</span> <em class="text-red">11 . </em>生命因你而美丽</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index96.html" title="警界雄风"><span
+                                        class="text-muted pull-right">更新至8集</span> <em class="text-red">12
+                                    . </em>警界雄风</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index97.html" title="霞光"><span
+                                        class="text-muted pull-right">更新至18集</span> <em class="text-red">13
+                                    . </em>霞光</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index98.html" title="即便如此你仍会发誓爱我吗?"><span
+                                        class="text-muted pull-right">更新至2集</span> <em class="text-red">14 . </em>即便如此你仍会发誓爱我吗</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index99.html" title="活着乐着"><span
+                                        class="text-muted pull-right">更新至14集</span> <em class="text-red">15 . </em>活着乐着</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <a class="more text-muted pull-right" href="a637f67fe1.html">更多 <i
+                                class="icon iconfont icon-more"></i></a>
+                        <h3 class="title">
+                            <img src="static2/picture/icon_4.png" alt="动漫推荐">
+                            <a href="a637f67fe1.html">动漫</a>
+                        </h3>
+                        <ul class="nav nav-text pull-right hidden-sm hidden-xs">
+                        </ul>
+                    </div>
+                </div>
+                <div class="stui-pannel_bd clearfix">
+                    <div class="col-lg-wide-8 col-xs-1 padding-0">
+                        <ul class="stui-vodlist clearfix">
+
+                            <li class="col-md-6 col-sm-4 col-xs-3">
+                                <div class="stui-vodlist__box stui-vodlist__bg">
+                                    <a class="stui-vodlist__thumb lazyload" href="b4942ae1f1.html" title="残次品放逐星空"
+                                       data-original="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/meme.jpg">
+                                        <span class="play hidden-xs"></span>
+                                        <span class="pic-text text-right">更新至13集</span>
+                                    </a>
+                                    <div class="stui-vodlist__detail active">
+                                        <h4 class="title text-overflow"><a href="b4942ae1f1.html" title="残次品放逐星空">残次品放逐星空</a>
+                                        </h4>
+                                        <p class="text text-overflow text-muted hidden-xs">沈磊,梁达伟,黄莺,刘北辰,阿牧</p>
+                                    </div>
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="col-lg-wide-2 hidden-md hidden-sm hidden-xs">
+                        <ul class="stui-vodlist__media active col-pd clearfix">
+                            <li>
+                                <div class="thumb">
+                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="b4942ae1f1.html"
+                                       title="残次品放逐星空"
+                                       data-original="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/meme.jpg"></a>
+                                </div>
+                                <div class="detail detail-side">
+                                    <h4 class="title"><a href="b4942ae1f1.html"><i
+                                            class="icon iconfont icon-more text-muted pull-right"></i> 残次品放逐星空</a></h4>
+                                    <p class="font-12"><span class="text-muted">类型：</span>动画，<span
+                                            class="text-muted"><span class="text-muted">地区：</span>中国大陆</span></p>
+                                    <p class="font-12 margin-0"><span class="text-muted">主演：</span>沈磊,梁达伟,黄莺,</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="stui-vodlist__text col-pd clearfix" style="padding-top: 0;">
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="19969ee989.html" title="一人之下第四季"><span
+                                        class="text-muted pull-right">更新至05集</span> <em class="text-red">2 . </em>一人之下第四季</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="86bf3e5348.html" title="异世界中药铺"><span
+                                        class="text-muted pull-right">更新至93集</span> <em class="text-red">3 . </em>异世界中药铺</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="index36.html" title="完美世界"><span
+                                        class="text-muted pull-right">更新至28集</span> <em class="text-red">4
+                                    . </em>完美世界</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="f722b2cb2a.html" title="宿命回响"><span
+                                        class="text-muted pull-right">更新至02集</span> <em class="text-red">5
+                                    . </em>宿命回响</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="8d2106d52f.html" title="狂热深渊迷失的孩子"><span
+                                        class="text-muted pull-right">更新至01集</span> <em class="text-red">6 . </em>狂热深渊迷失的孩子</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="5b7885d4c1.html" title="我被逐出队伍后过上慢生活"><span
+                                        class="text-muted pull-right">更新至2集</span> <em class="text-red">7 . </em>我被逐出队伍后过上慢生活</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="a8df75796e.html" title="迷宫标记者"><span
+                                        class="text-muted pull-right">更新至1集</span> <em class="text-red">8
+                                    . </em>迷宫标记者</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="ffc29c3ff7.html" title="动态漫画全球高武"><span
+                                        class="text-muted pull-right">更新至5集</span> <em class="text-red">9 . </em>动态漫画全球高武</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="6f8ba73a00.html" title="世界顶尖的暗杀者转生为异世界贵族"><span
+                                        class="text-muted pull-right">更新至2集</span> <em class="text-red">10 . </em>世界顶尖的暗杀者转生为异</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="f69987421a.html" title="独步逍遥"><span
+                                        class="text-muted pull-right">更新至147集</span> <em class="text-red">11 . </em>独步逍遥</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="5ee10cfd89.html" title="春秋封神"><span
+                                        class="text-muted pull-right">更新至21集</span> <em class="text-red">12 . </em>春秋封神</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="0c7c3f9cef.html" title="星河至尊"><span
+                                        class="text-muted pull-right">更新至40集</span> <em class="text-red">13 . </em>星河至尊</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="06f6e4da91.html" title="万界仙踪2018"><span
+                                        class="text-muted pull-right">更新至210集</span> <em class="text-red">14 . </em>万界仙踪2018</a>
+                            </li>
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="d3e0db94e9.html" title="狂神魔尊"><span
+                                        class="text-muted pull-right">更新至51集</span> <em class="text-red">15 . </em>狂神魔尊</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 列表 -->
+
+    </div>
+</div>
+
+{{template "footer"}}
+
+</body>
+
+</html>
+{{end}}
