@@ -1,171 +1,11 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<meta name="renderer" content="webkit|ie-comp|ie-stand">
-	<meta name="applicable-device" content="pc,mobile">
-	<meta name="MobileOptimized" content="width">
-	<meta name="HandheldFriendly" content="true">
-	<title>真不卡影院_我不卡影院 - 真正不卡的超清电影网站</title>
-	<meta name="keywords" content="真不卡电影网,我不卡影院,不卡的电影网,超清蓝光在线">
-	<meta name="description" content="真不卡影院(www.zhenbuka.vip)搜集最新电影、高清电影、超清蓝光电影等视频免费分享给大家在线观看，真不卡影院是一个真正我不卡的电影网站。">
+{{define "display"}}
 
-	<link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="static/css/iconfont.css" type="text/css">
-	<link rel="stylesheet" href="static/css/stui_block.css" type="text/css">
-	<link rel="stylesheet" href="static/css/stui_block_color.css" type="text/css">
-	<link rel="stylesheet" href="static/css/stui_default.css" type="text/css">
-	<script src="//lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"
-			type="application/javascript"></script>
-	<script type="text/javascript" src="static/js/stui_default.js"></script>
-	<script type="text/javascript" src="static/js/stui_block.js"></script>
-	<script type="text/javascript" src="static/js/home.js"></script>
-	<script type="text/javascript" src="//lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js"></script>
-	<script>var maccms = {
-		"path": "",
-		"mid": "",
-		"url": "www.zhenbuka3.com",
-		"wapurl": "www.zhenbuka3.com",
-		"mob_status": "0"
-	};</script>
-	<script>function onSubmit(token) {
-		document.getElementById("search").submit()
-	}</script>
-	<!--[if lt IE 9]>
-	<script src="https://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-	<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-	<!--  <script type="text/javascript" src="static/js/history.js"></script>-->
-	<!--  <script src="http://www.zhenbuka3.com/statics/js/toastr/jquery.toast.js"></script>-->
-	<!--  <link rel="stylesheet" href="http://www.zhenbuka3.com/statics/js/toastr/jquery.toast.css">-->
-	<style type="text/css">
-		.stui-header__top {
-			/*background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);*/
-			background: #292838;
-		}
+{{template "head"}}
 
-		.stui-header__top.headroom--not-top {
-			background: #292838;
-		}
-	</style>
-	<!--<style>html{overflow-y:scroll;filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);-webkit-filter:grayscale(100%)}</style>-->
-</head>
 <body style="padding: 0;">
 
-<div class="tncode" style="text-align: center;margin: 30px auto;display:none;">
-	开始验证
-</div>
-<script type="text/javascript" src="static/js/tn_code.js"></script>
-<script type="text/javascript">
-	//document.getElementByClassName('tncode').click();
+{{template "nav" .}}
 
-	$TN.onsuccess(function () {
-		//验证通过
-		doRealSearch();
-	});
-</script>
-<link rel="stylesheet" type="text/css" href="static/css/style.css">
-
-
-<!--搜索验证码↑-->
-<header class="stui-header__top clearfix" id="header-top">
-	<div class="container">
-		<div class="row">
-			<div class="stui-header_bd clearfix">
-				<div class="stui-header__logo">
-					<a class="logo" href="./index.html"></a>
-				</div>
-				<ul class="stui-header__menu">
-					<li><a href="">首页</a></li>
-					<li class="hidden-xs"><a href="index1.html">电影</a></li>
-					<li class="hidden-xs"><a href="index2.html">剧集</a></li>
-					<li class="hidden-xs"><a href="index3.html">综艺</a></li>
-					<li class="hidden-xs"><a href="index4.html">动漫</a></li>
-					<li class="hidden-xs"><a href="index5.html">专题</a></li>
-					<li>
-						<a href="javascript:;">导航 <i class="icon iconfont icon-moreunfold"></i></a>
-						<ul class="dropdown">
-							<li><a href="index1.html">电影</a></li>
-							<li><a href="index2.html">剧集</a></li>
-							<li><a href="index3.html">综艺</a></li>
-							<li><a href="index4.html">动漫</a></li>
-							<li><a href="index6.html">动作片</a></li>
-							<li><a href="index7.html">喜剧片</a></li>
-							<li><a href="index8.html">爱情片</a></li>
-							<li><a href="index9.html">科幻片</a></li>
-							<li><a href="index10.html">恐怖片</a></li>
-							<li><a href="index11.html">剧情片</a></li>
-							<li><a href="index12.html">战争片</a></li>
-							<li><a href="index13.html">国产剧</a></li>
-							<li><a href="index14.html">港台剧</a></li>
-							<li><a href="index15.html">日韩剧</a></li>
-							<li><a href="index16.html">欧美剧</a></li>
-							<li><a href="index17.html">海外剧</a></li>
-							<li><a href="index5.html">专题</a></li>
-							<li><a href="index18.html">关于</a></li>
-						</ul>
-					</li>
-				</ul>
-
-				<script type="text/javascript" src="static/js/jquery.autocomplete.js"></script>
-				<div class="stui-header__search">
-					<form id="search" name="search" method="get" action="/vodsearch/-------------/">
-						<input type="text" id="wd" name="wd" class="mac_wd form-control" value=""
-							   placeholder="今日更新5部视频">
-						<button class="submit" id="searchbutton" type="submit" name="submit"><i
-								class="icon iconfont icon-search"></i></button>
-					</form>
-					<script type="text/javascript">
-						function doRealSearch() {
-							location.href = '/vodsearch/-------------/?wd=' + $('#wd').val();
-
-						}
-
-						$('#search').submit(function (event) {
-							event.preventDefault();
-							if ($.cookie('vodSearchNeedVerify')) {
-								//弹出验证码
-								$('.tncode').click();
-							} else {
-								//真的搜索
-								doRealSearch();
-							}
-
-						});
-					</script>
-
-
-					<a rel="nofollow" class="search-close visible-xs" href="javascript:;"><i
-							class="icon iconfont icon-close"></i></a>
-				</div>
-
-
-				<ul class="stui-header__user">
-					<li class="visible-xs">
-						<a rel="nofollow" class="open-search" href="javascript:;"> <i
-								class="icon iconfont icon-search"></i></a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</header>
-<script type="text/javascript">
-
-	$(".stui-header__user li,.stui-header__menu li").click(function () {
-		$(this).find(".dropdown").toggle();
-	});
-	$(".open-search").click(function () {
-		var Seacrh = $(".stui-header__search");
-		Seacrh.addClass("active").siblings().hide();
-		Seacrh.find(".form-control").focus();
-		$(".search-close").click(function () {
-			Seacrh.removeClass("active").siblings().show();
-		});
-	});
-</script>
 
 
     <div class="container">
@@ -175,7 +15,7 @@
 					<div class="stui-pannel_hd">
 						<div class="stui-pannel__head active bottom-line clearfix">
 							<h3 class="title">
-								<img src="static/picture/icon_27.png" alt="最新电影资源列表">
+								<img src="static2/picture/icon_27.png" alt="最新电影资源列表">
 								最新电影							</h3>
 							<!-- <ul class="nav nav-tabs">
 								<li  class="active"><a  href="/vodshow/1--time---------/">最新更新</a></li>
@@ -778,52 +618,9 @@
 	
         </div>
     </div>
-	<div class="stui-foot clearfix">
-	<div class="container">
-		<div class="row">						
-			<div class="col-pd text-center hidden-xs">
-			<p>免责声明:真不卡影院所有视频均来自互联网收集而来，版权归原创者所有，如果侵犯了你的权益，请通知我们，我们会及时删除侵权内容，谢谢合作。</p>
-			<p>版权声明:真不卡电影网是一个免费看电影非赢利性的网站，本站所有内容均来源于互联网相关站点自动搜索采集信息，相关链接已经注明来源。</p>			
-			<p><span class="fontArial"></span>Copyright © 2021 · <a href="index.html">真不卡影院</a>  版权所有 · 版权反馈邮箱:<script>document.write(window.atob('emhlbmJ1a2F5eUBnbWFpbC5jb20='));</script></p>
-			</div>								
-			<p class="text-muted text-center visible-xs">Copyright © 2021 · 反馈邮箱:<script>document.write(window.atob('emhlbmJ1a2F5eUBnbWFpbC5jb20='));</script><br><br><br></p>
-		</div>
-	</div>
-</div>
-<ul class="stui-extra clearfix">
-	<li>
-		<a class="backtop" href="javascript:scroll(0,0)" style="display: none;"><i class="icon iconfont icon-less"></i></a>
-	</li>
 
-</ul>
-<div class="hide"><script type="text/javascript" src="static/js/foot.js"></script>
-<script src='static/js/rich-tf.js' id="richid" data='s=5133'></script>
+{{template "footer"}}
 
-<script src="http://www.zhenbuka3.com/static/layui/layer/layer.js"></script>
-
-<script type="text/javascript">
-    (function () {
-        let ck_key = '1every_24h_tips';
-        if (!$.cookie(ck_key)) {
-            layer.open({
-                type: 0,
-                title: '重要提示！！！',
-                shade: 0.3,
-                content: `欢迎来到本站！真不卡永久免费！<br />
-                <span style="color: blue;font-weight: 700">重要的事情说三遍：</span><br />
-                <span style="color: blue;font-weight: 700">近期部分资源黑屏卡顿可能已失效，等待修复（仅修复热播）！</span><br />
-                <span style="color: blue;font-weight: 700">近期部分资源黑屏卡顿可能已失效，等待修复（仅修复热播）！</span><br />
-                <span style="color: blue;font-weight: 700">近期部分资源黑屏卡顿可能已失效，等待修复（仅修复热播）！</span><br />
-                <span style="color: red;font-weight: 700">请收藏发布页：zhenbuka.fun</span>
-                `
-            });
-            $.cookie(ck_key, true, {
-                expires: 1,
-                path: '/'
-            });
-        }
-    })();
-</script></div>
-    <script type="text/javascript" src='static/js/jquerys.js'></script>
 </body>
 </html>
+{{end}}

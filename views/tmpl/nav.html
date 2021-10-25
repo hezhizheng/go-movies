@@ -4,35 +4,21 @@
         <div class="row">
             <div class="stui-header_bd clearfix">
                 <div class="stui-header__logo">
-                    <a class="logo" href=""></a>
+                    <a class="logo" href="/"></a>
                 </div>
                 <ul class="stui-header__menu">
-                    <li><a href="">首页1{{.}}456</a></li>
-                    <li class="hidden-xs"><a href="display.html">电影</a></li>
-                    <li class="hidden-xs"><a href="index2.html">剧集</a></li>
-                    <li class="hidden-xs"><a href="index3.html">综艺</a></li>
-                    <li class="hidden-xs"><a href="index4.html">动漫</a></li>
-                    <li class="hidden-xs"><a href="index5.html">专题</a></li>
+                    <li><a href="/">首页</a></li>
+
+                    {{range $key, $value := .categories}}
+                    <li class="hidden-xs"><a href="/display{{$value.Link}}">{{$value.Name}}</a></li>
+                    {{end}}
+
                     <li>
                         <a href="javascript:;">导航 <i class="icon iconfont icon-moreunfold"></i></a>
                         <ul class="dropdown">
-                            <li><a href="display.html">电影</a></li>
-                            <li><a href="index2.html">剧集</a></li>
-                            <li><a href="index3.html">综艺</a></li>
-                            <li><a href="index4.html">动漫</a></li>
-                            <li><a href="index6.html">动作片</a></li>
-                            <li><a href="index7.html">喜剧片</a></li>
-                            <li><a href="index8.html">爱情片</a></li>
-                            <li><a href="index9.html">科幻片</a></li>
-                            <li><a href="index10.html">恐怖片</a></li>
-                            <li><a href="index11.html">剧情片</a></li>
-                            <li><a href="index12.html">战争片</a></li>
-                            <li><a href="index13.html">国产剧</a></li>
-                            <li><a href="index14.html">港台剧</a></li>
-                            <li><a href="index15.html">日韩剧</a></li>
-                            <li><a href="index16.html">欧美剧</a></li>
-                            <li><a href="index17.html">海外剧</a></li>
-                            <li><a href="index5.html">专题</a></li>
+                            {{range $key, $value := .allCategories}}
+                            <li><a href="/display{{$value.Link}}">{{$value.Name}}</a></li>
+                            {{end}}
                             <li><a href="about.html">关于</a></li>
                         </ul>
                     </li>
