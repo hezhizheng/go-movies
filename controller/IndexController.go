@@ -118,63 +118,10 @@ func Index1(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-
-	path := r.URL.Path
-	cate := r.URL.Query()["cate"]
-	_start := r.URL.Query()["start"]
-	_stop := r.URL.Query()["stop"]
-
 	// 需要展示的数据
 	show := make(map[string]interface{})
-
 	// 所有类别/导航
 	Categories := services.AllCategoryDate()
-
-	key := "detail_links:id:14" // 默认首页
-
-	start := int64(0)
-	stop := int64(14)
-
-	if len(_start) > 0 {
-		StartInt64, _ := strconv.ParseInt(_start[0], 10, 64)
-		start = StartInt64
-	}
-
-	if len(_stop) > 0 {
-		StopInt64, _ := strconv.ParseInt(_stop[0], 10, 64)
-		stop = StopInt64
-	}
-
-	prev := path + "?start=" + strconv.FormatInt(start-15, 10) + "&stop=" + strconv.FormatInt(stop-15, 10)
-	next := path + "?start=" + strconv.FormatInt(start+15, 10) + "&stop=" + strconv.FormatInt(stop+15, 10)
-
-	prevStatus := "1"
-	nextStatus := "1"
-
-	navLink := "/"
-	if len(cate) > 0 {
-		key = "detail_links:id:" + services.TransformCategoryId(cate[0])
-		navLink = cate[0]
-		prev = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start-15, 10) + "&stop=" + strconv.FormatInt(stop-15, 10)
-		next = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start+15, 10) + "&stop=" + strconv.FormatInt(stop+15, 10)
-	}
-
-	if start > stop || stop-start > 15 || start < 0 {
-		start = 0
-		stop = 15
-	}
-
-	MovieLists := services.MovieListsRange(key, start, stop)
-
-	LenMovieLists := len(MovieLists)
-
-	if start-15 < 0 {
-		prevStatus = "0"
-	}
-
-	if LenMovieLists < 15 || LenMovieLists == 0 {
-		nextStatus = "0"
-	}
 
 	NewFilmKey := "detail_links:id:1"
 	NewTVKey := "detail_links:id:2"
@@ -183,22 +130,13 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	NewFilm := services.MovieListsRange(NewFilmKey, 0, 14)
 	NewTV := services.MovieListsRange(NewTVKey, 0, 14)
 	NewCartoon := services.MovieListsRange(NewCartoonKey, 0, 14)
-	recommend := services.MoviesRecommend()
-
-	show["recommend"] = recommend
 
 	show["categories"] = Categories
-	show["page"] = "页面"
-	show["movieLists"] = MovieLists
+
 	show["newFilm"] = NewFilm
 	show["newTv"] = NewTV
 	show["newCartoon"] = NewCartoon
-	show["prev"] = prev
-	show["next"] = next
-	show["prev_status"] = prevStatus
-	show["next_status"] = nextStatus
-	show["nav_link"] = navLink
-	show["film_title"] = ""
+
 
 	// 合并所有的类目
 	var allC []utils.Categories
@@ -236,7 +174,7 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	key := "detail_links:id:14" // 默认首页
 
 	start := int64(0)
-	stop := int64(14)
+	stop := int64(41)
 
 	if len(_start) > 0 {
 		StartInt64, _ := strconv.ParseInt(_start[0], 10, 64)
@@ -248,74 +186,59 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		stop = StopInt64
 	}
 
-	prev := path + "?start=" + strconv.FormatInt(start-15, 10) + "&stop=" + strconv.FormatInt(stop-15, 10)
-	next := path + "?start=" + strconv.FormatInt(start+15, 10) + "&stop=" + strconv.FormatInt(stop+15, 10)
+	prev := path + "?start=" + strconv.FormatInt(start-42, 10) + "&stop=" + strconv.FormatInt(stop-42, 10)
+	next := path + "?start=" + strconv.FormatInt(start+42, 10) + "&stop=" + strconv.FormatInt(stop+42, 10)
 
 	prevStatus := "1"
 	nextStatus := "1"
 
-	navLink := "/"
+	cateStrId := services.TransformCategoryId(cate[0])
+
 	if len(cate) > 0 {
-		key = "detail_links:id:" + services.TransformCategoryId(cate[0])
-		navLink = cate[0]
-		prev = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start-15, 10) + "&stop=" + strconv.FormatInt(stop-15, 10)
-		next = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start+15, 10) + "&stop=" + strconv.FormatInt(stop+15, 10)
+		key = "detail_links:id:" + cateStrId
+		prev = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start-42, 10) + "&stop=" + strconv.FormatInt(stop-42, 10)
+		next = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start+42, 10) + "&stop=" + strconv.FormatInt(stop+42, 10)
 	}
 
-	if start > stop || stop-start > 15 || start < 0 {
+	if start > stop || stop-start > 42 || start < 0 {
 		start = 0
-		stop = 15
+		stop = 41
 	}
 
 	MovieLists := services.MovieListsRange(key, start, stop)
 
 	LenMovieLists := len(MovieLists)
 
-	if start-15 < 0 {
+	if start-42 < 0 {
 		prevStatus = "0"
 	}
 
-	if LenMovieLists < 15 || LenMovieLists == 0 {
+	if LenMovieLists < 42 || LenMovieLists == 0 {
 		nextStatus = "0"
 	}
 
-	NewFilmKey := "detail_links:id:1"
-	NewTVKey := "detail_links:id:2"
-	NewCartoonKey := "detail_links:id:4"
-
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 14)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 14)
-	NewCartoon := services.MovieListsRange(NewCartoonKey, 0, 14)
-	recommend := services.MoviesRecommend()
-
-	show["recommend"] = recommend
 
 	show["categories"] = Categories
-	show["page"] = "页面"
 	show["movieLists"] = MovieLists
-	show["newFilm"] = NewFilm
-	show["newTv"] = NewTV
-	show["newCartoon"] = NewCartoon
 	show["prev"] = prev
 	show["next"] = next
 	show["prev_status"] = prevStatus
 	show["next_status"] = nextStatus
-	show["nav_link"] = navLink
-	show["film_title"] = ""
 
-	// 合并所有的类目
-	var allC []utils.Categories
-	for _, c := range show["categories"].([]utils.Categories) {
-		allC = append(allC,c)
-		for _,subC := range c.Sub{
-			allC = append(allC,subC)
-		}
+
+	if cateStrId == "1" {
+		show["currentSubCate"] = show["categories"].([]utils.Categories)[0].Sub
 	}
-	show["allCategories"] = allC
-	show["navFilm"] = show["categories"].([]utils.Categories)[0].Sub
-	show["navTv"] = show["categories"].([]utils.Categories)[1].Sub
-	//show["navFilm"] = show["categories"].([]utils.Categories)[2].Sub
-	//log.Println(show["categories"].([]utils.Categories)[0].Sub)
+
+	if cateStrId == "2" {
+		show["currentSubCate"] = show["categories"].([]utils.Categories)[1].Sub
+	}
+
+	if cateStrId == "4" {
+		show["currentSubCate"] = show["categories"].([]utils.Categories)[2].Sub
+	}
+
+	//log.Println(path,cate)
 
 
 	tmpl.GoTpl.ExecuteTemplate(w,"display",show)

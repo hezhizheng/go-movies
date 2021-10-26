@@ -7,619 +7,83 @@
 {{template "nav" .}}
 
 
+<div class="container">
+    <div class="row">
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <h3 class="title">
+                            <img src="static2/picture/icon_27.png" alt="最新电影资源列表">
+                            最新电影 </h3>
+                    </div>
+                    <ul class="stui-screen__list type-slide bottom-line-dot clearfix">
 
-    <div class="container">
-        <div class="row">
-            <div class="stui-pannel stui-pannel-bg clearfix">
-				<div class="stui-pannel-box">
-					<div class="stui-pannel_hd">
-						<div class="stui-pannel__head active bottom-line clearfix">
-							<h3 class="title">
-								<img src="static2/picture/icon_27.png" alt="最新电影资源列表">
-								最新电影							</h3>
-							<!-- <ul class="nav nav-tabs">
-								<li  class="active"><a  href="/vodshow/1--time---------/">最新更新</a></li>
-								<li ><a  href="/vodshow/1--hits---------/">最近热播</a></li>
-							</ul> -->
-						</div>
-						<ul class="stui-screen__list type-slide bottom-line-dot clearfix">
-
-							<li class="active"><a href="43ced81247.html">最新更新</a></li>
-							<li><a href="b0aafc8558.html">最近热播</a></li>
-						</ul>
-						<ul class="stui-screen__list type-slide bottom-line-dot clearfix">
-														<li>
-								<span class="text-muted">按类型</span>
-							</li>
-								                        	<li><a href="index40.html" class="text-muted">动作片</a></li>
-	                        		                        	<li><a href="index41.html" class="text-muted">喜剧片</a></li>
-	                        		                        	<li><a href="index42.html" class="text-muted">爱情片</a></li>
-	                        		                        	<li><a href="index43.html" class="text-muted">科幻片</a></li>
-	                        		                        	<li><a href="index44.html" class="text-muted">恐怖片</a></li>
-	                        		                        	<li><a href="index45.html" class="text-muted">剧情片</a></li>
-	                        		                        	<li><a href="index47.html" class="text-muted">战争片</a></li>
-	                        		                        	<li><a href="index48.html" class="text-muted">动画片</a></li>
-	                        		                        	<li><a href="index49.html" class="text-muted">纪录片</a></li>
-	                        		                        	<li><a href="index46.html" class="text-muted">犯罪片</a></li>
-	                        							</ul>
-						<ul class="stui-screen__list type-slide bottom-line-dot clearfix">
-							<li>
-								<span class="text-muted">按地区</span>
-							</li>
-													        <li><a href="7c917f1b7d.html">中国大陆</a></li>
-						        						        <li><a href="47f9624a19.html">中国香港</a></li>
-						        						        <li><a href="2c7d8c2888.html">中国台湾</a></li>
-						        						        <li><a href="c8d1f7278c.html">美国</a></li>
-						        						        <li><a href="c89bbc7c86.html">法国</a></li>
-						        						        <li><a href="d9fb35e477.html">英国</a></li>
-						        						        <li><a href="7bef3ba26b.html">日本</a></li>
-						        						        <li><a href="a1a68e7633.html">韩国</a></li>
-						        						        <li><a href="d505fddca2.html">德国</a></li>
-						        						        <li><a href="97ef1d897b.html">泰国</a></li>
-						        						        <li><a href="0756b73634.html">印度</a></li>
-						        						        <li><a href="50f7e5748d.html">意大利</a></li>
-						        						        <li><a href="c46426fb0b.html">西班牙</a></li>
-						        						        <li><a class="hide" href="cba44a2ad1.html">加拿大</a></li>
-						        						</ul>
-						<ul class="stui-screen__list type-slide clearfix">
-							<li>
-								<span class="text-muted">按年份</span>
-							</li>
-					        				                <li><a href="71b5d809ca.html">2021</a></li>
-				                				                <li><a href="d90fbd6127.html">2020</a></li>
-				                				                <li><a href="8c2431a8e4.html">2019</a></li>
-				                				                <li><a href="2ca720c93e.html">2018</a></li>
-				                				                <li><a href="9928ec3b3a.html">2017</a></li>
-				                				                <li><a href="9052f7f919.html">2016</a></li>
-				                				                <li><a href="351343efa9.html">2015</a></li>
-				                				                <li><a href="105b13b033.html">2014</a></li>
-				                				                <li><a href="394f377014.html">2013</a></li>
-				                				                <li><a href="0d26ea2291.html">2012</a></li>
-				                				                <li><a href="4710908a89.html">2011</a></li>
-				                				                <li><a href="86690a9834.html">2010</a></li>
-				                							
-						</ul>	
-					</div>
+                        <li class="active"><a href="43ced81247.html">最新更新</a></li>
+                        <li><a href="b0aafc8558.html">最近热播</a></li>
+                    </ul>
+                    <ul class="stui-screen__list type-slide bottom-line-dot clearfix">
+                        <li>
+                            <span class="text-muted">按类型</span>
+                        </li>
+                        {{range $key, $value := .currentSubCate}}
+                        <li><a href="/display?cate={{$value.Link}}" class="text-muted">{{$value.Name}}</a></li>
+                        {{end}}
+                    </ul>
 
 
-					<!-- 排序 -->
-<!--					<div class="stui-pannel_hd">-->
-<!--						<div class="stui-pannel__head active bottom-line clearfix">-->
-<!--							<ul class="nav nav-head">-->
-<!--								<li  class="active"><a href="/vodshow/1--time---------/">按时间</a></li>-->
-<!--								<li ><a href="/vodshow/1--hits---------/">按人气</a></li>-->
-<!--								<li ><a href="/vodshow/1--score---------/">按评分</a></li>-->
-<!--							</ul>-->
-<!--						</div>-->
-<!--					</div>-->
-					<!-- end 排序 -->
-					<div class="stui-pannel_bd">
-						<ul class="stui-vodlist clearfix">
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index62.html" title="中国营长" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211014-1/1d8873aa338cd24d7c729148b8a8e3f7.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">超清</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index62.html" title="中国营长">中国营长</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">封柏,Bai,Feng,徐大宁,Ning,Xu,王昌瑞,毕瀚文,Hanwen,Bi,项泰诚</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index63.html" title="探索发现2021" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20210501-1/13219e12e971e2c8f126104d43610c78.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">更新至20211013期</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index63.html" title="探索发现2021">探索发现2021</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">任志宏</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index50.html" title="摩加迪沙" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211014-1/a003ec96c7ee40afc60c880919edc502.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index50.html" title="摩加迪沙">摩加迪沙</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">金允石,赵寅成,许峻豪,具教焕,金素真</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index51.html" title="妈妈的神奇小子" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211012-1/ebe7ea4299a888231d78106a5b618579.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index51.html" title="妈妈的神奇小子">妈妈的神奇小子</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">吴君如,张继聪,梁仲恒,胡子彤,卢海鹏</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index64.html" title="我来自北京之玛尼堆的秋天" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211013-1/ea1f7c89d5579a995fbc43253f6a9d4d.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">超清</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index64.html" title="我来自北京之玛尼堆的秋天">我来自北京之玛尼堆的秋天</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">岳丽娜,朱铁,更登彭措,赵晓坤,赵晓苏,陈俐君,泽仁呷登,旦珠翁姆,阿尼,充巴,任杰</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index65.html" title="昆仑谜宫" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211013-1/79ddaa8c738c9ae0f7a1eee9d0243974.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">超清</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index65.html" title="昆仑谜宫">昆仑谜宫</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">马健勋,周,毅,傅雪睿</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index66.html" title="我和我的祖国" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-6/f504f075dfd4ac6b3972e94d596de22e.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index66.html" title="我和我的祖国">我和我的祖国</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">黄渤,张译,韩昊霖,杜江,葛优,刘昊然,宋佳,王千源,任素汐,吴京,朱一龙,王东,陈飞宇,佟丽娅,欧豪,张嘉译,惠英红,龚蓓苾,田壮壮,韩东君,辛柏青,周冬雨,任</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index67.html" title="终极代码" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211012-1/a520b693eff9a839c32d3a1bd93c0ba5.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">超清</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index67.html" title="终极代码">终极代码</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">吴治廷,孟璐,大卫·贝利,狼森,管乐,张家荣,林伟,申军谊,何杰,海伦,雷俊,王筱叶</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index68.html" title="亚当斯一家2" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211011-1/e599ab13ea3a641939134cf47c6d77f1.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index68.html" title="亚当斯一家2">亚当斯一家2</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">奥斯卡·伊萨克,查理兹·塞隆,科洛·莫瑞兹,尼克·克罗尔,杰文·旺纳·沃尔顿,华莱士·肖恩,史努比狗狗,贝特·米德勒,比尔·哈德尔</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index52.html" title="青蛇" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-6/7d5caa829fa598499bcd6679cb2f598b.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index52.html" title="青蛇">青蛇</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">张曼玉,王祖贤,赵文卓,吴兴国,马精武,田丰,刘洵</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index69.html" title="宋慈之河神案" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211012-1/fde79d7edacd1536dd32ee74cb9eb2fc.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index69.html" title="宋慈之河神案">宋慈之河神案</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">郭鑫,刘丁菡,徐少强,杨青竹,沈凯,王小利,陈国良,张军</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index70.html" title="全境封锁" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211011-1/9b1fea25e3717a01b9f4910c136d9513.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index70.html" title="全境封锁">全境封锁</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">埃伦·科戴罗,塞尔莫·费尔南德斯,瓦耐萨·热贝利,布鲁斯·岗拉斯迪,西尔维欧·圭恩丹尼,娜塔莉娅·拉热,马尔库斯·帕尔梅拉,Hanna,Romanazzi,Raphael,Teixeira,达尔顿·维格</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index53.html" title="哈利波特7：死亡圣器下" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-24/1fe75b7a8ebef8ff985ecf9c4b71bbcc.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index53.html" title="哈利波特7：死亡圣器下">哈利波特7：死亡圣器下</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,海伦娜·伯翰·卡特,拉尔夫·费因斯,艾伦·瑞克曼,玛吉·史密斯,汤姆·费尔顿,邦妮·怀特,朱丽·沃特斯,迈克尔·刚本,伊文娜·林奇,多姆纳尔·格里森,克蕾曼丝·波西,詹森·艾萨克,海伦·麦克洛瑞,马修·刘易斯,梁佩诗,约翰·赫特,大卫·休里斯,加里·奥德曼,吉姆·布劳德本特,艾玛·汤普森,娜塔丽·特纳,蒂莫西·斯波,大卫·布拉德利,罗彼·考特拉尼,凯莉·麦克唐纳,塞伦·希德</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index54.html" title="哈利波特7：死亡圣器上" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-23/dd06863290e88dedd60b5268e54e5e71.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index54.html" title="哈利波特7：死亡圣器上">哈利波特7：死亡圣器上</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,海伦娜·伯翰·卡特,拉尔夫·费因斯,比尔·奈伊,约翰·赫特,艾伦·瑞克曼,艾美达·斯丹顿,费奥纳·肖,邦妮·怀特,朱丽·沃特斯,米歇尔·费尔利,杰米·坎贝尔·鲍尔</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index55.html" title="哈利波特6：混血王子" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-24/17a14204e78b6f192c76c792114cd872.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index55.html" title="哈利波特6：混血王子">哈利波特6：混血王子</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,汤姆·费尔顿,迈克尔·刚本,艾伦·瑞克曼,邦妮·怀特,朱丽·沃特斯,海伦娜·伯翰·卡特,吉姆·布劳德本特,玛吉·史密斯,伊文娜·林奇</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index56.html" title="哈利波特5：凤凰社的密令" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-24/cf12174951d35cb83633841cd79f876b.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index56.html" title="哈利波特5：凤凰社的密令">哈利波特5：凤凰社的密令</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,加里·奥德曼,拉尔夫·费因斯,玛吉·史密斯,迈克尔·刚本,艾伦·瑞克曼,艾玛·汤普森,艾美达·斯丹顿,詹森·艾萨克,汤姆·费尔顿,海伦娜·伯翰·卡特,邦妮·怀特,朱丽·沃特斯,梁佩诗,布莱丹·格里森,罗彼·考特拉尼,伊文娜·林奇</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index57.html" title="哈利波特4：火焰杯" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-24/955ee92ba21a7952aa46a6f80653e201.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index57.html" title="哈利波特4：火焰杯">哈利波特4：火焰杯</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,蒂莫西·斯波,邦妮·怀特,罗伯特·帕丁森,汤姆·费尔顿,梁佩诗,迈克尔·刚本,玛吉·史密斯,艾伦·瑞克曼,加里·奥德曼,拉尔夫·费因斯</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index58.html" title="哈利波特3：阿兹卡班的囚徒" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-24/69e6d834b02c487d09c279326bc147f8.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index58.html" title="哈利波特3：阿兹卡班的囚徒">哈利波特3：阿兹卡班的囚徒</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,加里·奥德曼,朱丽·沃特斯,邦妮·怀特,大卫·休里斯,迈克尔·刚本,艾伦·瑞克曼,玛吉·史密斯,汤姆·费尔顿,艾玛·汤普森,朱莉·克里斯蒂,蒂莫西·斯波</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index59.html" title="哈利波特2：消失的密室" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-24/4005b7476afe8a2f33294796867ce95b.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index59.html" title="哈利波特2：消失的密室">哈利波特2：消失的密室</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,汤姆·费尔顿,理查德·格雷弗斯,费奥纳·肖,托比·琼斯,朱丽·沃特斯,邦妮·怀特,詹森·艾萨克,肯尼思·布拉纳,艾伦·瑞克曼,理查德·哈里斯,玛吉·史密斯,约翰·克立斯,肖恩·比格斯代夫,克里斯·兰金,克里斯蒂安·库尔森</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index60.html" title="哈利波特1：魔法石" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20200313-24/366b187c42127a83c0f409dd25bd5901.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index60.html" title="哈利波特1：魔法石">哈利波特1：魔法石</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">丹尼尔·雷德克里夫,艾玛·沃森,鲁伯特·格林特,艾伦·瑞克曼,玛吉·史密斯,汤姆·费尔顿,伊恩·哈特,理查德·哈里斯,约翰·赫特,罗彼·考特拉尼,朱丽·沃特斯,邦妮·怀特,约翰·克立斯,肖恩·比格斯代夫</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="24cff04e55.html" title="东北新青年" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211010-1/8c19942fb27434fedb746b71de5a2316.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">超清</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="24cff04e55.html" title="东北新青年">东北新青年</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">田娃,毕畅,文松,唐鉴军</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="df07c07570.html" title="浊水漂流" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211010-1/ceb291bbd5ef8b2b4182bd2793907558.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="df07c07570.html" title="浊水漂流">浊水漂流</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">吴镇宇,谢君豪,蔡思韵,李丽珍,朱栢康</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="510bf220f6.html" title="超决战！贝利亚银河帝国" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211010-1/5f46edfc31b62a2ea43b39a6a2cefa37.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="510bf220f6.html" title="超决战！贝利亚银河帝国">超决战！贝利亚银河帝国</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">宫野真守,绿川光,关智一,神谷浩史,宫迫博之</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="index61.html" title="白蛇传情" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211010-1/96b2e2d50f8c5804880f11ccde248111.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="index61.html" title="白蛇传情">白蛇传情</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">曾小敏,文汝清,朱红星,王燕飞,莫非</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="d2db79af99.html" title="一级指控" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/7c80a5a32d8c298377ea60e23c236928.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">超清</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="d2db79af99.html" title="一级指控">一级指控</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">方中信,谭耀文,陈家乐,鲍起静,廖启智,曾江,张建声,何珮瑜,张松枝,骆应钧,陈嘉莉,陈保元,黄定谦</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="adc380fd4a.html" title="谍影重重4" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/d009ec205abe4e6d25ee06a592ff7fe1.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="adc380fd4a.html" title="谍影重重4">谍影重重4</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">杰瑞米·雷纳,蕾切尔·薇兹,爱德华·诺顿,琼·艾伦,奥斯卡·伊萨克</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="3b859130e5.html" title="谍影重重3" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/ac2a1943e4b48b7c8fa0499f35d5e0ec.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="3b859130e5.html" title="谍影重重3">谍影重重3</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">马特·达蒙,朱丽娅·斯蒂尔斯,帕迪·康斯戴恩,埃德加·拉米雷兹,琼·艾伦</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="baf8a52c2d.html" title="谍影重重2" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/d3b8e60aa81212e9288b9def9c3b3301.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="baf8a52c2d.html" title="谍影重重2">谍影重重2</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">马特·达蒙,卡尔·厄本,弗兰卡·波坦特,朱丽娅·斯蒂尔斯,琼·艾伦,马尔顿·索克斯,米歇尔·莫娜汉,克里斯·库柏,加百利·曼恩,卡瑞尔·罗登,奥莎娜·阿金什那,布莱恩·考克斯</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="b9d2c3745e.html" title="谍影重重1" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/6ecd0c56847ad40abda284803f3f2ea3.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="b9d2c3745e.html" title="谍影重重1">谍影重重1</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">马特·达蒙,弗朗卡·波滕特,克里斯·库珀,克里夫·欧文</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="900b4ec496.html" title="怨恨" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/bad47b439609661dba70f6490577fe2a.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="900b4ec496.html" title="怨恨">怨恨</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">Yilmaz,Erdogan,Cem,Yigit,Uzümoglu,Ahmet,Mümtaz,Taylan,Ruzgar,Aksoy,Metehan,Parilti</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="e7b49d69c2.html" title="一级指控国语" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/b417383e77eb13eeb3aa08eac35f16ae.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="e7b49d69c2.html" title="一级指控国语">一级指控国语</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">方中信,谭耀文,陈家乐,鲍起静,廖启智,曾江,张建声,何珮瑜,张松枝,骆应钧,陈嘉莉,陈保元,黄定谦</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="6625bb5ad3.html" title="别叫我酒神2" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/cb071a6d3ba04eccb4bed53dd49bfdf7.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="6625bb5ad3.html" title="别叫我酒神2">别叫我酒神2</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">宋晓峰,崔菁格,黄继栋,张蓝艺,罗辑</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="478379e833.html" title="被遗忘的孩子" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211009-1/12eb63cd61fa1909d42293cead1b75e6.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="478379e833.html" title="被遗忘的孩子">被遗忘的孩子</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">安德莉亚·阿尔祖里,伊娃·欧简古仁,乔苏·库贝罗,费利克斯·阿卡拉佐</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="641c5d1ade.html" title="军中乐园" data-original="https://img.52swat.cn/upload/vod/20200810-1/6f5b098140fc3ab193e55efa69f4fd17.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="641c5d1ade.html" title="军中乐园">军中乐园</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">阮经天,万茜,陈意涵,陈建斌,王柏杰,苗可丽,陈大天,洪胜德,陈匡荣,廖启智,石知田</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="6147faaf5a.html" title="日常幻想指南" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211001-1/074379573acdd29f3077b590e1b241e1.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="6147faaf5a.html" title="日常幻想指南">日常幻想指南</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">王彦霖,焦俊艳,高捷,闵健,罗辑</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="2860010aa1.html" title="人母诅咒" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211008-1/3907d8b7093f65e5650a06d4fdb7192c.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="2860010aa1.html" title="人母诅咒">人母诅咒</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">艾尔皮迪娅·卡里洛,特诺切·韦尔塔,克里·卡希尔,贝茜·波雷戈,Harlon,Miller,Ariana,Guerra,Jennifer,Patino,Britton,Webb,Ashleigh,Lewis,Evelyn,Gonzalez,René,Mena,Robert,Larriviere,Amelia,Rico,Joseph,Garcia,Rachel,Whitman,Groves</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="8ab99a99e9.html" title="贾斯汀比伯：我们的世界" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211008-1/37896887a515f69417fd6fdd21a36400.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="8ab99a99e9.html" title="贾斯汀比伯：我们的世界">贾斯汀比伯：我们的世界</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">海莉·鲍德温,贾斯汀·比伯</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="1f8c8c1541.html" title="养老庄园" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211008-1/42bcb1be8990f2209164544562e53c64.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="1f8c8c1541.html" title="养老庄园">养老庄园</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">芭芭拉·赫希,布鲁斯·戴维森,西雷拉·佩顿,斯塔西·达维斯,吉尔·拉森,弗兰·本内特,马克·斯达格,尼古拉斯·亚历山大,Ashley,Platz,Cissy,Wellman,Jaquita,Ta,le,Katie,A.,Keane,Devin,Kawaoka</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="55430d614e.html" title="致命录像带94" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211008-1/1af7a657617f04203b5278ebbcc3a20f.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">HD</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="55430d614e.html" title="致命录像带94">致命录像带94</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">安娜·霍普金斯,Sean,Patrick,Dolan,德鲁·维尔戈维尔,达克斯·拉维纳</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="1d9a25a528.html" title="一级指控" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211008-1/358f4896838dc0e56c63902350ab6f21.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">1080P</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="1d9a25a528.html" title="一级指控">一级指控</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">方中信,谭耀文,陈家乐,鲍起静,廖启智</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="7f1a14cf6f.html" title="牧野诡事之观山太保" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20211007-1/2c16740f68163bc8e01f6d80402118d9.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">超清</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="7f1a14cf6f.html" title="牧野诡事之观山太保">牧野诡事之观山太保</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">此沙,叶熙祺,林枫烨,付赫安琪</p>
-	</div>												
-</div>															
-							</li>
-														<li class="col-md-7 col-sm-4 col-xs-3">
-								<div class="stui-vodlist__box stui-vodlist__bg">
-	<a class="stui-vodlist__thumb lazyload" href="9fffb7ddab.html" title="共和国医者" data-original="https://pic.iqiyipic.com.hudonghezi.com/img/upload/vod/20210702-1/6bd054cf40a70116eba39e440767a621.jpg">						
-		<span class="play hidden-xs"></span>		
-		<span class="pic-text text-right">更新至第12集</span>
-	</a>									
-	<div class="stui-vodlist__detail active">
-		<h4 class="title text-overflow"><a href="9fffb7ddab.html" title="共和国医者">共和国医者</a></h4>
-		<p class="text text-overflow text-muted hidden-xs">内详</p>
-	</div>												
-</div>															
-							</li>
-													</ul>	
-					</div>
-				</div>				
-			</div>
-			<ul class="stui-page text-center clearfix">
-	<li><a href="javascript:;">首页</a></li>
-	<li><a href="javascript:;">上一页</a></li>							
-		<li class="hidden-xs active"><a href="javascript:;">1</a></li>
-		<li class="hidden-xs "><a href="javascript:;">2</a></li>
-		<li class="hidden-xs "><a href="javascript:;">3</a></li>
-		<li class="hidden-xs "><a href="javascript:;">4</a></li>
-		<li class="hidden-xs "><a href="javascript:;">5</a></li>
-		<li class="active visible-xs"><span class="num">1/336</span></li>
-	<li><a href="javascript:;">下一页</a></li>
-	<li><a href="javascript:;">尾页</a></li>							
-</ul>
-	
+                </div>
+
+
+                <div class="stui-pannel_bd">
+                    <ul class="stui-vodlist clearfix">
+                        {{range $key, $value := .movieLists}}
+                        <li class="col-md-7 col-sm-4 col-xs-3">
+                            <div class="stui-vodlist__box stui-vodlist__bg">
+                                <a class="stui-vodlist__thumb lazyload" href="/detail?link={{$value.Link}}"
+                                   title="{{$value.Name}}"
+                                   data-original="{{$value.Cover}}">
+                                    <span class="play hidden-xs"></span>
+                                    <span class="pic-text text-right">超清</span>
+                                </a>
+                                <div class="stui-vodlist__detail active">
+                                    <h4 class="title text-overflow"><a href="/detail?link={{$value.Link}}"
+                                                                       title="{{$value.Name}}">{{$value.Name}}</a></h4>
+                                    <p class="text text-overflow text-muted hidden-xs">
+                                        {{$value.Starring}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </div>
         </div>
+
+        <ul class="stui-page text-center clearfix">
+            <li><a href="{{.prev}}" class="prev">上一页</a></li>
+            <li><a href="{{.next}}" class="next">下一页</a></li>
+        </ul>
+
     </div>
+</div>
 
 {{template "footer"}}
+
+<script>
+    let prev_status = {{.prev_status}}
+    let next_status = {{.next_status}}
+
+    if ( prev_status === "0" )
+    {
+        $(".prev").attr("href","javascript:;")
+    }
+
+    if ( next_status === "0" )
+    {
+        $(".next").attr("href","javascript:;")
+    }
+</script>
 
 </body>
 </html>

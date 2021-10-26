@@ -10,14 +10,14 @@
                     <li><a href="/">首页</a></li>
 
                     {{range $key, $value := .categories}}
-                    <li class="hidden-xs"><a href="/display{{$value.Link}}">{{$value.Name}}</a></li>
+                    <li class="hidden-xs"><a href="/display?cate={{$value.Link}}">{{$value.Name}}</a></li>
                     {{end}}
 
                     <li>
                         <a href="javascript:;">导航 <i class="icon iconfont icon-moreunfold"></i></a>
                         <ul class="dropdown">
                             {{range $key, $value := .allCategories}}
-                            <li><a href="/display{{$value.Link}}">{{$value.Name}}</a></li>
+                            <li><a href="/display?cate={{$value.Link}}">{{$value.Name}}</a></li>
                             {{end}}
                             <li><a href="about.html">关于</a></li>
                         </ul>
