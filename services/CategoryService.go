@@ -5,7 +5,7 @@ import (
 	"go_movies/utils"
 )
 
-func AllCategoryDate() []utils.Categories {
+func AllCategoryData() []utils.Categories {
 	categories := models.AllCategory()
 
 	var nav []utils.Categories
