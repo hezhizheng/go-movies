@@ -27,7 +27,7 @@ func Index1(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show := make(map[string]interface{})
 
 	// 所有类别/导航
-	Categories := services.AllCategoryDate()
+	Categories := services.AllCategoryData()
 
 	key := "detail_links:id:14" // 默认首页
 
@@ -260,7 +260,7 @@ func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show := make(map[string]interface{})
 
 	// 所有类别/导航
-	Categories := services.AllCategoryDate()
+	Categories := services.AllCategoryData()
 
 	MovieDetail := services.MovieDetail(link)
 
@@ -301,7 +301,7 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	buffer := new(bytes.Buffer)
 
-	Categories := services.AllCategoryDate()
+	Categories := services.AllCategoryData()
 	link := r.URL.Query()["link"][0]
 	MovieDetail := services.MovieDetail(link)
 	show["MovieDetail"] = MovieDetail
@@ -329,7 +329,7 @@ func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	// 所有类别/导航
-	Categories := services.AllCategoryDate()
+	Categories := services.AllCategoryData()
 
 	NewFilmKey := "detail_links:id:1"
 	NewTVKey := "detail_links:id:2"
@@ -356,7 +356,7 @@ func About(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show := make(map[string]interface{})
 
 	// 所有类别/导航
-	Categories := services.AllCategoryDate()
+	Categories := services.AllCategoryData()
 
 	show["categories"] = Categories
 
