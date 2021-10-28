@@ -175,6 +175,12 @@ func actionRecentUpdateList() {
 	defer ants.Release()
 	antPool, _ := ants.NewPool(200)
 
+
+	film := GetAssignCategoryIds("film")
+	tv := GetAssignCategoryIds("tv")
+	cartoon := GetAssignCategoryIds("cartoon")
+	saveTypes := GetIntSubCategoryIds()
+
 	pageCount := RecentUpdatePageCount(0)
 	//pageCount := 5
 	wg2 := sync.WaitGroup{}
@@ -201,9 +207,7 @@ func actionRecentUpdateList() {
 			}
 
 			for _, value := range nav.List {
-				// 不保存的类别 // 34,35,36,25,26,27,28,17,18,5
-				types := []int{5,17,18,33,34,37,36,39,40,41,42,43}
-				if !inType(value.TypeId,types){
+				if inType(value.TypeId,saveTypes){
 					//log.Println("value.TypeId",value.TypeId)
 					//continue
 					// 模板时间
@@ -214,10 +218,6 @@ func actionRecentUpdateList() {
 						Score:  float64(stamp1.Unix()),
 						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 					})
-
-					film := []int{6, 7, 8, 9, 10, 11, 12, 20, 21, 37}
-					tv := []int{13, 14, 15, 16, 22, 23, 24}
-					cartoon := []int{29, 30, 31, 32, 33}
 
 					if inType(value.TypeId, film) {
 						utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
@@ -298,6 +298,11 @@ func RecentUpdatePageCount(retry int) int {
 func actionList(subCategoryId string, pg int, pageCount int) {
 	//return
 
+	film := GetAssignCategoryIds("film")
+	tv := GetAssignCategoryIds("tv")
+	cartoon := GetAssignCategoryIds("cartoon")
+	saveTypes := GetIntSubCategoryIds()
+
 	for j := pg; j <= pageCount; j++ {
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
 		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
@@ -320,40 +325,38 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 			timeTemplate := "2006-01-02 15:04:05"
 			stamp1, _ := time.ParseInLocation(timeTemplate, value.VodTime, time.Local)
 
-			utils.RedisDB.ZAdd("detail_links:id:"+strconv.Itoa(value.TypeId), &redis.Z{
-				Score:  float64(stamp1.Unix()),
-				Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
-			})
-
-			film := []int{6, 7, 8, 9, 10, 11, 12, 20, 21, 37}
-			tv := []int{13, 14, 15, 16, 22, 23, 24}
-			cartoon := []int{29, 30, 31, 32, 33}
-
-			if inType(value.TypeId, film) {
-				utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
+			if inType(value.TypeId, saveTypes) {
+				utils.RedisDB.ZAdd("detail_links:id:"+strconv.Itoa(value.TypeId), &redis.Z{
 					Score:  float64(stamp1.Unix()),
 					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 				})
-				// 获取详情
-				Detail(strconv.Itoa(value.VodId), 0)
-			}
 
-			if inType(value.TypeId, tv) {
-				utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
-					Score:  float64(stamp1.Unix()),
-					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
-				})
-				// 获取详情
-				Detail(strconv.Itoa(value.VodId), 0)
-			}
+				if inType(value.TypeId, film) {
+					utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
+						Score:  float64(stamp1.Unix()),
+						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+					})
+					// 获取详情
+					Detail(strconv.Itoa(value.VodId), 0)
+				}
 
-			if inType(value.TypeId, cartoon) {
-				utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
-					Score:  float64(stamp1.Unix()),
-					Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
-				})
-				// 获取详情
-				Detail(strconv.Itoa(value.VodId), 0)
+				if inType(value.TypeId, tv) {
+					utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
+						Score:  float64(stamp1.Unix()),
+						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+					})
+					// 获取详情
+					Detail(strconv.Itoa(value.VodId), 0)
+				}
+
+				if inType(value.TypeId, cartoon) {
+					utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
+						Score:  float64(stamp1.Unix()),
+						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
+					})
+					// 获取详情
+					Detail(strconv.Itoa(value.VodId), 0)
+				}
 			}
 		}
 	}
@@ -657,4 +660,65 @@ func SendDingMsg(msg string) {
 
 func DelAllListCacheKey() {
 	utils.RedisDB.Del("paginate")
+}
+
+func GetAssignCategoryIds(_type string) []int {
+
+	ids := make([]int, 0)
+
+	var nav []Categories
+	categoriesStr := CategoriesStr()
+
+	err := utils.Json.Unmarshal([]byte(categoriesStr), &nav)
+	if err != nil {
+		log.Println("GetAssignCategoryIds json 解析失败", err)
+		return ids
+	}
+
+	film := nav[0].Sub
+	tv := nav[1].Sub
+	cartoon := nav[2].Sub
+
+	switch _type {
+	case "film":
+		for _, v := range film {
+			intId, _ := strconv.Atoi(v.TypeId)
+			ids = append(ids, intId)
+		}
+	case "tv":
+		for _, v := range tv {
+			intId, _ := strconv.Atoi(v.TypeId)
+			ids = append(ids, intId)
+		}
+	case "cartoon":
+		for _, v := range cartoon {
+			intId, _ := strconv.Atoi(v.TypeId)
+			ids = append(ids, intId)
+		}
+	}
+	return ids
+}
+
+func GetIntSubCategoryIds() []int {
+	ids := make([]int, 0)
+
+	var nav []Categories
+	categoriesStr := CategoriesStr()
+
+	err := utils.Json.Unmarshal([]byte(categoriesStr), &nav)
+	if err != nil {
+		log.Println("getIntSubCategoryIds json 解析失败", err)
+		return ids
+	}
+
+	for _, value := range nav {
+		for _, subValue := range value.Sub {
+			Smutex.Lock()
+			intId, _ := strconv.Atoi(subValue.TypeId)
+			ids = append(ids, intId)
+			Smutex.Unlock()
+		}
+	}
+
+	return ids
 }
