@@ -18,9 +18,7 @@
                             最新电影 </h3>
                     </div>
                     <ul class="stui-screen__list type-slide bottom-line-dot clearfix">
-
                         <li class="active"><a href="43ced81247.html">最新更新</a></li>
-                        <li><a href="b0aafc8558.html">最近热播</a></li>
                     </ul>
                     <ul class="stui-screen__list type-slide bottom-line-dot clearfix">
                         <li>
@@ -40,14 +38,14 @@
                         {{range $key, $value := .movieLists}}
                         <li class="col-md-7 col-sm-4 col-xs-3">
                             <div class="stui-vodlist__box stui-vodlist__bg">
-                                <a class="stui-vodlist__thumb lazyload" href="/detail?link={{$value.Link}}"
+                                <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}"
                                    title="{{$value.Name}}"
                                    data-original="{{$value.Cover}}">
                                     <span class="play hidden-xs"></span>
                                     <span class="pic-text text-right">超清</span>
                                 </a>
                                 <div class="stui-vodlist__detail active">
-                                    <h4 class="title text-overflow"><a href="/detail?link={{$value.Link}}"
+                                    <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}"
                                                                        title="{{$value.Name}}">{{$value.Name}}</a></h4>
                                     <p class="text text-overflow text-muted hidden-xs">
                                         {{$value.Starring}}</p>

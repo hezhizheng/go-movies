@@ -6,6 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"go_movies/services"
 	"go_movies/utils"
+	"go_movies/utils/spider/tian_kong"
 	heroTpl "go_movies/views/hero"
 	"go_movies/views/tmpl"
 	"log"
@@ -121,7 +122,7 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	// 需要展示的数据
 	show := make(map[string]interface{})
 	// 所有类别/导航
-	Categories := services.AllCategoryDate()
+	Categories := services.AllCategoryData()
 
 	NewFilmKey := "detail_links:id:1"
 	NewTVKey := "detail_links:id:2"
@@ -169,7 +170,7 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show := make(map[string]interface{})
 
 	// 所有类别/导航
-	Categories := services.AllCategoryDate()
+	Categories := services.AllCategoryData()
 
 	key := "detail_links:id:14" // 默认首页
 
@@ -225,16 +226,25 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["prev_status"] = prevStatus
 	show["next_status"] = nextStatus
 
+	var allC []utils.Categories
+	for _, c := range show["categories"].([]utils.Categories) {
+		allC = append(allC,c)
+		for _,subC := range c.Sub{
+			allC = append(allC,subC)
+		}
+	}
+	show["allCategories"] = allC
 
-	if cateStrId == "1" {
+
+	if utils.InArray(cateStrId,tian_kong.GetAssignCategoryStrIds("film")) {
 		show["currentSubCate"] = show["categories"].([]utils.Categories)[0].Sub
 	}
 
-	if cateStrId == "2" {
+	if utils.InArray(cateStrId,tian_kong.GetAssignCategoryStrIds("tv")) {
 		show["currentSubCate"] = show["categories"].([]utils.Categories)[1].Sub
 	}
 
-	if cateStrId == "4" {
+	if utils.InArray(cateStrId,tian_kong.GetAssignCategoryStrIds("cartoon")) {
 		show["currentSubCate"] = show["categories"].([]utils.Categories)[2].Sub
 	}
 
@@ -278,9 +288,8 @@ func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["new_tv"] = NewTV
 	show["nav_link"] = "/"
 	show["film_title"] = MovieDetail["info"].(map[string]string)["name"]
-	buffer := new(bytes.Buffer)
-	heroTpl.MDetail(show, buffer)
-	w.Write(buffer.Bytes())
+
+	tmpl.GoTpl.ExecuteTemplate(w,"detail",show)
 }
 
 func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

@@ -14,11 +14,11 @@
             <div class="stui-pannel-box">
                 <div class="stui-pannel_hd">
                     <div class="stui-pannel__head active bottom-line clearfix">
-                        <a class="more text-muted pull-right" href="/display/?m=vod-type-id-1.html">更多<i
+                        <a class="more text-muted pull-right" href="/display?cate=/?m=vod-type-id-1.html">更多<i
                                 class="icon iconfont icon-more"></i></a>
                         <h3 class="title">
                             <img src="static2/picture/icon_1.png" alt="电影推荐">
-                            <a href="/display/?m=vod-type-id-1.html">电影</a>
+                            <a href="/display?cate=/?m=vod-type-id-1.html">电影</a>
                         </h3>
                         <ul class="nav nav-text pull-right hidden-sm hidden-xs">
                             {{range $key, $value := .navFilm}}
@@ -37,13 +37,13 @@
                             {{else}}
                             <li class="col-md-6 col-sm-4 col-xs-3">
                                 <div class="stui-vodlist__box stui-vodlist__bg">
-                                    <a class="stui-vodlist__thumb lazyload" href="/detail{{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}">
                                         <span class="play hidden-xs"></span>
                                         <span class="pic-text text-right">1080P</span>
                                     </a>
                                     <div class="stui-vodlist__detail active">
-                                        <h4 class="title text-overflow"><a href="/detail{{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
+                                        <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
                                         </h4>
                                         <p class="text text-overflow text-muted hidden-xs">{{$value.Starring}}</p>
                                     </div>
@@ -60,11 +60,11 @@
                         <ul class="stui-vodlist__media active col-pd clearfix">
                             <li>
                                 <div class="thumb">
-                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/detail{{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}"></a>
                                 </div>
                                 <div class="detail detail-side">
-                                    <h4 class="title"><a href="/detail{{$value.Link}}"><i
+                                    <h4 class="title"><a href="/movie?link={{$value.Link}}"><i
                                             class="icon iconfont icon-more text-muted pull-right"></i> {{$value.Name}}</a></h4>
                                     <p class="font-12">
                                         <span class="text-muted">类型：</span>{{$value.Category}}
@@ -81,7 +81,7 @@
                             {{range $key, $value := .newFilm}}
                             {{if gt $key 0}}
                             <li class="top-line-dot">
-                                <a class="text-overflow" href="/detail{{$value.Link}}" title="{{$value.Name}}">
+                                <a class="text-overflow" href="/movie?link={{$value.Link}}" title="{{$value.Name}}">
                                     <span class="text-muted pull-right"></span>
                                     <em class="text-red">{{add $key 1}} . </em>{{$value.Name}}</a>
                             </li>
@@ -97,11 +97,11 @@
             <div class="stui-pannel-box">
                 <div class="stui-pannel_hd">
                     <div class="stui-pannel__head active bottom-line clearfix">
-                        <a class="more text-muted pull-right" href="/display/?m=vod-type-id-2.html">更多 <i
+                        <a class="more text-muted pull-right" href="/display?cate=/?m=vod-type-id-2.html">更多 <i
                                 class="icon iconfont icon-more"></i></a>
                         <h3 class="title">
                             <img src="static2/picture/icon_2.png" alt="剧集推荐">
-                            <a href="/display/?m=vod-type-id-2.html">剧集</a>
+                            <a href="/display?cate=/?m=vod-type-id-2.html">剧集</a>
                         </h3>
                         <ul class="nav nav-text pull-right hidden-sm hidden-xs">
                             {{range $key, $value := .navTv}}
@@ -118,13 +118,13 @@
                             {{else}}
                             <li class="col-md-6 col-sm-4 col-xs-3">
                                 <div class="stui-vodlist__box stui-vodlist__bg">
-                                    <a class="stui-vodlist__thumb lazyload" href="/detail{{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}">
                                         <span class="play hidden-xs"></span>
                                         <span class="pic-text text-right">1080P</span>
                                     </a>
                                     <div class="stui-vodlist__detail active">
-                                        <h4 class="title text-overflow"><a href="/detail{{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
+                                        <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
                                         </h4>
                                         <p class="text text-overflow text-muted hidden-xs">{{$value.Starring}}</p>
                                     </div>
@@ -142,11 +142,11 @@
                         <ul class="stui-vodlist__media active col-pd clearfix">
                             <li>
                                 <div class="thumb">
-                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/detail{{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}"></a>
                                 </div>
                                 <div class="detail detail-side">
-                                    <h4 class="title"><a href="/detail{{$value.Link}}"><i
+                                    <h4 class="title"><a href="/movie?link={{$value.Link}}"><i
                                             class="icon iconfont icon-more text-muted pull-right"></i> {{$value.Name}}</a></h4>
                                     <p class="font-12">
                                         <span class="text-muted">类型：</span>{{$value.Category}}
@@ -162,7 +162,7 @@
                             {{range $key, $value := .newTv}}
                             {{if gt $key 0}}
                             <li class="top-line-dot">
-                                <a class="text-overflow" href="/detail{{$value.Link}}" title="{{$value.Name}}">
+                                <a class="text-overflow" href="/movie?link={{$value.Link}}" title="{{$value.Name}}">
                                     <span class="text-muted pull-right"></span>
                                     <em class="text-red">{{add $key 1}} . </em>{{$value.Name}}</a>
                             </li>
@@ -179,11 +179,11 @@
             <div class="stui-pannel-box">
                 <div class="stui-pannel_hd">
                     <div class="stui-pannel__head active bottom-line clearfix">
-                        <a class="more text-muted pull-right" href="/display/?m=vod-type-id-4.html">更多 <i
+                        <a class="more text-muted pull-right" href="/display?cate=/?m=vod-type-id-4.html">更多 <i
                                 class="icon iconfont icon-more"></i></a>
                         <h3 class="title">
                             <img src="static2/picture/icon_4.png" alt="动漫推荐">
-                            <a href="/display/?m=vod-type-id-4.html">动漫</a>
+                            <a href="/display?cate=/?m=vod-type-id-4.html">动漫</a>
                         </h3>
                         <ul class="nav nav-text pull-right hidden-sm hidden-xs">
                         </ul>
@@ -197,13 +197,13 @@
                             {{else}}
                             <li class="col-md-6 col-sm-4 col-xs-3">
                                 <div class="stui-vodlist__box stui-vodlist__bg">
-                                    <a class="stui-vodlist__thumb lazyload" href="/detail{{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}">
                                         <span class="play hidden-xs"></span>
                                         <span class="pic-text text-right">1080P</span>
                                     </a>
                                     <div class="stui-vodlist__detail active">
-                                        <h4 class="title text-overflow"><a href="/detail{{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
+                                        <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
                                         </h4>
                                         <p class="text text-overflow text-muted hidden-xs">{{$value.Starring}}</p>
                                     </div>
@@ -222,11 +222,11 @@
                         <ul class="stui-vodlist__media active col-pd clearfix">
                             <li>
                                 <div class="thumb">
-                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/detail{{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}"></a>
                                 </div>
                                 <div class="detail detail-side">
-                                    <h4 class="title"><a href="/detail{{$value.Link}}"><i
+                                    <h4 class="title"><a href="/movie?link={{$value.Link}}"><i
                                             class="icon iconfont icon-more text-muted pull-right"></i> {{$value.Name}}</a></h4>
                                     <p class="font-12">
                                         <span class="text-muted">类型：</span>{{$value.Category}}
@@ -242,7 +242,7 @@
                             {{range $key, $value := .newCartoon}}
                             {{if gt $key 0}}
                             <li class="top-line-dot">
-                                <a class="text-overflow" href="/detail{{$value.Link}}" title="{{$value.Name}}">
+                                <a class="text-overflow" href="/movie?link={{$value.Link}}" title="{{$value.Name}}">
                                     <span class="text-muted pull-right"></span>
                                     <em class="text-red">{{add $key 1}} . </em>{{$value.Name}}</a>
                             </li>
