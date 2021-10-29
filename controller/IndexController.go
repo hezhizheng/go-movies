@@ -274,21 +274,14 @@ func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	MovieDetail := services.MovieDetail(link)
 
-	NewFilmKey := "detail_links:id:1"
-	NewTVKey := "detail_links:id:2"
-
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 49)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 49)
-	recommend := services.MoviesRecommend()
-	show["recommend"] = recommend
 
 	show["categories"] = Categories
 	show["MovieDetail"] = MovieDetail
-	show["new_film"] = NewFilm
-	show["new_tv"] = NewTV
+
 	show["nav_link"] = "/"
 	show["film_title"] = MovieDetail["info"].(map[string]string)["name"]
 
+	//log.Println(show)
 	tmpl.GoTpl.ExecuteTemplate(w,"detail",show)
 }
 
@@ -296,7 +289,7 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	show := make(map[string]interface{})
 
-	PlayUrl := r.URL.Query()["play_url"][0]
+	PlayUrl := r.URL.Query().Get("play_url")
 
 	PlayType := "kuyun"
 	if strings.Contains(PlayUrl, ".mp4"){
@@ -305,20 +298,19 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		PlayType = "m3u8"
 	}
 
-	show["play_url"] = PlayUrl
-	show["type"] = PlayType
-
-	buffer := new(bytes.Buffer)
+	show["playUrl"] = PlayUrl
+	show["playType"] = PlayType
 
 	Categories := services.AllCategoryData()
-	link := r.URL.Query()["link"][0]
+	link := r.URL.Query().Get("link")
+	episode := r.URL.Query().Get("episode")
 	MovieDetail := services.MovieDetail(link)
 	show["MovieDetail"] = MovieDetail
 	show["categories"] = Categories
 	show["film_title"] = MovieDetail["info"].(map[string]string)["name"]
-	heroTpl.Play(show, buffer)
+	show["episode"] = episode
 
-	w.Write(buffer.Bytes())
+	tmpl.GoTpl.ExecuteTemplate(w,"play",show)
 }
 
 func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
