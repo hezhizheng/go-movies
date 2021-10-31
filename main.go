@@ -19,8 +19,6 @@ import (
 //go:embed static2/*
 var embedStatic2 embed.FS
 
-
-
 // Reads from the routes slice to translate the values to httprouter.Handle
 // 遍历路由
 func traversingRouter() *httprouter.Router {
@@ -37,7 +35,7 @@ func traversingRouter() *httprouter.Router {
 		router.Handle(route.Method, route.Path, handle)
 	}
 
-	if viper.GetString(`app.debug`) == "false" {
+	if viper.GetString(`app.debug_mod`) == "false" {
 		// live 模式 打包用
 		fsys, _ := fs.Sub(embedStatic2, "static2")
 		router.ServeFiles("/static2/*filepath", http.FS(fsys))
@@ -98,12 +96,13 @@ func main() {
 
 	firstSpider()
 
-	// 启动定时爬虫任务
+	// 启动定时爬虫任务 全量
 	utils.TimingSpider(func() {
 		spider.Create().Start()
 		return
 	})
 
+	// 爬虫 只爬取最近有更新的资源
 	utils.RecentUpdate(func() {
 		spider.Create().DoRecentUpdate()
 		return

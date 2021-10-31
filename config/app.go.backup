@@ -10,6 +10,7 @@ cron.timing_spider: 定时爬虫的CRON表达式
 ding.access_token: 钉钉机器人token
 recommend: 推荐电影列表
 app.spider_mod: 固定参数为 TianKongApi
+app.debug_mod: 开发模式建议设置为`true` 避免修改静态资源需要重启服务
 */
 var AppJsonConfig = []byte(`
 {
@@ -19,7 +20,8 @@ var AppJsonConfig = []byte(`
     "spider_path_name": "MoviesSpider",
     "debug_path": "/debug",
     "debug_path_name": "Debug",
-    "spider_mod": "TianKongApi"
+    "spider_mod": "TianKongApi",
+    "debug_mod": "true"
   },
   "redis": {
     "port": "6379",
@@ -32,24 +34,6 @@ var AppJsonConfig = []byte(`
   },
   "ding": {
     "access_token": ""
-  },
-  "recommend": [
-    {
-      "name": "绝命毒师第一季",
-      "link": "/?m=vod-detail-id-27290.html"
-    },
-    {
-      "name": "风骚律师第一季",
-      "link": "/?m=vod-detail-id-47868.html"
-    },
-    {
-      "name": "维多利亚一号",
-      "link": "/?m=vod-detail-id-41939.html"
-    },
-    {
-      "name": "树大招风",
-      "link": "/?m=vod-detail-id-47948.html"
-    }
-  ]
+  }
 }
 `)
