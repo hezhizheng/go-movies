@@ -19,6 +19,7 @@ type MovieListStruct struct {
 	Cover     string `json:"cover"`
 	UpdatedAt string `json:"updated_at"`
 	Starring  string `json:"starring"`
+	Quality   string `json:"quality"`
 }
 
 type SortMovieListStruct []MovieListStruct
@@ -59,6 +60,7 @@ func MovieListsRange(key string, start, stop int64) []MovieListStruct {
 		movieKeyMap.Name = info["name"]
 		movieKeyMap.Link = info["link"]
 		movieKeyMap.Cover = info["cover"]
+		movieKeyMap.Quality = info["quality"]
 		if detail["update"] != nil {
 			movieKeyMap.UpdatedAt = detail["update"].(string)
 		}

@@ -28,6 +28,7 @@ func AllRoutes() Routes {
 	debugPathName := viper.GetString(`app.debug_path_name`)
 	routes := Routes{
 		Route{"Index", "GET", "/", controller.Index},
+		Route{"Display", "GET", "/display", controller.Display},
 		Route{"Movie", "GET", "/movie", controller.Movie},
 		Route{"Search", "GET", "/search", controller.Search},
 		Route{"Play", "GET", "/play", controller.Play},

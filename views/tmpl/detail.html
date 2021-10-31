@@ -1,0 +1,109 @@
+{{define "detail"}}
+
+{{template "head" .}}
+
+<body style="padding: 0;">
+
+{{template "nav" .}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-wide-75 col-xs-1">
+            <!-- 详细信息-->
+            <div class="stui-pannel stui-pannel-bg clearfix">
+
+                <div class="v_path clearfix" style="padding-bottom: 20px">当前位置： <a href='javascript:;'>{{.MovieDetail.detail.type}} —> {{.MovieDetail.info.name}}</a></div>
+
+                <div class="stui-pannel-box">
+
+                    <div class="stui-content__thumb">
+                        <a class="stui-vodlist__thumb picture v-thumb" href="javascript:;" title="">
+                            <img class="default-img" src=""
+                                 data-url="{{.MovieDetail.info.cover}}">
+                            <span class="play active hidden-xs"></span>
+                            <!--								<span class="pic-text text-right"></span>-->
+                        </a>
+                    </div>
+                    <div class="stui-content__detail">
+                        <h1 class="title">{{.MovieDetail.info.name}}</h1>
+                        <p class="data">
+                            <span class="text-muted">类型：</span>{{.MovieDetail.detail.type}}
+                            <span class="split-line"></span>
+                            <span class="text-muted hidden-xs">地区：</span>{{.MovieDetail.detail.area}}<span
+                                class="split-line"></span>
+                            <span class="text-muted hidden-xs">年份：</span>{{.MovieDetail.detail.released}}
+                        </p>
+                        <p class="data"><span class="text-muted">主演：</span>{{.MovieDetail.detail.starring}}</p>
+                        <p class="data"><span class="text-muted">导演：</span>{{.MovieDetail.detail.director}}</p>
+                        <p class="data hidden-sm"><span class="text-muted">更新：</span>{{.MovieDetail.detail.update}}</p>
+                        <p class="data hidden-sm">
+                            <span class="left text-muted">简介：</span>
+                            <span class="detail-sketch">{{.MovieDetail.detail.vod_play_info}}</span>
+                            <span class="detail-content"
+                                  style="display: none;">{{.MovieDetail.detail.vod_play_info}}</span>
+                            <a class="detail-more" href="javascript:;">详情 <i class="icon iconfont icon-moreunfold"></i></a>
+                        </p>
+                        <div class="play-btn clearfix">
+                            <a rel="nofollow" class="btn btn-primary" rel="nofollow" href="javascript:;" onclick="playNow()">立即播放</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end 详细信息-->
+
+            <div class="stui-pannel stui-pannel-bg clearfix">
+                <div class="stui-pannel-box b playlist mb">
+                    <div class="stui-pannel_hd">
+                        <div class="stui-pannel__head bottom-line active clearfix">
+                            <h3 class="title">
+                                <img src="static2/picture/icon_30.png">
+                                资源 1</h3>
+                        </div>
+                    </div>
+                    <div class="stui-pannel_bd col-pd clearfix">
+                        <ul class="stui-content__playlist clearfix">
+                            {{$link := .MovieDetail.info.link}}
+                            {{range $key, $value := .MovieDetail.kuyun}}
+                            <li><a class="play-now" href="/play?play_url={{$value.play_link}}&link={{$link}}&episode={{$value.episode}}">第 {{$value.episode}} 集</a></li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="stui-pannel stui-pannel-bg clearfix">
+                <div class="stui-pannel-box b playlist mb">
+                    <div class="stui-pannel_hd">
+                        <div class="stui-pannel__head bottom-line active clearfix">
+                            <h3 class="title">
+                                <img src="static2/picture/icon_30.png">
+                                资源 2</h3>
+                        </div>
+                    </div>
+                    <div class="stui-pannel_bd col-pd clearfix">
+                        <ul class="stui-content__playlist clearfix">
+                            {{$link := .MovieDetail.info.link}}
+                            {{range $key, $value := .MovieDetail.ckm3u8}}
+                            <li><a href="/play?play_url={{$value.play_link}}&link={{$link}}&episode={{$value.episode}}">第 {{$value.episode}} 集</a></li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 播放地址-->
+
+        </div>
+
+    </div>
+</div>
+
+{{template "footer" .}}
+<script>
+    function playNow() {
+        // console.log($(".play-now").eq(0).attr("href"))
+        window.location = $(".play-now").eq(0).attr("href");
+    }
+</script>
+</body>
+
+</html>
+{{end}}

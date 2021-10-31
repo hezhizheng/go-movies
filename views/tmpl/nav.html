@@ -1,0 +1,51 @@
+{{define "nav"}}
+<header class="stui-header__top clearfix" id="header-top">
+    <div class="container">
+        <div class="row">
+            <div class="stui-header_bd clearfix">
+                <div class="stui-header__logo">
+                    <a class="logo" href="/"></a>
+                </div>
+                <ul class="stui-header__menu">
+                    <li><a href="/">首页</a></li>
+
+                    {{range $key, $value := .categories}}
+                    <li class="hidden-xs"><a href="/display?cate={{$value.Link}}">{{$value.Name}}</a></li>
+                    {{end}}
+                    <li class="hidden-xs"><a href="/about">关于</a></li>
+                    <li>
+                        <a href="javascript:;">导航 <i class="icon iconfont icon-moreunfold"></i></a>
+                        <ul class="dropdown">
+                            {{range $key, $value := .allCategories}}
+                            <li><a href="/display?cate={{$value.Link}}">{{$value.Name}}</a></li>
+                            {{end}}
+                            <li><a href="/about">关于</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="stui-header__search">
+                    <form id="search" name="search" method="get" action="/search">
+                        <input type="text" id="wd" autocomplete="off" name="q" class="mac_wd form-control" value="{{.q}}"
+                               placeholder="仅支持电影名称模糊搜索">
+                        <button class="submit" id="searchbutton" type="submit" ><i
+                                class="icon iconfont icon-search"></i></button>
+                    </form>
+
+
+                    <a rel="nofollow" class="search-close visible-xs" href="javascript:;"><i
+                            class="icon iconfont icon-close"></i></a>
+                </div>
+
+
+                <ul class="stui-header__user">
+                    <li class="visible-xs">
+                        <a rel="nofollow" class="open-search" href="javascript:;"> <i
+                                class="icon iconfont icon-search"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+{{end}}

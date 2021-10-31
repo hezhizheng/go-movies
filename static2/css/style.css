@@ -1,0 +1,335 @@
+body {
+    width: 100%;
+    overflow-x: hidden
+}
+
+.clear {
+    clear: both
+}
+
+.tncode {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    width: 260px;
+    height: 44px;
+    cursor: pointer;
+    opacity: 1;
+    line-height: 44px
+}
+
+.tncode_div_bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, .5);
+    opacity: .3;
+    filter: alpha(opacity=30);
+    background-color: #000;
+    *zoom: 1;
+    display: none
+}
+
+.tncode_div {
+    display: none;
+    background-color: #fff;
+    z-index: 1000000;
+    width: 260px;
+    height: 260px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -130px;
+    margin-left: -130px;
+    border: 1px solid #d1d1d1;
+    border-radius: 2px;
+    overflow: hidden;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=5);
+    -moz-box-shadow: 2px 2px 5px #969696;
+    -webkit-box-shadow: 2px 2px 5px #969696;
+    box-shadow: 2px 2px 5px #969696
+}
+
+.tncode_div .tncode_canvas_bg {
+    z-index: 0
+}
+
+.tncode_div .tncode_canvas_mark {
+    z-index: 10000
+}
+
+.tncode_div canvas {
+    position: absolute;
+    left: 10px;
+    top: 10px
+}
+
+.tncode_div .loading {
+    padding-top: 60px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background-color: #ccc;
+    width: 240px;
+    height: 150px;
+    text-align: center;
+    box-sizing: border-box
+}
+
+.dd {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-animation: ddf .1s ease-in 0s infinite;
+    -o-animation: ddf .1s ease-in 0s infinite;
+    animation: ddf .1s ease-in 0s infinite
+}
+
+@-webkit-keyframes ddf {
+    0% {
+        -webkit-transform: translate(-8px, 3px)
+    }
+    20% {
+        -webkit-transform: translate(-3px, 1.5px)
+    }
+    50% {
+        -webkit-transform: translate(0px, 0px)
+    }
+    70% {
+        -webkit-transform: translate(5px, -1.5px)
+    }
+    100% {
+        -webkit-transform: translate(0px, 0px)
+    }
+}
+
+@-o-keyframes ddf {
+    0% {
+        -o-transform: translate(-8px, 3px)
+    }
+    20% {
+        -o-transform: translate(-3px, 1.5px)
+    }
+    50% {
+        -o-transform: translate(0px, 0px)
+    }
+    70% {
+        -o-transform: translate(5px, -1.5px)
+    }
+    100% {
+        -o-transform: translate(0px, 0px)
+    }
+}
+
+@-moz-keyframes ddf {
+    0% {
+        -moz-transform: translate(-8px, 3px)
+    }
+    20% {
+        -moz-transform: translate(-3px, 1.5px)
+    }
+    50% {
+        -moz-transform: translate(0px, 0px)
+    }
+    70% {
+        -moz-transform: translate(5px, -1.5px)
+    }
+    100% {
+        -moz-transform: translate(0px, 0px)
+    }
+}
+
+@keyframes ddf {
+    0% {
+        transform: translate(-8px, 3px)
+    }
+    20% {
+        transform: translate(-3px, 1.5px)
+    }
+    50% {
+        transform: translate(0px, 0px)
+    }
+    70% {
+        transform: translate(5px, -1.5px)
+    }
+    100% {
+        transform: translate(0px, 0px)
+    }
+}
+
+.hgroup {
+    z-index: 20000;
+    content: "";
+    position: absolute;
+    left: -800px;
+    top: 70px;
+    width: 250px;
+    height: 15px;
+    background-color: rgba(255, 255, 255, .5);
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-animation: searchLights 3s ease-in 0s infinite;
+    -o-animation: searchLights 3s ease-in 0s infinite;
+    animation: searchLights 3s ease-in 0s infinite
+}
+
+@-webkit-keyframes searchLights {
+    0% {
+        left: -800px;
+        top: 70px
+    }
+    to {
+        left: 350px;
+        top: 70px
+    }
+}
+
+@-o-keyframes searchLights {
+    0% {
+        left: -800px;
+        top: 70px
+    }
+    to {
+        left: 350px;
+        top: 70px
+    }
+}
+
+@-moz-keyframes searchLights {
+    0% {
+        left: -800px;
+        top: 70px
+    }
+    to {
+        left: 350px;
+        top: 70px
+    }
+}
+
+@keyframes searchLights {
+    0% {
+        left: -800px;
+        top: 70px
+    }
+    to {
+        left: 350px;
+        top: 70px
+    }
+}
+
+.slide, .slide_block, .tools .tncode_close, .tools .tncode_refresh {
+    background-repeat: no-repeat;
+    background-image: url(../image/icon.png)
+}
+
+.tncode_msg_ok {
+    background-color: #24c628
+}
+
+.tncode_msg_error {
+    background-color: #de5145
+}
+
+.tncode_msg_ok, .tncode_msg_error {
+    position: absolute;
+    top: 136px;
+    left: 10px;
+    width: 220px;
+    height: 20px;
+    color: #fff;
+    margin: 0;
+    padding: 2px 10px;
+    overflow: visible;
+    background-position: 0 0;
+    font-size: 14px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 10000
+}
+
+.slide {
+    position: absolute;
+    top: 160px;
+    width: 93.52%;
+    height: 0;
+    background-color: #fff;
+    background-size: 100%;
+    margin: 5.39% 3.24%;
+    padding: 0 0 13.67%;
+    overflow: visible;
+    background-position: 0 0
+}
+
+.tools {
+    position: absolute;
+    top: 210px;
+    width: 93.52%;
+    height: 0;
+    background-color: #fff;
+    background-size: 100%;
+    margin: 5.39% 3.24%;
+    padding: 5px 0 13.67%;
+    overflow: visible;
+    background-position: 0 0;
+    border-top: 1px solid #eee
+}
+
+.slide_block {
+    background-position: 0 12.9794%;
+    width: 65px;
+    height: 65px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: -4.62% 0 0 -2.31%;
+    cursor: pointer
+}
+
+.slide_block_text {
+    background-position: 0 12.9794%;
+    height: 65px;
+    position: absolute;
+    left: 65px;
+    top: 20px;
+    margin: -4.62% 0 0 -2.31%;
+    cursor: pointer;
+    font-size: 14px;
+    color: #88949d
+}
+
+.tncode_canvas_bg, .tncode_canvas_mark {
+}
+
+.tools .tncode_close {
+    background-position: 0 50%;
+    height: 30px;
+    width: 30px;
+    float: left;
+    margin-right: 10px;
+    cursor: pointer
+}
+
+.tools .tncode_refresh {
+    background-position: 0 94%;
+    height: 30px;
+    width: 30px;
+    float: left;
+    cursor: pointer
+}
+
+.tools .tncode_tips {
+    float: right
+}
+
+.tools .tncode_tips a {
+    text-decoration: none;
+    font-size: 10px;
+    color: #88949d
+}

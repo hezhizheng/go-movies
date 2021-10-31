@@ -2,23 +2,26 @@ package main
 
 import (
 	"bytes"
+	"embed"
 	"errors"
 	"github.com/julienschmidt/httprouter"
-	"github.com/rakyll/statik/fs"
 	"github.com/spf13/viper"
 	"go_movies/config"
 	"go_movies/routes"
-	_ "go_movies/statik"
 	"go_movies/utils"
 	"go_movies/utils/spider"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
 )
 
+//go:embed static2/*
+var embedStatic2 embed.FS
+
 // Reads from the routes slice to translate the values to httprouter.Handle
 // 遍历路由
-func TraversingRouter() *httprouter.Router {
+func traversingRouter() *httprouter.Router {
 
 	AllRoutes := routes.AllRoutes()
 
@@ -32,13 +35,14 @@ func TraversingRouter() *httprouter.Router {
 		router.Handle(route.Method, route.Path, handle)
 	}
 
-	statikFS, err := fs.New()
-	if err != nil {
-		log.Fatal(err)
+	if viper.GetString(`app.debug_mod`) == "false" {
+		// live 模式 打包用
+		fsys, _ := fs.Sub(embedStatic2, "static2")
+		router.ServeFiles("/static2/*filepath", http.FS(fsys))
+	}else{
+		// dev 开发用 避免修改静态资源需要重启服务
+		router.ServeFiles("/static2/*filepath", http.Dir("static2"))
 	}
-
-	// 配置静态文件访问
-	router.ServeFiles("/static/*filepath", statikFS)
 	return router
 }
 
@@ -71,17 +75,17 @@ func init() {
 // 首次启动自动开启爬虫
 func firstSpider() {
 
-	hasHK := utils.RedisDB.Exists("detail_links:id:14").Val()
-	log.Println("hasHK", hasHK)
+	hasHome := utils.RedisDB.Exists("detail_links:id:1").Val()
+	log.Println("hasHome", hasHome)
 	// 不存在首页的key 则认为是第一次启动
-	if hasHK == 0 {
+	if hasHome == 0 {
 		spider.Create().Start()
 	}
 }
 
 func main() {
 	// 注册所有路由
-	router := TraversingRouter()
+	router := traversingRouter()
 
 	// 初始化 redis 连接
 	utils.InitRedisDB()
@@ -92,12 +96,13 @@ func main() {
 
 	firstSpider()
 
-	// 启动定时爬虫任务
+	// 启动定时爬虫任务 全量
 	utils.TimingSpider(func() {
 		spider.Create().Start()
 		return
 	})
 
+	// 爬虫 只爬取最近有更新的资源
 	utils.RecentUpdate(func() {
 		spider.Create().DoRecentUpdate()
 		return

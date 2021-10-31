@@ -1,0 +1,55 @@
+{{define "search"}}
+
+{{template "head" .}}
+
+<body style="padding: 0;">
+
+{{template "nav" .}}
+
+
+<div class="container">
+    <div class="row">
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <h3 class="title">
+                            <img src="static2/picture/icon_27.png" alt="最新电影资源列表">
+                            搜索 "{{.q}}" 的相关资源 </h3>
+                    </div>
+                </div>
+
+
+                <div class="stui-pannel_bd">
+                    <ul class="stui-vodlist clearfix">
+                        {{range $key, $value := .movieLists}}
+                        <li class="col-md-7 col-sm-4 col-xs-3">
+                            <div class="stui-vodlist__box stui-vodlist__bg">
+                                <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}"
+                                   title="{{$value.Name}}"
+                                   data-original="{{$value.Cover}}">
+                                    <span class="play hidden-xs"></span>
+                                    <span class="pic-text text-right">超清</span>
+                                </a>
+                                <div class="stui-vodlist__detail active">
+                                    <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}"
+                                                                       title="{{$value.Name}}">{{$value.Name}}</a></h4>
+                                    <p class="text text-overflow text-muted hidden-xs">
+                                        {{$value.Starring}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{template "footer" .}}
+
+</body>
+</html>
+{{end}}

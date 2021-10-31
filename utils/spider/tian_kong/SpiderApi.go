@@ -401,7 +401,7 @@ func Detail(id string, retry int) {
 
 	_, resp, gErr := fasthttp.Get(nil, url)
 	if gErr != nil {
-		log.Println("Detail 请求失败:", gErr.Error())
+		log.Println("Detail 请求失败:", gErr.Error(),url)
 		return
 	}
 

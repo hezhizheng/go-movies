@@ -1,0 +1,267 @@
+{{define "index"}}
+
+{{template "head" .}}
+
+<body style="padding: 0;">
+
+{{/* 注释 子模板后面的 . 一点要加上 否则将获取不父模板绑定的数据 */}}
+{{template "nav" .}}
+
+<div class="container">
+    <div class="row">
+
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <a class="more text-muted pull-right" href="/display?cate=/?m=vod-type-id-1.html">更多<i
+                                class="icon iconfont icon-more"></i></a>
+                        <h3 class="title">
+                            <img src="static2/picture/icon_1.png" alt="电影推荐">
+                            <a href="/display?cate=/?m=vod-type-id-1.html">电影</a>
+                        </h3>
+                        <ul class="nav nav-text pull-right hidden-sm hidden-xs">
+                            {{range $key, $value := .navFilm}}
+                            <li><a href="/display?cate={{$value.Link}}" class="text-muted">{{$value.Name}}</a> <span class="split-line"></span></li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+                <div class="stui-pannel_bd clearfix">
+                    <div class="col-lg-wide-8 col-xs-1 padding-0">
+                        <ul class="stui-vodlist clearfix">
+
+                            <!--                            12 个 -->
+                            {{range $key, $value := .newFilm}}
+                            {{if ge $key 12}}
+                            {{else}}
+                            <li class="col-md-6 col-sm-4 col-xs-3">
+                                <div class="stui-vodlist__box stui-vodlist__bg">
+                                    <a class="stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                       data-original="{{$value.Cover}}">
+                                        <span class="play hidden-xs"></span>
+                                        <span class="pic-text text-right">{{$value.Quality}}</span>
+                                    </a>
+                                    <div class="stui-vodlist__detail active">
+                                        <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
+                                        </h4>
+                                        <p class="text text-overflow text-muted hidden-xs">&nbsp;{{$value.Starring}}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            {{end}}
+                            {{end}}
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-wide-2 hidden-md hidden-sm hidden-xs">
+                        {{range $key, $value := .newFilm}}
+                        {{if eq $key 0}}
+                        <ul class="stui-vodlist__media active col-pd clearfix">
+                            <li>
+                                <div class="thumb">
+                                    <a class="m-thumb stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                       data-original="{{$value.Cover}}"></a>
+                                </div>
+                                <div class="detail detail-side">
+                                    <h4 class="title"><a href="/movie?link={{$value.Link}}"><i
+                                            class="icon iconfont icon-more text-muted pull-right"></i> {{$value.Name}}</a></h4>
+                                    <p class="font-12">
+                                        <span class="text-muted">类型：</span>{{$value.Category}}
+                                    </p>
+                                    <p class="font-12 margin-0"><span class="text-muted">主演：</span>&nbsp;{{$value.Starring}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        {{end}}
+                        {{end}}
+
+
+                        <ul class="stui-vodlist__text col-pd clearfix" style="padding-top: 0;">
+                            {{range $key, $value := .newFilm}}
+                            {{if gt $key 0}}
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="/movie?link={{$value.Link}}" title="{{$value.Name}}">
+                                    <span class="text-muted pull-right"></span>
+                                    <em class="text-red">{{add $key 1}} . </em>{{$value.Name}}</a>
+                            </li>
+                            {{end}}
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <a class="more text-muted pull-right" href="/display?cate=/?m=vod-type-id-2.html">更多 <i
+                                class="icon iconfont icon-more"></i></a>
+                        <h3 class="title">
+                            <img src="static2/picture/icon_2.png" alt="剧集推荐">
+                            <a href="/display?cate=/?m=vod-type-id-2.html">剧集</a>
+                        </h3>
+                        <ul class="nav nav-text pull-right hidden-sm hidden-xs">
+                            {{range $key, $value := .navTv}}
+                            <li><a href="/display?cate={{$value.Link}}" class="text-muted">{{$value.Name}}</a> <span class="split-line"></span></li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+                <div class="stui-pannel_bd clearfix">
+                    <div class="col-lg-wide-8 col-xs-1 padding-0">
+                        <ul class="stui-vodlist clearfix">
+                            {{range $key, $value := .newTv}}
+                            {{if ge $key 12}}
+                            {{else}}
+                            <li class="col-md-6 col-sm-4 col-xs-3">
+                                <div class="stui-vodlist__box stui-vodlist__bg">
+                                    <a class="stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                       data-original="{{$value.Cover}}">
+                                        <span class="play hidden-xs"></span>
+                                        <span class="pic-text text-right">{{$value.Quality}}</span>
+                                    </a>
+                                    <div class="stui-vodlist__detail active">
+                                        <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
+                                        </h4>
+                                        <p class="text text-overflow text-muted hidden-xs">&nbsp;{{$value.Starring}}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            {{end}}
+                            {{end}}
+
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-wide-2 hidden-md hidden-sm hidden-xs">
+                        {{range $key, $value := .newTv}}
+                        {{if eq $key 0}}
+                        <ul class="stui-vodlist__media active col-pd clearfix">
+                            <li>
+                                <div class="thumb">
+                                    <a class="m-thumb stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                       data-original="{{$value.Cover}}"></a>
+                                </div>
+                                <div class="detail detail-side">
+                                    <h4 class="title"><a href="/movie?link={{$value.Link}}"><i
+                                            class="icon iconfont icon-more text-muted pull-right"></i> {{$value.Name}}</a></h4>
+                                    <p class="font-12">
+                                        <span class="text-muted">类型：</span>{{$value.Category}}
+                                    </p>
+                                    <p class="font-12 margin-0"><span class="text-muted">主演：</span>&nbsp;{{$value.Starring}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        {{end}}
+                        {{end}}
+
+                        <ul class="stui-vodlist__text col-pd clearfix" style="padding-top: 0;">
+                            {{range $key, $value := .newTv}}
+                            {{if gt $key 0}}
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="/movie?link={{$value.Link}}" title="{{$value.Name}}">
+                                    <span class="text-muted pull-right"></span>
+                                    <em class="text-red">{{add $key 1}} . </em>{{$value.Name}}</a>
+                            </li>
+                            {{end}}
+                            {{end}}
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <a class="more text-muted pull-right" href="/display?cate=/?m=vod-type-id-4.html">更多 <i
+                                class="icon iconfont icon-more"></i></a>
+                        <h3 class="title">
+                            <img src="static2/picture/icon_4.png" alt="动漫推荐">
+                            <a href="/display?cate=/?m=vod-type-id-4.html">动漫</a>
+                        </h3>
+                        <ul class="nav nav-text pull-right hidden-sm hidden-xs">
+                        </ul>
+                    </div>
+                </div>
+                <div class="stui-pannel_bd clearfix">
+                    <div class="col-lg-wide-8 col-xs-1 padding-0">
+                        <ul class="stui-vodlist clearfix">
+                            {{range $key, $value := .newCartoon}}
+                            {{if ge $key 12}}
+                            {{else}}
+                            <li class="col-md-6 col-sm-4 col-xs-3">
+                                <div class="stui-vodlist__box stui-vodlist__bg">
+                                    <a class="stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                       data-original="{{$value.Cover}}">
+                                        <span class="play hidden-xs"></span>
+                                        <span class="pic-text text-right">{{$value.Quality}}</span>
+                                    </a>
+                                    <div class="stui-vodlist__detail active">
+                                        <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
+                                        </h4>
+                                        <p class="text text-overflow text-muted hidden-xs">&nbsp;{{$value.Starring}}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            {{end}}
+                            {{end}}
+
+
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-wide-2 hidden-md hidden-sm hidden-xs">
+                        {{range $key, $value := .newCartoon}}
+                        {{if eq $key 0}}
+                        <ul class="stui-vodlist__media active col-pd clearfix">
+                            <li>
+                                <div class="thumb">
+                                    <a class="m-thumb stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                       data-original="{{$value.Cover}}"></a>
+                                </div>
+                                <div class="detail detail-side">
+                                    <h4 class="title"><a href="/movie?link={{$value.Link}}"><i
+                                            class="icon iconfont icon-more text-muted pull-right"></i> {{$value.Name}}</a></h4>
+                                    <p class="font-12">
+                                        <span class="text-muted">类型：</span>{{$value.Category}}
+                                    </p>
+                                    <p class="font-12 margin-0"><span class="text-muted">主演：</span>&nbsp;{{$value.Starring}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        {{end}}
+                        {{end}}
+
+                        <ul class="stui-vodlist__text col-pd clearfix" style="padding-top: 0;">
+                            {{range $key, $value := .newCartoon}}
+                            {{if gt $key 0}}
+                            <li class="top-line-dot">
+                                <a class="text-overflow" href="/movie?link={{$value.Link}}" title="{{$value.Name}}">
+                                    <span class="text-muted pull-right"></span>
+                                    <em class="text-red">{{add $key 1}} . </em>{{$value.Name}}</a>
+                            </li>
+                            {{end}}
+                            {{end}}
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 列表 -->
+
+    </div>
+</div>
+
+{{template "footer" .}}
+
+</body>
+
+</html>
+{{end}}

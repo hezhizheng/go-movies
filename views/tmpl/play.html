@@ -1,0 +1,117 @@
+{{define "play"}}
+
+{{template "head" .}}
+
+<style>
+	.video {
+		position: relative;
+		padding-bottom: 56.25%;
+		height: 0;
+		overflow: hidden;
+	}
+	.video iframe,
+	.video object,
+	.video embed {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+<body style="padding: 0;">
+
+{{template "nav" .}}
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-wide-75 col-xs-1">
+			<!-- 详细信息-->
+			<div class="stui-pannel stui-pannel-bg clearfix">
+
+				<div class="v_path clearfix" style="padding-bottom: 20px">
+					当前位置：
+					<a href='javascript:;'>{{.MovieDetail.detail.type}} —> {{.MovieDetail.info.name}} 第 {{.episode}} 集</a>
+				</div>
+
+				<div class="stui-pannel-box video">
+					{{if eq .playType "kuyun"}}
+					<iframe width="100%" height="100%" allowtransparency="true" allowfullscreen="true"
+							frameborder="0" scrolling="no"
+							src="{{.playUrl}}"></iframe>
+
+					{{end}}
+					{{if eq .playType "m3u8"}}
+					<div id="hls-video" ></div>
+					{{end}}
+				</div>
+			</div>
+			<!-- end 详细信息-->
+
+			<div class="stui-pannel stui-pannel-bg clearfix">
+				<div class="stui-pannel-box b playlist mb">
+					<div class="stui-pannel_hd">
+						<div class="stui-pannel__head bottom-line active clearfix">
+							<h3 class="title">
+								<img src="static2/picture/icon_30.png">
+								资源 1</h3>
+						</div>
+					</div>
+					<div class="stui-pannel_bd col-pd clearfix">
+						<ul class="stui-content__playlist clearfix">
+							{{$link := .MovieDetail.info.link}}
+							{{range $key, $value := .MovieDetail.kuyun}}
+							<li><a href="/play?play_url={{$value.play_link}}&link={{$link}}&episode={{$value.episode}}">第 {{$value.episode}} 集</a></li>
+							{{end}}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="stui-pannel stui-pannel-bg clearfix">
+				<div class="stui-pannel-box b playlist mb">
+					<div class="stui-pannel_hd">
+						<div class="stui-pannel__head bottom-line active clearfix">
+							<h3 class="title">
+								<img src="static2/picture/icon_30.png">
+								资源 2</h3>
+						</div>
+					</div>
+					<div class="stui-pannel_bd col-pd clearfix">
+						<ul class="stui-content__playlist clearfix">
+							{{$link := .MovieDetail.info.link}}
+							{{range $key, $value := .MovieDetail.ckm3u8}}
+							<li><a href="/play?play_url={{$value.play_link}}&link={{$link}}&episode={{$value.episode}}">第 {{$value.episode}} 集</a></li>
+							{{end}}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- 播放地址-->
+
+		</div>
+
+	</div>
+</div>
+
+{{template "footer" .}}
+
+{{if eq .playType "m3u8"}}
+<script src="//cdn.jsdelivr.net/npm/xgplayer@2.9.6/browser/index.js" type="text/javascript"></script>
+<script src="//sf1-ttcdn-tos.pstatp.com/obj/unpkg/xgplayer-hls.js/2.2.2/browser/index.js" charset="utf-8"></script>
+<script>
+	new window.HlsJsPlayer({
+		id: 'hls-video',
+		url: '{{.playUrl}}',
+		fluid: true,
+		autoplay: true,
+		playbackRate: [0.5, 0.75, 1, 1.5, 2],
+		defaultPlaybackRate: 1
+	});
+</script>
+{{end}}
+</body>
+</html>
+{{end}}

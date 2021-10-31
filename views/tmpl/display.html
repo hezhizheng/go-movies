@@ -1,0 +1,88 @@
+{{define "display"}}
+
+{{template "head" .}}
+
+<body style="padding: 0;">
+
+{{template "nav" .}}
+
+
+<div class="container">
+    <div class="row">
+        <div class="stui-pannel stui-pannel-bg clearfix">
+            <div class="stui-pannel-box">
+                <div class="stui-pannel_hd">
+                    <div class="stui-pannel__head active bottom-line clearfix">
+                        <h3 class="title">
+                            <img src="static2/picture/icon_27.png" alt="最新资源列表">
+                            最新资源列表 </h3>
+                    </div>
+                    <ul class="stui-screen__list type-slide bottom-line-dot clearfix">
+                        <li class="active">最新更新</li>
+                    </ul>
+                    <ul class="stui-screen__list type-slide bottom-line-dot clearfix">
+                        <li>
+                            <span class="text-muted">按类型</span>
+                        </li>
+                        {{range $key, $value := .currentSubCate}}
+                        <li><a href="/display?cate={{$value.Link}}" class="text-muted">{{$value.Name}}</a></li>
+                        {{end}}
+                    </ul>
+
+
+                </div>
+
+
+                <div class="stui-pannel_bd">
+                    <ul class="stui-vodlist clearfix">
+                        {{range $key, $value := .movieLists}}
+                        <li class="col-md-7 col-sm-4 col-xs-3">
+                            <div class="stui-vodlist__box stui-vodlist__bg">
+                                <a class="stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}"
+                                   title="{{$value.Name}}"
+                                   data-original="{{$value.Cover}}">
+                                    <span class="play hidden-xs"></span>
+                                    <span class="pic-text text-right">{{$value.Quality}}</span>
+                                </a>
+                                <div class="stui-vodlist__detail active">
+                                    <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}"
+                                                                       title="{{$value.Name}}">{{$value.Name}}</a></h4>
+                                    <p class="text text-overflow text-muted hidden-xs">
+                                        {{$value.Starring}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ul class="stui-page text-center clearfix">
+            <li><a href="{{.prev}}" class="prev">上一页</a></li>
+            <li><a href="{{.next}}" class="next">下一页</a></li>
+        </ul>
+
+    </div>
+</div>
+
+{{template "footer" .}}
+
+<script>
+    let prev_status = {{.prev_status}}
+    let next_status = {{.next_status}}
+
+    if ( prev_status === "0" )
+    {
+        $(".prev").attr("href","javascript:;")
+    }
+
+    if ( next_status === "0" )
+    {
+        $(".next").attr("href","javascript:;")
+    }
+</script>
+
+</body>
+</html>
+{{end}}
