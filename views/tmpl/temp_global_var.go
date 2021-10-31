@@ -3,6 +3,7 @@ package tmpl
 import (
 	"embed"
 	"html/template"
+	"time"
 )
 
 // main 函数中定义的全局变量 在其他包中无法调用 ，重新定义新包实现全局变量
@@ -14,6 +15,9 @@ var (
 	funcMap = template.FuncMap{
 		"add": func(k1, k2 int) int {
 			return k1 + k2
+		},
+		"year": func() int {
+			return time.Now().Year()
 		},
 	}
 	GoTpl = template.Must(
