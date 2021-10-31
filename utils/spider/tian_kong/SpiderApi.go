@@ -699,41 +699,6 @@ func GetAssignCategoryIds(_type string) []int {
 	return ids
 }
 
-func GetAssignCategoryStrIds(_type string) []string {
-	ids := make([]string, 0)
-	var nav []Categories
-	categoriesStr := CategoriesStr()
-
-	err := utils.Json.Unmarshal([]byte(categoriesStr), &nav)
-	if err != nil {
-		log.Println("GetAssignCategoryIds json 解析失败", err)
-		return ids
-	}
-
-	film := nav[0].Sub
-	tv := nav[1].Sub
-	cartoon := nav[2].Sub
-
-	switch _type {
-	case "film":
-		for _, v := range film {
-			ids = append(ids, v.TypeId)
-		}
-		ids = append(ids, "1")
-	case "tv":
-		for _, v := range tv {
-			ids = append(ids, v.TypeId)
-		}
-		ids = append(ids, "2")
-	case "cartoon":
-		for _, v := range cartoon {
-			ids = append(ids, v.TypeId)
-		}
-		ids = append(ids, "4")
-	}
-	return ids
-}
-
 func GetIntSubCategoryIds() []int {
 	ids := make([]int, 0)
 

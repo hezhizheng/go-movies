@@ -12,23 +12,23 @@
                     {{range $key, $value := .categories}}
                     <li class="hidden-xs"><a href="/display?cate={{$value.Link}}">{{$value.Name}}</a></li>
                     {{end}}
-
+                    <li class="hidden-xs"><a href="/about">关于</a></li>
                     <li>
                         <a href="javascript:;">导航 <i class="icon iconfont icon-moreunfold"></i></a>
                         <ul class="dropdown">
                             {{range $key, $value := .allCategories}}
                             <li><a href="/display?cate={{$value.Link}}">{{$value.Name}}</a></li>
                             {{end}}
-                            <li><a href="about.html">关于</a></li>
+                            <li><a href="/about">关于</a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <div class="stui-header__search">
-                    <form id="search" name="search" method="get" action="/vodsearch/-------------/">
-                        <input type="text" id="wd" autocomplete="off" name="wd" class="mac_wd form-control" value=""
+                    <form id="search" name="search" method="get" action="/search">
+                        <input type="text" id="wd" autocomplete="off" name="q" class="mac_wd form-control" value="{{.q}}"
                                placeholder="仅支持电影名称模糊搜索">
-                        <button class="submit" id="searchbutton" type="submit" name="submit"><i
+                        <button class="submit" id="searchbutton" type="submit" ><i
                                 class="icon iconfont icon-search"></i></button>
                     </form>
 

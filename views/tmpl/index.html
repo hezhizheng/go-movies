@@ -1,10 +1,10 @@
 {{define "index"}}
 
-{{template "head"}}
+{{template "head" .}}
 
 <body style="padding: 0;">
 
-{{/* 注释 子模板后面的 . 一点要加上 否则将获取不到数据 */}}
+{{/* 注释 子模板后面的 . 一点要加上 否则将获取不父模板绑定的数据 */}}
 {{template "nav" .}}
 
 <div class="container">
@@ -37,10 +37,10 @@
                             {{else}}
                             <li class="col-md-6 col-sm-4 col-xs-3">
                                 <div class="stui-vodlist__box stui-vodlist__bg">
-                                    <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}">
                                         <span class="play hidden-xs"></span>
-                                        <span class="pic-text text-right">1080P</span>
+                                        <span class="pic-text text-right">{{$value.Quality}}</span>
                                     </a>
                                     <div class="stui-vodlist__detail active">
                                         <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
@@ -60,7 +60,7 @@
                         <ul class="stui-vodlist__media active col-pd clearfix">
                             <li>
                                 <div class="thumb">
-                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="m-thumb stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}"></a>
                                 </div>
                                 <div class="detail detail-side">
@@ -118,10 +118,10 @@
                             {{else}}
                             <li class="col-md-6 col-sm-4 col-xs-3">
                                 <div class="stui-vodlist__box stui-vodlist__bg">
-                                    <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}">
                                         <span class="play hidden-xs"></span>
-                                        <span class="pic-text text-right">1080P</span>
+                                        <span class="pic-text text-right">{{$value.Quality}}</span>
                                     </a>
                                     <div class="stui-vodlist__detail active">
                                         <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
@@ -142,7 +142,7 @@
                         <ul class="stui-vodlist__media active col-pd clearfix">
                             <li>
                                 <div class="thumb">
-                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="m-thumb stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}"></a>
                                 </div>
                                 <div class="detail detail-side">
@@ -197,10 +197,10 @@
                             {{else}}
                             <li class="col-md-6 col-sm-4 col-xs-3">
                                 <div class="stui-vodlist__box stui-vodlist__bg">
-                                    <a class="stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}">
                                         <span class="play hidden-xs"></span>
-                                        <span class="pic-text text-right">1080P</span>
+                                        <span class="pic-text text-right">{{$value.Quality}}</span>
                                     </a>
                                     <div class="stui-vodlist__detail active">
                                         <h4 class="title text-overflow"><a href="/movie?link={{$value.Link}}" title="{{$value.Name}}">{{$value.Name}}</a>
@@ -222,7 +222,7 @@
                         <ul class="stui-vodlist__media active col-pd clearfix">
                             <li>
                                 <div class="thumb">
-                                    <a class="m-thumb stui-vodlist__thumb lazyload" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
+                                    <a class="m-thumb stui-vodlist__thumb a-default-img" href="/movie?link={{$value.Link}}" title="{{$value.Name}}"
                                        data-original="{{$value.Cover}}"></a>
                                 </div>
                                 <div class="detail detail-side">
@@ -259,7 +259,7 @@
     </div>
 </div>
 
-{{template "footer"}}
+{{template "footer" .}}
 
 </body>
 

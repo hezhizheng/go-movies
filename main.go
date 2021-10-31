@@ -10,6 +10,7 @@ import (
 	"go_movies/routes"
 	"go_movies/utils"
 	"go_movies/utils/spider"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -36,21 +37,14 @@ func traversingRouter() *httprouter.Router {
 		router.Handle(route.Method, route.Path, handle)
 	}
 
-	//statikFS, err := fs.New()
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-
-
-	// 配置静态文件访问
-	//router.ServeFiles("/static2/*filepath", statikFS)
-
-	// live 模式 打包用
-	//fsys, _ := fs.Sub(embedStatic2, "static2")
-	//router.ServeFiles("/static2/*filepath", http.FS(fsys))
-
-	// dev 开发用 避免修改静态资源需要重启服务
-	router.ServeFiles("/static2/*filepath", http.Dir("static2"))
+	if viper.GetString(`app.debug`) == "false" {
+		// live 模式 打包用
+		fsys, _ := fs.Sub(embedStatic2, "static2")
+		router.ServeFiles("/static2/*filepath", http.FS(fsys))
+	}else{
+		// dev 开发用 避免修改静态资源需要重启服务
+		router.ServeFiles("/static2/*filepath", http.Dir("static2"))
+	}
 	return router
 }
 
@@ -83,10 +77,10 @@ func init() {
 // 首次启动自动开启爬虫
 func firstSpider() {
 
-	hasHK := utils.RedisDB.Exists("detail_links:id:14").Val()
-	log.Println("hasHK", hasHK)
+	hasHome := utils.RedisDB.Exists("detail_links:id:1").Val()
+	log.Println("hasHome", hasHome)
 	// 不存在首页的key 则认为是第一次启动
-	if hasHK == 0 {
+	if hasHome == 0 {
 		spider.Create().Start()
 	}
 }
@@ -102,7 +96,7 @@ func main() {
 	port := viper.GetString(`app.port`)
 	log.Println("监听端口", "http://127.0.0.1"+port)
 
-	//firstSpider()
+	firstSpider()
 
 	// 启动定时爬虫任务
 	utils.TimingSpider(func() {

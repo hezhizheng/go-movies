@@ -1,176 +1,50 @@
 package controller
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"go_movies/services"
 	"go_movies/utils"
 	"go_movies/utils/spider/tian_kong"
-	heroTpl "go_movies/views/hero"
 	"go_movies/views/tmpl"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
-// 首页
-func Index1(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
-
-	path := r.URL.Path
-	cate := r.URL.Query()["cate"]
-	_start := r.URL.Query()["start"]
-	_stop := r.URL.Query()["stop"]
-
-	// 需要展示的数据
-	show := make(map[string]interface{})
-
-	// 所有类别/导航
-	Categories := services.AllCategoryData()
-
-	key := "detail_links:id:14" // 默认首页
-
-	start := int64(0)
-	stop := int64(14)
-
-	if len(_start) > 0 {
-		StartInt64, _ := strconv.ParseInt(_start[0], 10, 64)
-		start = StartInt64
-	}
-
-	if len(_stop) > 0 {
-		StopInt64, _ := strconv.ParseInt(_stop[0], 10, 64)
-		stop = StopInt64
-	}
-
-	prev := path + "?start=" + strconv.FormatInt(start-15, 10) + "&stop=" + strconv.FormatInt(stop-15, 10)
-	next := path + "?start=" + strconv.FormatInt(start+15, 10) + "&stop=" + strconv.FormatInt(stop+15, 10)
-
-	prevStatus := "1"
-	nextStatus := "1"
-
-	navLink := "/"
-	if len(cate) > 0 {
-		key = "detail_links:id:" + services.TransformCategoryId(cate[0])
-		navLink = cate[0]
-		prev = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start-15, 10) + "&stop=" + strconv.FormatInt(stop-15, 10)
-		next = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start+15, 10) + "&stop=" + strconv.FormatInt(stop+15, 10)
-	}
-
-	if start > stop || stop-start > 15 || start < 0 {
-		start = 0
-		stop = 15
-	}
-
-	MovieLists := services.MovieListsRange(key, start, stop)
-
-	LenMovieLists := len(MovieLists)
-
-	if start-15 < 0 {
-		prevStatus = "0"
-	}
-
-	if LenMovieLists < 15 || LenMovieLists == 0 {
-		nextStatus = "0"
-	}
-
-	NewFilmKey := "detail_links:id:1"
-	NewTVKey := "detail_links:id:2"
-
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 49)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 49)
-	recommend := services.MoviesRecommend()
-	show["recommend"] = recommend
-
-	show["categories"] = Categories
-	show["page"] = "页面"
-	show["movieLists"] = MovieLists
-	show["new_film"] = NewFilm
-	show["new_tv"] = NewTV
-	show["prev"] = prev
-	show["next"] = next
-	show["prev_status"] = prevStatus
-	show["next_status"] = nextStatus
-	show["nav_link"] = navLink
-	show["film_title"] = ""
-
-
-
-	//GoTpl.ExecuteTemplate(os.Stdout, "index", "hzz go movies")
-	//display ,rc:= tmpl.GoTpl.ParseFiles("./views/tmpl/index.html","./views/tmpl/nav.html")
-
-	vv := tmpl.GoTpl.ExecuteTemplate(w,"index","hzz go movies33")
-	log.Println("eeeeeeee",vv)
-
-	//display.ExecuteTemplate(w,"nav","hzz go movies33")
-	//tmpl.GoTpl.ExecuteTemplate(w,"nav","hzz go movies2")
-
-	//tmpl.GoTpl.Execute(w,"hzz go movies2")
-
-	//GoTpl.ParseFiles("index.html")
-	//buffer := new(bytes.Buffer)
-	//heroTpl.Index(show, buffer)
-	//w.Write([]byte(`fdsfsdfs`))
-
-
-}
-
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
-	// 需要展示的数据
 	show := make(map[string]interface{})
-	// 所有类别/导航
-	Categories := services.AllCategoryData()
 
 	NewFilmKey := "detail_links:id:1"
 	NewTVKey := "detail_links:id:2"
 	NewCartoonKey := "detail_links:id:4"
-
 	NewFilm := services.MovieListsRange(NewFilmKey, 0, 14)
 	NewTV := services.MovieListsRange(NewTVKey, 0, 14)
 	NewCartoon := services.MovieListsRange(NewCartoonKey, 0, 14)
-
-	show["categories"] = Categories
 
 	show["newFilm"] = NewFilm
 	show["newTv"] = NewTV
 	show["newCartoon"] = NewCartoon
 
+	// 导航栏类目显示
+	Categories := services.AllCategoryData()
+	show["categories"] = Categories
+	show["allCategories"] = getAllCategory(Categories)
 
-	// 合并所有的类目
-	var allC []utils.Categories
-	for _, c := range show["categories"].([]utils.Categories) {
-		allC = append(allC,c)
-		for _,subC := range c.Sub{
-			allC = append(allC,subC)
-		}
-	}
-	show["allCategories"] = allC
-	show["navFilm"] = show["categories"].([]utils.Categories)[0].Sub
-	show["navTv"] = show["categories"].([]utils.Categories)[1].Sub
-	//show["navFilm"] = show["categories"].([]utils.Categories)[2].Sub
-	//log.Println(show["categories"].([]utils.Categories)[0].Sub)
+	show["navFilm"] = getAssignTypeSubCategories(Categories, "film")
+	show["navTv"] = getAssignTypeSubCategories(Categories, "tv")
 
-
-	tmpl.GoTpl.ExecuteTemplate(w,"index",show)
-
-
+	tmpl.GoTpl.ExecuteTemplate(w, "index", show)
 }
 
 func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	path := r.URL.Path
-	cate := r.URL.Query()["cate"]
-	_start := r.URL.Query()["start"]
-	_stop := r.URL.Query()["stop"]
+	cate := r.URL.Query().Get("cate")
+	_start := r.URL.Query().Get("start")
+	_stop := r.URL.Query().Get("stop")
 
-	// 需要展示的数据
 	show := make(map[string]interface{})
-
-	// 所有类别/导航
-	Categories := services.AllCategoryData()
 
 	key := "detail_links:id:14" // 默认首页
 
@@ -178,12 +52,12 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	stop := int64(41)
 
 	if len(_start) > 0 {
-		StartInt64, _ := strconv.ParseInt(_start[0], 10, 64)
+		StartInt64, _ := strconv.ParseInt(_start, 10, 64)
 		start = StartInt64
 	}
 
 	if len(_stop) > 0 {
-		StopInt64, _ := strconv.ParseInt(_stop[0], 10, 64)
+		StopInt64, _ := strconv.ParseInt(_stop, 10, 64)
 		stop = StopInt64
 	}
 
@@ -193,12 +67,13 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	prevStatus := "1"
 	nextStatus := "1"
 
-	cateStrId := services.TransformCategoryId(cate[0])
+	cateStrId := services.TransformCategoryId(cate)
+	cateIntId, _ := strconv.Atoi(cateStrId)
 
 	if len(cate) > 0 {
 		key = "detail_links:id:" + cateStrId
-		prev = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start-42, 10) + "&stop=" + strconv.FormatInt(stop-42, 10)
-		next = path + "?cate=" + cate[0] + "&start=" + strconv.FormatInt(start+42, 10) + "&stop=" + strconv.FormatInt(stop+42, 10)
+		prev = path + "?cate=" + cate + "&start=" + strconv.FormatInt(start-42, 10) + "&stop=" + strconv.FormatInt(stop-42, 10)
+		next = path + "?cate=" + cate + "&start=" + strconv.FormatInt(start+42, 10) + "&stop=" + strconv.FormatInt(stop+42, 10)
 	}
 
 	if start > stop || stop-start > 42 || start < 0 {
@@ -218,153 +93,123 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		nextStatus = "0"
 	}
 
-
-	show["categories"] = Categories
 	show["movieLists"] = MovieLists
 	show["prev"] = prev
 	show["next"] = next
 	show["prev_status"] = prevStatus
 	show["next_status"] = nextStatus
 
-	var allC []utils.Categories
-	for _, c := range show["categories"].([]utils.Categories) {
-		allC = append(allC,c)
-		for _,subC := range c.Sub{
-			allC = append(allC,subC)
-		}
-	}
-	show["allCategories"] = allC
+	// 导航栏类目显示
+	Categories := services.AllCategoryData()
+	show["categories"] = Categories
+	show["allCategories"] = getAllCategory(Categories)
 
-
-	if utils.InArray(cateStrId,tian_kong.GetAssignCategoryStrIds("film")) {
-		show["currentSubCate"] = show["categories"].([]utils.Categories)[0].Sub
+	// 根据不同类别显示不同 筛选类别项
+	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("film")) || cateIntId == 1 {
+		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "film")
 	}
 
-	if utils.InArray(cateStrId,tian_kong.GetAssignCategoryStrIds("tv")) {
-		show["currentSubCate"] = show["categories"].([]utils.Categories)[1].Sub
+	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("tv")) || cateIntId == 2 {
+		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "tv")
 	}
 
-	if utils.InArray(cateStrId,tian_kong.GetAssignCategoryStrIds("cartoon")) {
-		show["currentSubCate"] = show["categories"].([]utils.Categories)[2].Sub
+	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("cartoon")) || cateIntId == 4 {
+		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "cartoon")
 	}
 
-	//log.Println(path,cate)
-
-
-	tmpl.GoTpl.ExecuteTemplate(w,"display",show)
-
+	tmpl.GoTpl.ExecuteTemplate(w, "display", show)
 }
 
 func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
-	_link := r.URL.Query()["link"]
-
-	if len(_link) == 0 {
+	link := r.URL.Query().Get("link")
+	if link == "" {
 		fmt.Fprint(w, "404")
 		return
 	}
 
-	link := _link[0]
-
-	// 需要展示的数据
 	show := make(map[string]interface{})
-
-	// 所有类别/导航
-	Categories := services.AllCategoryData()
-
 	MovieDetail := services.MovieDetail(link)
-
-
-	show["categories"] = Categories
 	show["MovieDetail"] = MovieDetail
-
-	show["nav_link"] = "/"
-	show["film_title"] = MovieDetail["info"].(map[string]string)["name"]
-
-	//log.Println(show)
-	tmpl.GoTpl.ExecuteTemplate(w,"detail",show)
+	// 导航栏类目显示
+	Categories := services.AllCategoryData()
+	show["categories"] = Categories
+	show["allCategories"] = getAllCategory(Categories)
+	tmpl.GoTpl.ExecuteTemplate(w, "detail", show)
 }
 
 func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
 	show := make(map[string]interface{})
-
 	PlayUrl := r.URL.Query().Get("play_url")
-
 	PlayType := "kuyun"
-	if strings.Contains(PlayUrl, ".mp4"){
+	if strings.Contains(PlayUrl, ".mp4") {
 		PlayType = "mp4"
-	} else if strings.Contains(PlayUrl, ".m3u8"){
+	} else if strings.Contains(PlayUrl, ".m3u8") {
 		PlayType = "m3u8"
 	}
 
 	show["playUrl"] = PlayUrl
 	show["playType"] = PlayType
 
-	Categories := services.AllCategoryData()
 	link := r.URL.Query().Get("link")
 	episode := r.URL.Query().Get("episode")
 	MovieDetail := services.MovieDetail(link)
 	show["MovieDetail"] = MovieDetail
-	show["categories"] = Categories
-	show["film_title"] = MovieDetail["info"].(map[string]string)["name"]
 	show["episode"] = episode
+	// 导航栏类目显示
+	Categories := services.AllCategoryData()
+	show["categories"] = Categories
+	show["allCategories"] = getAllCategory(Categories)
 
-	tmpl.GoTpl.ExecuteTemplate(w,"play",show)
+	tmpl.GoTpl.ExecuteTemplate(w, "play", show)
 }
 
 func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
 	show := make(map[string]interface{})
-
-	q := ""
-	_q := r.URL.Query()["q"]
-	if len(_q) > 0 {
-		q = _q[0]
-	}
+	q := r.URL.Query().Get("q")
 
 	var MovieLists []services.MovieListStruct
-
 	if strings.TrimSpace(q) != "" {
 		MovieLists = services.SearchMovies(q)
 	}
 
-	// 所有类别/导航
-	Categories := services.AllCategoryData()
-
-	NewFilmKey := "detail_links:id:1"
-	NewTVKey := "detail_links:id:2"
-
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 49)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 49)
-	recommend := services.MoviesRecommend()
-	show["recommend"] = recommend
 	show["movieLists"] = MovieLists
+	show["q"] = q
+	// 导航栏类目显示
+	Categories := services.AllCategoryData()
 	show["categories"] = Categories
-	show["new_film"] = NewFilm
-	show["new_tv"] = NewTV
-	show["nav_link"] = "/"
-	show["film_title"] = ""
-
-	buffer := new(bytes.Buffer)
-	heroTpl.Search(show, buffer)
-	w.Write(buffer.Bytes())
+	show["allCategories"] = getAllCategory(Categories)
+	tmpl.GoTpl.ExecuteTemplate(w, "search", show)
 }
 
 func About(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
-	// 需要展示的数据
 	show := make(map[string]interface{})
-
-	// 所有类别/导航
+	// 导航栏类目显示
 	Categories := services.AllCategoryData()
-
 	show["categories"] = Categories
+	show["allCategories"] = getAllCategory(Categories)
+	tmpl.GoTpl.ExecuteTemplate(w, "about", show)
+}
 
-	show["nav_link"] = "/about"
-	show["film_title"] = ""
+func getAllCategory(Categories []utils.Categories) []utils.Categories {
+	var allC []utils.Categories
+	for _, c := range Categories {
+		allC = append(allC, c)
+		for _, subC := range c.Sub {
+			allC = append(allC, subC)
+		}
+	}
+	return allC
+}
 
-	buffer := new(bytes.Buffer)
-	heroTpl.About(show, buffer)
-	w.Write(buffer.Bytes())
+func getAssignTypeSubCategories(Categories []utils.Categories, _type string) []utils.Categories {
+	var cate []utils.Categories
+	switch _type {
+	case "film":
+		cate = Categories[0].Sub
+	case "tv":
+		cate = Categories[1].Sub
+	case "cartoon":
+		cate = Categories[2].Sub
+	}
+	return cate
 }

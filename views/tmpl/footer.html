@@ -6,14 +6,14 @@
                 <p>Copyright © 2019- 2021 GoMovies</p>
                 <p>本站所有视频均由程序自动采集而来，版权归原创者所有，如果侵犯了你的权益，请通知我删除侵权内容，谢谢合作。</p>
                 <p>视频内所有广告均来自采集视频中自带广告，与本站无关！</p>
-                <p>power by hzz.cool</p>
+                <p>power <a href="https://hzz.cool" target="_blank">hzz.cool</a></p>
             </div>
             <p class="text-muted text-center visible-xs">
                 Copyright © 2019- 2021 GoMovies <br>
                 本站所有视频均由程序自动采集而来，版权归原创者所有，<br>
                 如果侵犯了你的权益，请通知我删除侵权内容，谢谢合作。<br>
                 视频内所有广告均来自采集视频中自带广告，与本站无关！<br>
-                power by hzz.cool<br>
+                power by <a href="https://hzz.cool" target="_blank">hzz.cool</a><br>
             </p>
         </div>
     </div>
@@ -29,8 +29,10 @@
         type="application/javascript"></script>
 <script type="text/javascript" src="static2/js/stui_default.js"></script>
 <script type="text/javascript" src="static2/js/stui_block.js"></script>
-<script type="text/javascript" src="//lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js"></script>
 <script type="text/javascript" src="static2/js/jquery.autocomplete.js"></script>
+<script src="//lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/quicklink/1.0.1/quicklink.umd.js" type="application/javascript"></script>
+
+
 
 <script type="text/javascript">
     $(".stui-header__user li,.stui-header__menu li").click(function () {
@@ -59,13 +61,29 @@
             let realImgUrl = $(this).attr("data-url");
             if ( realImgUrl !== "" )
             {
-                $(this).attr("src",$(this).attr("data-url"))
+                $(this).attr("src",realImgUrl)
+            }
+        });
+    }
+    function replaceAImg(){
+        $(".a-default-img").each(function () {
+            let realImgUrl = $(this).attr("data-original");
+            if ( realImgUrl !== "" )
+            {
+                $(this).css("background-image","url("+realImgUrl+")")
             }
         });
     }
     loadImg()
     setTimeout(replaceImg, 1500);
-
+    setTimeout(replaceAImg, 1000);
 </script>
+
+<script>
+    window.addEventListener('load', () =>{
+        quicklink();
+    });
+</script>
+
 
 {{end}}
