@@ -8,9 +8,9 @@
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
 
 ## features
-- 静态文件与go文件统一编译，运行只依赖编译后可执行的二进制文件与redis
+- 使用 Golang 1.16 embed 内嵌静态资源(html、js、css等)，运行只依赖编译后可执行的二进制文件与redis
 - 支持docker启动方式
-- 简单影片分类、搜索的支持
+- 简单资源分类、搜索的支持
 - 内置自动爬虫、自动更新最新资源的定时任务，基本满足日常看片需求。
 - 钉钉机器人通知
 
@@ -23,11 +23,10 @@
 ```
 |-- Dockerfile
 |-- LICENSE.txt
-|-- app.json                                               #程序配置文件，优先级最高
-|-- config                                                 #程序配置文件，根目录下没有app.json文件则配置以app.go为准
-|   |-- app.go 
-|   `-- app.go.backup
-|-- controller                                             # controller层，基本的页面渲染
+|-- config
+|   |-- app.go
+|   `-- app.go.backup                        #程序配置文件
+|-- controller                               #controller层，基本的页面渲染
 |   |-- DebugController.go
 |   |-- IndexController.go
 |   `-- SpiderController.go
@@ -35,48 +34,47 @@
 |-- go.mod
 |-- go.sum
 |-- main.go
-|-- models                                                 # 定义一些redis查询的方法
+|-- models                                   # 定义一些redis查询的方法
 |   |-- Category.go
 |   |-- Movies.go
 |   `-- readme.md
 |-- readme.md
-|-- repository
-|   `-- readme.md
 |-- routes
 |   `-- route.go
-|-- services                                               # 普通业务处理类 
+|-- runner.conf                              # fresh 配置文件
+|-- services                                 # 普通业务处理类
 |   |-- CategoryService.go
 |   |-- MoviesService.go
 |   `-- readme.md
-|-- static                                                 # js、css、image等静态资源文件夹
-|-- statik                                                 # 静态资源嵌入编译，由命令生成
-|   `-- statik.go
-|-- utils                                                  # 一些工具类
-    |-- Cron.go
-    |-- Dingrobot.go
-    |-- Helper.go
-    |-- JsonUtil.go
-    |-- Pagination.go
-    |-- RedisUtil.go
-    |-- Spider.1go
-    |-- Spider.go                                          # 爬虫网页版主要功能代码
-    |-- SpiderTask.go
-    `-- spider                                             # 爬虫api版主要功能代码
-        |-- CategoriesStr.go
-        |-- SpiderApi.go
-        |-- SpiderTaskPolicy.go
-        |-- tian_kong
-        |   |-- CategoriesStr.go
-        |   `-- SpiderApi.go
-        |
-        `-- useragents.go
-`-- views                                                  # html模板目录
+|-- static2                                  # js、css、image等静态资源文件夹
+|-- utils                                    # 一些工具类
+|   |-- Cron.go
+|   |-- Dingrobot.go
+|   |-- Helper.go
+|   |-- JsonUtil.go
+|   |-- Pagination.go
+|   |-- RedisUtil.go
+|   |-- Spider.go
+|   |-- SpiderTask.go
+|   `-- spider                               # 爬虫api版主要功能代码
+|       |-- SpiderTaskPolicy.go
+|       `-- tian_kong
+|           |-- CategoriesStr.go
+|           `-- SpiderApi.go
+`-- views                                    # html模板目录
+    `-- tmpl
+        `-- temp_global_var.go               # 定义 embed 的全局变量跟一些模板调用的函数
 ```
 
 ## 首页效果
-![img](https://i.loli.net/2019/12/05/Qzqv4HWoMp2DByi.png)
+<center>
+<figure class="half">
+    <img src=https://files.catbox.moe/wf1s0r.png>
+    <img src=https://files.catbox.moe/bi79bd.png>
+</figure>
+</center>
 
-## 使用安装 
+## 使用安装 (go version >= 1.16)
 ```
 # 下载
 git clone https://github.com/hezhizheng/go-movies
@@ -85,7 +83,6 @@ git clone https://github.com/hezhizheng/go-movies
 cd go-movies
 
 # 配置文件(默认使用redis db10的库，可自行修改app.go中的配置)
-# config/app.go 或 app.json 为配置文件(PS:存在app.json文件则以app.json为准)
 cp ./config/app.go.backup ./config/app.go
 
 # 配置说明
@@ -96,12 +93,13 @@ app.debug_path_name: debug的路由名称
 cron.timing_spider: 定时爬虫的CRON表达式
 ding.access_token: 钉钉机器人token
 app.spider_mod: 固定参数为 TianKongApi
+app.spider_mod: 开发模式建议设置为`true` 避免修改静态资源需要重启服务
 
 # 启动 (首次启动会自动开启爬虫任务)
 go run main.go 
 or
-# 安装 bee 工具
-bee run
+# 安装 fresh 工具
+fresh
 
 # 如安装依赖包失败，请使用代理
 export GOPROXY=https://goproxy.io,direct
@@ -118,8 +116,6 @@ http://127.0.0.1:8899
 - 耗时：具体时间受目标网站/接口的响应速度影响
 
 ## Tools
-- [https://github.com/gocolly/colly](https://github.com/gocolly/colly) 爬虫框架
-- 模板引擎：https://github.com/shiyanhui/hero
 - 数据库 redis 缓存/持久 [https://github.com/Go-redis/redis](https://github.com/Go-redis/redis)
   - Zset：每个分类为一个有序集合
     - score：电影更新的时间戳
@@ -128,27 +124,19 @@ http://127.0.0.1:8899
 - 路由 [https://github.com/julienschmidt/httprouter](https://github.com/julienschmidt/httprouter)
 - json解析 jsoniter [github.com/json-iterator/go](github.com/json-iterator/go)
 - 跨平台打包：https://github.com/mitchellh/gox
-- 静态资源处理：https://github.com/rakyll/statik
 - web server 框架：https://github.com/valyala/fasthttp
+- 配置文件读取：https://github.com/spf13/viper
+- 热重启：https://github.com/gravityblast/fresh
 
-## 注意
-```
-# 修改静态文件/static  、 views/hero 需要先安装包的依赖，执行以下编译命令，更多用法可参考官方redame.md
-
-# https://github.com/rakyll/statik
-statik -src=xxxPath/go_movies/static -f 
-
-# https://github.com/shiyanhui/hero
-hero -source="./views/hero"
-```
 
 ## 编译可执行文件(跨平台)
 
 ```
 # 用法参考 https://github.com/mitchellh/gox
-# 生成文件可直接执行 Linux
-gox -osarch="linux/amd64" -ldflags "-s -w"
-......
+# 生成文件可直接执行 
+gox -osarch="windows/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
+gox -osarch="darwin/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
+gox -osarch="linux/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
 ```
 
 - 提供win64的已编译的文件下载 [release](https://github.com/hezhizheng/go-movies/releases)
@@ -200,8 +188,9 @@ sudo docker-compose up -d
 
 ## TODO
 - [x] 跨平台编译,模板路径不正确
-  - 使用 https://github.com/rakyll/statik 处理 js、css、image等静态资源
-  - 使用 https://github.com/shiyanhui/hero 替换 html/template 模板引擎
+  - ~~使用 https://github.com/rakyll/statik 处理 js、css、image等静态资源~~
+  - ~~使用 https://github.com/shiyanhui/hero 替换 html/template 模板引擎~~
+  - 使用 golang 1.16 embed 特性
 - [x] redis查询慢问题
   - 使用 hash 缓存页面数据
   - 使用scan 代替 keys*
@@ -210,7 +199,6 @@ sudo docker-compose up -d
 - [x] Docker 部署
 - [x] goroutine 并发数控制
   - 使用 https://github.com/panjf2000/ants
-- [ ] 爬取数据的完整性
 
 
 ## Other
