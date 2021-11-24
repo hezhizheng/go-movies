@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://files.catbox.moe/rpdbb6.png">
+<img src="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/image-hosting/20211124102659_GRITHQADFCQQUIUN.png">
 </p>
 
 > golang + redis 实现的影站(低级爬虫)。无管理后台，效果站：[http://film.hzz.cool](http://film.hzz.cool) 支持手机端访问播放
@@ -69,8 +69,8 @@
 ## 首页效果
 <center>
 <figure class="half">
-    <img src=https://files.catbox.moe/wf1s0r.png>
-    <img src=https://files.catbox.moe/bi79bd.png>
+    <img src=https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/image-hosting/20211124102515_SFWJDVHPPVCYNKDO.png>
+    <img src=https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/image-hosting/20211124102515_EWYNHTWMKQRHUCDX.png>
 </figure>
 </center>
 
