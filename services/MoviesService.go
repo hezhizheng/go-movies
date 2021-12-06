@@ -164,6 +164,7 @@ func SearchMovies(key string) []MovieListStruct {
 		movieKeyMap.Name = info["name"]
 		movieKeyMap.Link = info["link"]
 		movieKeyMap.Cover = info["cover"]
+		movieKeyMap.Quality = info["quality"]
 		if detail["update"] != nil {
 			movieKeyMap.UpdatedAt = detail["update"].(string)
 		}
