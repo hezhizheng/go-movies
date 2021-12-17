@@ -42,28 +42,35 @@ func RangeSCanMoviesKey(key string) []string {
 		all []string
 		i   uint64
 		mutex sync.Mutex
+		wg sync.WaitGroup
 	)
 
-	i = 0
-	for {
-		s, c, _ := SCanMoviesKey(i, key, 1000)
-		//log.Println("s c",s, c)
-		// 游标为0，停止循环
-		if c == 0 {
+	wg.Add(1)
+	go func() {
+		i = 0
+		for {
+			s, c, _ := SCanMoviesKey(i, key, 10000)
+			//log.Println("s c",s, c,i)
+			// 游标为0，停止循环
+			if c == 0 {
+				for _, val := range s {
+					mutex.Lock()
+					all = append(all, val)
+					mutex.Unlock()
+				}
+				break
+			}
+
 			for _, val := range s {
 				mutex.Lock()
 				all = append(all, val)
 				mutex.Unlock()
 			}
-			break
-		} else {
 			i = c
-			for _, val := range s {
-				mutex.Lock()
-				all = append(all, val)
-				mutex.Unlock()
-			}
+
 		}
-	}
+		wg.Done()
+	}()
+	wg.Wait()
 	return all
 }

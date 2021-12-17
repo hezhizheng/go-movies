@@ -93,8 +93,8 @@ func MovieDetail(link string) map[string]interface{} {
 	defer mutex.Unlock()
 	data := make(map[string]interface{})
 
-	//details := models.FindMoviesKey("movies_detail:" + link + "*")
-	details := models.RangeSCanMoviesKey("movies_detail:" + link + "*")
+	details := models.FindMoviesKey("movies_detail:" + link + "*")
+	//details := models.RangeSCanMoviesKey("movies_detail:" + link + "*")
 
 	detail := make(map[string]string)
 	if len(details) > 0 {
@@ -146,42 +146,51 @@ func MovieDetail(link string) map[string]interface{} {
 
 // 搜索影片
 func SearchMovies(key string) []MovieListStruct {
-
-	var data []MovieListStruct
-
-	var movieKeyMap MovieListStruct
+	var (
+		data []MovieListStruct
+		wg sync.WaitGroup
+		chanPool = make(chan int,1000)
+	)
 
 	//movieKeys := models.FindMoviesKey("*" + ":movie_name:" + key + "*")
 	movieKeys := models.RangeSCanMoviesKey("*" + ":movie_name:" + key + "*")
 
 	for _, val := range movieKeys {
+		wg.Add(1)
+		go func(val string) {
+			chanPool <- 1
 
-		MovieDetail := MovieDetail(TransformLink(val))
+			var movieKeyMap MovieListStruct
+			MovieDetail := MovieDetail(TransformLink(val))
 
-		info := MovieDetail["info"].(map[string]string)
-		detail := MovieDetail["detail"].(map[string]interface{})
+			info := MovieDetail["info"].(map[string]string)
+			detail := MovieDetail["detail"].(map[string]interface{})
 
-		movieKeyMap.Name = info["name"]
-		movieKeyMap.Link = info["link"]
-		movieKeyMap.Cover = info["cover"]
-		movieKeyMap.Quality = info["quality"]
-		if detail["update"] != nil {
-			movieKeyMap.UpdatedAt = detail["update"].(string)
-		}
-		if detail["type"] != nil {
-			movieKeyMap.Category = detail["type"].(string)
-		}
-		if detail["starring"] != nil {
-			movieKeyMap.Starring = detail["starring"].(string)
-		}
+			movieKeyMap.Name = info["name"]
+			movieKeyMap.Link = info["link"]
+			movieKeyMap.Cover = info["cover"]
+			movieKeyMap.Quality = info["quality"]
+			if detail["update"] != nil {
+				movieKeyMap.UpdatedAt = detail["update"].(string)
+			}
+			if detail["type"] != nil {
+				movieKeyMap.Category = detail["type"].(string)
+			}
+			if detail["starring"] != nil {
+				movieKeyMap.Starring = detail["starring"].(string)
+			}
 
-		mutex.Lock()
-		data = append(data, movieKeyMap)
-		mutex.Unlock()
+			mutex.Lock()
+			data = append(data, movieKeyMap)
+			mutex.Unlock()
+
+			<-chanPool
+			wg.Done()
+		}(val)
 	}
-
+	wg.Wait()
+	close(chanPool)
 	return data
-
 }
 
 // 获取实际链接url
