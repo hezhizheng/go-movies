@@ -144,20 +144,20 @@ func list(pg int) {
 
 	// 全量 done -> set done 永久Redis 标识 -> new corntab every min ( done key exist && recent_update_key expire ) -> set recent_update_key 1h expire -> do recent 3h update
 	// 一周进行一次全量爬取，资源网站的电影ID是会变的，fuck!!!
-	utils.RedisDB.SetNX("all_movies_done","done", time.Second*604800)
+	utils.RedisDB.SetNX("all_movies_done", "done", time.Second*604800)
 
 	// 钉钉通知
 	SendDingMsg("本次爬虫执行时间为：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
 }
 
-func DoRecentUpdate()  {
+func DoRecentUpdate() {
 	allMoviesDoneKeyExists := utils.RedisDB.Exists("all_movies_done").Val()
 	recentUpdateKeyExists := utils.RedisDB.Exists("recent_update_key").Val()
 
 	if allMoviesDoneKeyExists > 0 && recentUpdateKeyExists == 0 {
 		startTime := time.Now()
 
-		utils.RedisDB.SetNX("recent_update_key","done", time.Second*3600).Err()
+		utils.RedisDB.SetNX("recent_update_key", "done", time.Second*3600).Err()
 
 		actionRecentUpdateList()
 
@@ -167,14 +167,13 @@ func DoRecentUpdate()  {
 		ExecMinutesS := strconv.FormatFloat(endTime.Minutes(), 'f', 2, 64)
 		ExecHoursS := strconv.FormatFloat(endTime.Hours(), 'f', 2, 64)
 
-		SendDingMsg("最近更新执行完成，耗时："+ ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
+		SendDingMsg("最近更新执行完成，耗时：" + ExecSecondsS + "秒 \n 即" + ExecMinutesS + "分钟 \n 即" + ExecHoursS + "小时 \n " + runtime.GOOS)
 	}
 }
 
 func actionRecentUpdateList() {
 	defer ants.Release()
 	antPool, _ := ants.NewPool(200)
-
 
 	film := GetAssignCategoryIds("film")
 	tv := GetAssignCategoryIds("tv")
@@ -202,12 +201,12 @@ func actionRecentUpdateList() {
 			var nav ResData
 			err := utils.Json.Unmarshal(resp, &nav)
 			if err != nil {
-				log.Println("actionRecentUpdateList json 序列化错误",err)
+				log.Println("actionRecentUpdateList json 序列化错误", err)
 				return
 			}
 
 			for _, value := range nav.List {
-				if inType(value.TypeId,saveTypes){
+				if inType(value.TypeId, saveTypes) {
 					//log.Println("value.TypeId",value.TypeId)
 					//continue
 					// 模板时间
@@ -229,7 +228,7 @@ func actionRecentUpdateList() {
 					}
 
 					if inType(value.TypeId, tv) {
-						utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
+						utils.RedisDB.ZAdd("detail_links:id:3", &redis.Z{
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
@@ -238,7 +237,7 @@ func actionRecentUpdateList() {
 					}
 
 					if inType(value.TypeId, cartoon) {
-						utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
+						utils.RedisDB.ZAdd("detail_links:id:24", &redis.Z{
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
@@ -255,12 +254,11 @@ func actionRecentUpdateList() {
 			task()
 		})
 
-		if submitErr != nil{
-			log.Println("antPool submitErr：",submitErr)
+		if submitErr != nil {
+			log.Println("antPool submitErr：", submitErr)
 		}
 	}
 	wg2.Wait()
-
 
 	if pageCount > 0 {
 		go DelAllListCacheKey()
@@ -278,14 +276,14 @@ func RecentUpdatePageCount(retry int) int {
 	_, resp, gErr := fasthttp.Get(nil, url)
 	if gErr != nil {
 		retry++
-		log.Println("RecentUpdatePageCount 请求失败:", retry,url, gErr.Error())
+		log.Println("RecentUpdatePageCount 请求失败:", retry, url, gErr.Error())
 		return RecentUpdatePageCount(retry)
 	}
 
 	var nav ResData
 	err := utils.Json.Unmarshal(resp, &nav)
 	if err != nil {
-		log.Println(err,"RecentUpdatePageCount json解析失败")
+		log.Println(err, "RecentUpdatePageCount json解析失败")
 		return 0
 	}
 
@@ -293,7 +291,6 @@ func RecentUpdatePageCount(retry int) int {
 	log.Println("获取最近更新总页数", url, "PageCount", PageCount)
 	return PageCount
 }
-
 
 func actionList(subCategoryId string, pg int, pageCount int) {
 	//return
@@ -309,14 +306,14 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 
 		_, resp, gErr := fasthttp.Get(nil, url)
 		if gErr != nil {
-			log.Println("actionList 请求失败:", url,gErr.Error())
+			log.Println("actionList 请求失败:", url, gErr.Error())
 			return
 		}
 
 		var nav ResData
 		err := utils.Json.Unmarshal(resp, &nav)
 		if err != nil {
-			log.Println("actionList json 解析失败",url,err)
+			log.Println("actionList json 解析失败", url, err)
 			return
 		}
 
@@ -341,7 +338,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 				}
 
 				if inType(value.TypeId, tv) {
-					utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
+					utils.RedisDB.ZAdd("detail_links:id:3", &redis.Z{
 						Score:  float64(stamp1.Unix()),
 						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 					})
@@ -350,7 +347,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 				}
 
 				if inType(value.TypeId, cartoon) {
-					utils.RedisDB.ZAdd("detail_links:id:4", &redis.Z{
+					utils.RedisDB.ZAdd("detail_links:id:24", &redis.Z{
 						Score:  float64(stamp1.Unix()),
 						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 					})
@@ -363,7 +360,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 	return
 }
 
-func pageCount(subCategoryId string , retry int) (int, string) {
+func pageCount(subCategoryId string, retry int) (int, string) {
 	if retry >= 4 {
 		return 0, subCategoryId
 	}
@@ -372,14 +369,14 @@ func pageCount(subCategoryId string , retry int) (int, string) {
 	_, resp, err := fasthttp.Get(nil, url)
 	if err != nil {
 		retry++
-		log.Println("pageCount 请求失败:", retry,url, err.Error())
-		return pageCount(subCategoryId,retry)
+		log.Println("pageCount 请求失败:", retry, url, err.Error())
+		return pageCount(subCategoryId, retry)
 	}
 
 	var nav ResData
 	jErr := utils.Json.Unmarshal(resp, &nav)
 	if jErr != nil {
-		log.Println(jErr,"pageCount json 解析失败")
+		log.Println(jErr, "pageCount json 解析失败")
 		return 0, subCategoryId
 	}
 
@@ -401,14 +398,14 @@ func Detail(id string, retry int) {
 
 	_, resp, gErr := fasthttp.Get(nil, url)
 	if gErr != nil {
-		log.Println("Detail 请求失败:", gErr.Error(),url)
+		log.Println("Detail 请求失败:", gErr.Error(), url)
 		return
 	}
 
 	var nav ResData
 	err := utils.Json.Unmarshal(resp, &nav)
 	if err != nil {
-		log.Println(err,"detail json 解析失败")
+		log.Println(err, "detail json 解析失败")
 		return
 	}
 
@@ -523,7 +520,7 @@ func subCategoryIds() []string {
 
 	err := utils.Json.Unmarshal([]byte(categoriesStr), &nav)
 	if err != nil {
-		log.Println("subCategoryIds json 解析失败",err)
+		log.Println("subCategoryIds json 解析失败", err)
 		return CategoryIds
 	}
 
@@ -546,7 +543,7 @@ func getCategoryPageCount() []CatePageCount {
 
 	for _, subCategoryId := range subCategoryIds {
 
-		pageCount, t := pageCount(subCategoryId,0)
+		pageCount, t := pageCount(subCategoryId, 0)
 
 		CatePageCount := CatePageCount{
 			categoryId: t,
