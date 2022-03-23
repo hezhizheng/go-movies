@@ -390,11 +390,11 @@ func Detail(id string, retry int) {
 	// movies_detail:/?m=vod-detail-id-10051.html:movie_name:第102次相亲
 	url := ApiHost + "?ac=" + AcDetail + "&ids=" + id + "&pg=1"
 
-	retryMax := 3
-	if retry >= retryMax {
-		log.Println("重试已结束", url, retry)
-		return
-	}
+	//retryMax := 3
+	//if retry >= retryMax {
+	//	log.Println("重试已结束", url, retry)
+	//	return
+	//}
 
 	_, resp, gErr := fasthttp.Get(nil, url)
 	if gErr != nil {
@@ -413,15 +413,15 @@ func Detail(id string, retry int) {
 		log.Println("没有list", url)
 
 		// 重试
-		for {
-			if retry > retryMax {
-				log.Println("超过最大重试次数，重试机制已跳出", url, retry)
-				break
-			}
-			retry++
-			Detail(id, retry)
-			log.Println("正在重试...", url, retry)
-		}
+		//for {
+		//	if retry > retryMax {
+		//		log.Println("超过最大重试次数，重试机制已跳出", url, retry)
+		//		break
+		//	}
+		//	retry++
+		//	Detail(id, retry)
+		//	log.Println("正在重试...", url, retry)
+		//}
 
 		return
 	}

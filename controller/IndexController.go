@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"go_movies/services"
 	"go_movies/utils"
@@ -123,12 +122,20 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func Movie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	link := r.URL.Query().Get("link")
 	if link == "" {
-		fmt.Fprint(w, "404")
+		w.WriteHeader(404)
+		w.Write([]byte("404"))
 		return
 	}
 
 	show := make(map[string]interface{})
 	MovieDetail := services.MovieDetail(link)
+
+	if len(MovieDetail["info"].(map[string]string)) == 0 {
+		w.WriteHeader(404)
+		tmpl.GoTpl.ExecuteTemplate(w, "404", show)
+		return
+	}
+
 	show["MovieDetail"] = MovieDetail
 	// 导航栏类目显示
 	Categories := services.AllCategoryData()
@@ -153,6 +160,13 @@ func Play(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	link := r.URL.Query().Get("link")
 	episode := r.URL.Query().Get("episode")
 	MovieDetail := services.MovieDetail(link)
+
+	if len(MovieDetail["info"].(map[string]string)) == 0 {
+		w.WriteHeader(404)
+		tmpl.GoTpl.ExecuteTemplate(w, "404", show)
+		return
+	}
+
 	show["MovieDetail"] = MovieDetail
 	show["episode"] = episode
 	// 导航栏类目显示

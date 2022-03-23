@@ -1,0 +1,15 @@
+{{define "404"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+</head>
+<body>
+<center><h1>404，5秒后跳转至 <a href="/">首页</a> 。</h1></center>
+</body>
+<script>
+    setTimeout(function(){window.location.replace("/")},5000)
+</script>
+</html>
+{{end}}

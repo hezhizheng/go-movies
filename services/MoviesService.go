@@ -4,13 +4,12 @@ import (
 	"github.com/spf13/viper"
 	"go_movies/models"
 	"go_movies/utils"
-	"go_movies/utils/spider"
 	"strconv"
 	"strings"
 	"sync"
 )
 
-const paginateCacheKey  = "paginate"
+const paginateCacheKey = "paginate"
 
 type MovieListStruct struct {
 	Link      string `json:"link"`
@@ -41,7 +40,7 @@ func MovieListsRange(key string, start, stop int64) []MovieListStruct {
 	cacheKey := "movie_lists_key:" + key + ":start:" + sStart + ":stop:" + sStop
 	cacheHashKey := paginateCacheKey
 
-	movieList := models.FindMoviesHashFieldValue(cacheHashKey,cacheKey)
+	movieList := models.FindMoviesHashFieldValue(cacheHashKey, cacheKey)
 
 	if movieList != "" {
 		utils.Json.Unmarshal([]byte(movieList), &data)
@@ -79,7 +78,7 @@ func MovieListsRange(key string, start, stop int64) []MovieListStruct {
 
 	// 这个应该是在for外面调用才对，之前居然也不报错。。。。。。
 	byteData, _ := utils.Json.MarshalIndent(data, "", " ")
-	models.SaveMoviesHash(cacheHashKey, cacheKey ,string(byteData))
+	models.SaveMoviesHash(cacheHashKey, cacheKey, string(byteData))
 
 	return data
 }
@@ -103,8 +102,8 @@ func MovieDetail(link string) map[string]interface{} {
 
 	if detail["name"] == "" {
 		// 重新采集
-		detailId := TransformCategoryId(link)
-		spider.Create().PageDetail(detailId)
+		//detailId := TransformCategoryId(link)
+		//spider.Create().PageDetail(detailId)
 	}
 
 	var kuYunMap []map[string]interface{}
@@ -147,9 +146,9 @@ func MovieDetail(link string) map[string]interface{} {
 // 搜索影片
 func SearchMovies(key string) []MovieListStruct {
 	var (
-		data []MovieListStruct
-		wg sync.WaitGroup
-		chanPool = make(chan int,1000)
+		data     []MovieListStruct
+		wg       sync.WaitGroup
+		chanPool = make(chan int, 1000)
 	)
 
 	//movieKeys := models.FindMoviesKey("*" + ":movie_name:" + key + "*")
