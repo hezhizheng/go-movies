@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-const ApiHost = "http://api.tiankongapi.com/api.php/provide/vod"
+const ApiHost = "https://api.tiankongapi.com/api.php/provide/vod"
 const AcList = "list"
 const AcDetail = "detail"
 

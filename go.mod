@@ -1,30 +1,35 @@
 module go_movies
 
-go 1.16
+go 1.18
 
 require (
-	github.com/PuerkitoBio/goquery v1.5.0 // indirect
-	github.com/andybalholm/cascadia v1.1.0 // indirect
-	github.com/antchfx/htmlquery v1.1.0 // indirect
-	github.com/antchfx/xmlquery v1.1.0 // indirect
-	github.com/antchfx/xpath v1.1.0 // indirect
-	github.com/go-redis/redis v6.15.5+incompatible
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
-	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/golang/protobuf v1.3.2 // indirect
-	github.com/howeyc/fsnotify v0.9.0 // indirect
-	github.com/json-iterator/go v1.1.8
+	github.com/json-iterator/go v1.1.12
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/kennygrant/sanitize v1.2.4 // indirect
-	github.com/klauspost/compress v1.10.3 // indirect
-	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/panjf2000/ants/v2 v2.2.2
 	github.com/robfig/cron/v3 v3.0.0
-	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/spf13/viper v1.6.1
-	github.com/temoto/robotstxt v1.1.1 // indirect
 	github.com/valyala/fasthttp v1.9.0
+)
+
+require (
+	github.com/fsnotify/fsnotify v1.4.7 // indirect
+	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/klauspost/compress v1.10.3 // indirect
+	github.com/magiconair/properties v1.8.1 // indirect
+	github.com/mitchellh/mapstructure v1.1.2 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pelletier/go-toml v1.2.0 // indirect
+	github.com/spf13/afero v1.1.2 // indirect
+	github.com/spf13/cast v1.3.0 // indirect
+	github.com/spf13/jwalterweatherman v1.0.0 // indirect
+	github.com/spf13/pflag v1.0.3 // indirect
+	github.com/subosito/gotenv v1.2.0 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	golang.org/x/net v0.0.0-20191021144547-ec77196f6094 // indirect
-	golang.org/x/tools v0.0.0-20191230220329-2aa90c603ae3 // indirect
-	google.golang.org/appengine v1.6.5 // indirect
+	golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6 // indirect
+	golang.org/x/text v0.3.2 // indirect
+	gopkg.in/ini.v1 v1.51.0 // indirect
+	gopkg.in/yaml.v2 v2.2.4 // indirect
 )

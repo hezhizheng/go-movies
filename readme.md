@@ -74,7 +74,7 @@
 </figure>
 </center>
 
-## 使用安装 (go version >= 1.16)
+## 使用安装 (go version >= 1.18)
 ```
 # 下载
 git clone https://github.com/hezhizheng/go-movies
