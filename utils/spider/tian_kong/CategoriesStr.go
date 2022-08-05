@@ -61,6 +61,30 @@ func CategoriesStr() string {
                 "name": "犯罪片",
                 "type_id": "21",
                 "sub": null
+            },
+            {
+                "link": "/?m=vod-type-id-38.html",
+                "name": "奇幻片",
+                "type_id": "38",
+                "sub": null
+            },
+            {
+                "link": "/?m=vod-type-id-39.html",
+                "name": "灾难片",
+                "type_id": "39",
+                "sub": null
+            },
+            {
+                "link": "/?m=vod-type-id-40.html",
+                "name": "悬疑片",
+                "type_id": "40",
+                "sub": null
+            },
+            {
+                "link": "/?m=vod-type-id-41.html",
+                "name": "其他片",
+                "type_id": "41",
+                "sub": null
             }
         ]
     },

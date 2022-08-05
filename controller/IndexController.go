@@ -108,11 +108,11 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "film")
 	}
 
-	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("tv")) || cateIntId == 2 {
+	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("tv")) || cateIntId == 3 {
 		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "tv")
 	}
 
-	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("cartoon")) || cateIntId == 4 {
+	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("cartoon")) || cateIntId == 24 {
 		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "cartoon")
 	}
 
