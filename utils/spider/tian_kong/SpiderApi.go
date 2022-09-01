@@ -1,11 +1,13 @@
 package tian_kong
 
 import (
+	"crypto/tls"
 	"github.com/go-redis/redis/v7"
 	"github.com/panjf2000/ants/v2"
 	"github.com/spf13/viper"
 	"github.com/valyala/fasthttp"
 	"go_movies/utils"
+	"go_movies/utils/request"
 	"log"
 	"regexp"
 	"runtime"
@@ -106,7 +108,7 @@ func list(pg int) {
 	// 执行时间标记
 	startTime := time.Now()
 	defer ants.Release()
-	antPool, _ := ants.NewPool(200)
+	antPool, _ := ants.NewPool(100)
 
 	//_f := initFastHttp()
 
@@ -173,7 +175,7 @@ func DoRecentUpdate() {
 
 func actionRecentUpdateList() {
 	defer ants.Release()
-	antPool, _ := ants.NewPool(200)
+	antPool, _ := ants.NewPool(100)
 
 	film := GetAssignCategoryIds("film")
 	tv := GetAssignCategoryIds("tv")
@@ -192,7 +194,10 @@ func actionRecentUpdateList() {
 			//time.Sleep(time.Second * 2)
 			//return
 			url := ApiHost + "?h=6" + "&pg=" + strconv.Itoa(j)
-			_, resp, gErr := getFastReqClient().Get(nil, url)
+			//_, resp, gErr := getFastReqClient().Get(nil, url)
+			resp, gErr := request.IClient(request.Client).Get(&request.RequestForm{
+				Uri: url,
+			})
 			if gErr != nil {
 				log.Println("actionRecentUpdateList 请求失败:", gErr.Error())
 				return
@@ -273,7 +278,10 @@ func RecentUpdatePageCount(retry int) int {
 	}
 	url := ApiHost + "?h=6&pg=1"
 
-	_, resp, gErr := getFastReqClient().Get(nil, url)
+	//_, resp, gErr := getFastReqClient().Get(nil, url)
+	resp, gErr := request.IClient(request.Client).Get(&request.RequestForm{
+		Uri: url,
+	})
 	if gErr != nil {
 		retry++
 		log.Println("RecentUpdatePageCount 请求失败:", retry, url, gErr.Error())
@@ -304,7 +312,10 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 		url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=" + strconv.Itoa(j)
 		log.Println("当前page"+strconv.Itoa(j), url, pageCount)
 
-		_, resp, gErr := getFastReqClient().Get(nil, url)
+		//_, resp, gErr := getFastReqClient().Get(nil, url)
+		resp, gErr := request.IClient(request.Client).Get(&request.RequestForm{
+			Uri: url,
+		})
 		if gErr != nil {
 			log.Println("actionList 请求失败:", url, gErr.Error())
 			return
@@ -366,7 +377,10 @@ func pageCount(subCategoryId string, retry int) (int, string) {
 	}
 	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=1"
 
-	_, resp, err := getFastReqClient().Get(nil, url)
+	//_, resp, err := getFastReqClient().Get(nil, url)
+	resp, err := request.IClient(request.Client).Get(&request.RequestForm{
+		Uri: url,
+	})
 	if err != nil {
 		retry++
 		log.Println("pageCount 请求失败:", retry, url, err.Error())
@@ -396,7 +410,10 @@ func Detail(id string, retry int) {
 	//	return
 	//}
 
-	_, resp, gErr := getFastReqClient().Get(nil, url)
+	//_, resp, gErr := getFastReqClient().Get(nil, url)
+	resp, gErr := request.IClient(request.Client).Get(&request.RequestForm{
+		Uri: url,
+	})
 	if gErr != nil {
 		log.Println("Detail 请求失败:", gErr.Error(), url)
 		return
@@ -732,13 +749,30 @@ func getFastReqClient() *fasthttp.Client {
 		// 写超时时间
 		WriteTimeout: time.Second * 5,
 		// 5秒后，关闭空闲的活动连接
-		MaxIdleConnDuration: time.Second * 5,
-		// 当true时,从请求中去掉User-Agent标头
-		NoDefaultUserAgentHeader: true,
-		// 当true时，header中的key按照原样传输，默认会根据标准化转化
-		DisableHeaderNamesNormalizing: true,
-		//当true时,路径按原样传输，默认会根据标准化转化
-		DisablePathNormalizing: true,
+		MaxIdleConnDuration: time.Second * 3,
+		MaxResponseBodySize: 1024 * 1024 * 10,
+		MaxConnWaitTimeout:  time.Minute,
+		MaxConnDuration:     10 * time.Minute,
+
+		TLSConfig: &tls.Config{
+
+			InsecureSkipVerify: true,
+			MinVersion:         tls.VersionTLS12,
+			CurvePreferences:   []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+			CipherSuites: []uint16{
+				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+				tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_RSA_WITH_AES_256_CBC_SHA,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, // Go 1.8 only
+				tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,   // Go 1.8 only
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			},
+		},
+
 		Dial: (&fasthttp.TCPDialer{
 			// 最大并发数，0表示无限制
 			Concurrency: 200,
