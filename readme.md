@@ -8,7 +8,7 @@
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
 
 ## features
-- 使用 Golang 1.16 embed 内嵌静态资源(html、js、css等)，运行只依赖编译后可执行的二进制文件与redis
+- 使用 Golang `embed` 内嵌静态资源(html、js、css等)，运行只依赖编译后可执行的二进制文件与redis
 - 支持docker启动方式
 - 简单资源分类、搜索的支持
 - 内置自动爬虫、自动更新最新资源的定时任务，基本满足日常看片需求。
