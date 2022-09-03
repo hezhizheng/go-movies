@@ -1,7 +1,6 @@
 package tian_kong
 
 import (
-	"crypto/tls"
 	"github.com/go-redis/redis/v7"
 	"github.com/panjf2000/ants/v2"
 	"github.com/spf13/viper"
@@ -735,50 +734,4 @@ func GetIntSubCategoryIds() []int {
 	}
 
 	return ids
-}
-
-/**
-@link http://liuqh.icu/2022/04/13/go/package/34-fasthttp/
-@link https://zsmhub.github.io/post/golang/http%E5%AE%A2%E6%88%B7%E7%AB%AF/
-*/
-func getFastReqClient() *fasthttp.Client {
-	reqClient := &fasthttp.Client{
-		MaxConnsPerHost: 1024,
-		// 读超时时间,不设置read超时,可能会造成连接复用失效
-		ReadTimeout: time.Second * 5,
-		// 写超时时间
-		WriteTimeout: time.Second * 5,
-		// 5秒后，关闭空闲的活动连接
-		MaxIdleConnDuration: time.Second * 3,
-		MaxResponseBodySize: 1024 * 1024 * 10,
-		MaxConnWaitTimeout:  time.Minute,
-		MaxConnDuration:     10 * time.Minute,
-
-		TLSConfig: &tls.Config{
-
-			InsecureSkipVerify: true,
-			MinVersion:         tls.VersionTLS12,
-			CurvePreferences:   []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
-			CipherSuites: []uint16{
-				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-				tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-				tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
-				tls.TLS_RSA_WITH_AES_256_CBC_SHA,
-				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, // Go 1.8 only
-				tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,   // Go 1.8 only
-				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-			},
-		},
-
-		Dial: (&fasthttp.TCPDialer{
-			// 最大并发数，0表示无限制
-			Concurrency: 200,
-			// 将 DNS 缓存时间从默认分钟增加到一小时
-			DNSCacheDuration: time.Hour,
-		}).Dial,
-	}
-	return reqClient
 }
