@@ -8,7 +8,6 @@ app.debug_path: debug的路由
 app.debug_path_name: debug的路由名称
 cron.timing_spider: 定时爬虫的CRON表达式
 ding.access_token: 钉钉机器人token
-recommend: 推荐电影列表
 app.spider_mod: 固定参数为 TianKongApi
 app.debug_mod: 开发模式建议设置为`true` 避免修改静态资源需要重启服务
 */
