@@ -15,7 +15,7 @@
 - 钉钉机器人通知
 
 ## Tip
-- 暂时只维护API请求版本 [API接口说明.txt](https://api.tiankongapi.com)，后续可能追加其他资源支持
+- 暂时只维护API请求版本 [API接口说明](https://help.tiankongapi.com/)，后续可能追加其他资源支持
 - API版本首次启动会全量请求并存储到redis，之后每小时定时爬取最近更新的影视资源
 
 ## 目录结构
