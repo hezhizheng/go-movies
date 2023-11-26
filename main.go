@@ -39,7 +39,7 @@ func traversingRouter() *httprouter.Router {
 		// live 模式 打包用
 		fsys, _ := fs.Sub(embedStatic2, "static2")
 		router.ServeFiles("/static2/*filepath", http.FS(fsys))
-	}else{
+	} else {
 		// dev 开发用 避免修改静态资源需要重启服务
 		router.ServeFiles("/static2/*filepath", http.Dir("static2"))
 	}
@@ -92,7 +92,9 @@ func main() {
 	defer utils.CloseRedisDB()
 
 	port := viper.GetString(`app.port`)
+	mod := viper.GetString(`app.spider_mod`)
 	log.Println("监听端口", "http://127.0.0.1"+port)
+	log.Println("spider_mod：" + mod)
 
 	firstSpider()
 
