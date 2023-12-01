@@ -4,7 +4,7 @@
 <img src="https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@main/image-hosting/20211124102659_GRITHQADFCQQUIUN.png">
 </p>
 
-> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站：[http://film.hzz.cool](http://film.hzz.cool) 支持手机端访问播放
+> golang + redis 实现的影站(低级爬虫)。无管理后台，效果站：[http://117.50.186.143:6003](http://117.50.186.143:6003) 支持手机端访问播放
 
 ## Github地址
 [https://github.com/hezhizheng/go-movies](https://github.com/hezhizheng/go-movies)
