@@ -10,6 +10,8 @@ cron.timing_spider: 定时爬虫的CRON表达式
 ding.access_token: 钉钉机器人token
 app.spider_mod: async 或者 sync
 app.debug_mod: 开发模式建议设置为`true` 避免修改静态资源需要重启服务
+auth.user: 登录用户名
+auth.pass: 登录密码
 */
 var AppJsonConfig = []byte(`
 {
@@ -33,6 +35,10 @@ var AppJsonConfig = []byte(`
   },
   "ding": {
     "access_token": ""
+  },
+  "auth": {
+    "user": "",
+    "pass": ""
   }
 }
 `)

@@ -19,9 +19,31 @@ import (
 //go:embed static2/*
 var embedStatic2 embed.FS
 
+func BasicAuth(h httprouter.Handle, requiredUser, requiredPassword string) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		// Get the Basic Authentication credentials
+		user, password, hasAuth := r.BasicAuth()
+
+		if hasAuth && user == requiredUser && password == requiredPassword {
+			// Delegate request to the given handle
+			h(w, r, ps)
+		} else {
+			// Request Basic Authentication otherwise
+			w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		}
+	}
+}
+
 // Reads from the routes slice to translate the values to httprouter.Handle
 // 遍历路由
 func traversingRouter() *httprouter.Router {
+	var isAuth = false
+	user := viper.GetString(`auth.user`)
+	pass := viper.GetString(`auth.pass`)
+	if user != "" && pass != "" {
+		isAuth = true
+	}
 
 	AllRoutes := routes.AllRoutes()
 
@@ -29,7 +51,11 @@ func traversingRouter() *httprouter.Router {
 	for _, route := range AllRoutes {
 		var handle httprouter.Handle
 
-		handle = route.HandlerFunc
+		if isAuth {
+			handle = BasicAuth(route.HandlerFunc, user, pass)
+		} else {
+			handle = route.HandlerFunc
+		}
 
 		log.Println(route.Path)
 		router.Handle(route.Method, route.Path, handle)
