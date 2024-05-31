@@ -90,6 +90,8 @@
 | ding.access_token   | 钉钉机器人token                        |
 | app.spider_mod      | 接口请求方式，async(使用goroutine并发请求数据，快但会被频控，导致请求超时)、sync(不使用goroutine请求，慢但比较稳定，如使用async出现请求超时，建议改为sync模式) （默认为async） |
 | app.spider_mod      | 开发模式建议设置为`true` 避免修改静态资源需要重启服务 |
+| auth.user           | 登录用户名（当用户名和密码都填写时才会开启登录认证） |
+| auth.pass           | 登录密码（当用户名和密码都填写时才会开启登录认证） |
 
 ```
 # 下载
