@@ -8,7 +8,7 @@ app.debug_path: debug的路由
 app.debug_path_name: debug的路由名称
 cron.timing_spider: 定时爬虫的CRON表达式
 ding.access_token: 钉钉机器人token
-app.spider_mod: async 或者 sync
+app.spider_mod: 固定使用 dbzy
 app.debug_mod: 开发模式建议设置为`true` 避免修改静态资源需要重启服务
 */
 var AppJsonConfig = []byte(`
@@ -19,7 +19,7 @@ var AppJsonConfig = []byte(`
     "spider_path_name": "MoviesSpider",
     "debug_path": "/debug",
     "debug_path_name": "Debug",
-    "spider_mod": "async",
+    "spider_mod": "dbzy",
     "debug_mod": "true"
   },
   "redis": {

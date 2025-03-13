@@ -17,7 +17,7 @@
 - 钉钉机器人通知
 
 ## Tip
-- 暂时只维护API请求版本 [API接口说明](https://help.tiankongapi.com/)，后续可能追加其他资源支持
+- 暂时只维护API请求版本 [API接口说明](https://dbzy.tv/index.php/help)，后续可能追加其他资源支持 (有其他资源可推荐)
 - API版本首次启动会全量请求并存储到redis，之后每小时定时爬取最近更新的影视资源
 
 ## 目录结构
@@ -80,16 +80,17 @@
 ## 使用安装 (go version >= 1.18)
 ### 配置说明
 
-| 参数名                 | 描述                                   |
-|---------------------|----------------------------------------|
-| app.spider_path     | 爬虫路由                               |
-| app.spider_path_name | 爬虫路由名称                           |
-| app.debug_path      | debug的路由                            |
-| app.debug_path_name | debug的路由名称                        |
-| cron.timing_spider  | 定时爬虫的CRON表达式                   |
-| ding.access_token   | 钉钉机器人token                        |
-| app.spider_mod      | 接口请求方式，async(使用goroutine并发请求数据，快但会被频控，导致请求超时)、sync(不使用goroutine请求，慢但比较稳定，如使用async出现请求超时，建议改为sync模式) （默认为async） |
-| app.debug_mod       | 开发模式建议设置为`true` 避免修改静态资源需要重启服务 |
+| 参数名            | 描述                                                                                                                 |
+|----------------|--------------------------------------------------------------------------------------------------------------------|
+| app.spider_path | 爬虫路由                                                                                                               |
+| app.spider_path_name | 爬虫路由名称                                                                                                             |
+| app.debug_path | debug的路由                                                                                                           |
+| app.debug_path_name | debug的路由名称                                                                                                         |
+| cron.timing_spider | 定时爬虫的CRON表达式                                                                                                       |
+| ding.access_token | 钉钉机器人token                                                                                                         |
+| ~~app.spider_mod~~ | ~~接口请求方式，async(使用goroutine并发请求数据，快但会被频控，导致请求超时)、sync(不使用goroutine请求，慢但比较稳定，如使用async出现请求超时，建议改为sync模式) （默认为async）~~ |
+| app.spider_mod | 固定使用dbzy (豆瓣资源)                                                                                                    |
+| app.debug_mod  | 开发模式建议设置为`true` 避免修改静态资源需要重启服务                                                                                     |
 
 ```
 # 下载

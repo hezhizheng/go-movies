@@ -15,8 +15,8 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show := make(map[string]interface{})
 
 	NewFilmKey := "detail_links:id:1"
-	NewTVKey := "detail_links:id:3"
-	NewCartoonKey := "detail_links:id:24"
+	NewTVKey := "detail_links:id:2"
+	NewCartoonKey := "detail_links:id:4"
 	NewFilm := services.MovieListsRange(NewFilmKey, 0, 14)
 	NewTV := services.MovieListsRange(NewTVKey, 0, 14)
 	NewCartoon := services.MovieListsRange(NewCartoonKey, 0, 14)
@@ -45,7 +45,7 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	show := make(map[string]interface{})
 
-	key := "detail_links:id:5" // 默认首页
+	key := "detail_links:id:1" // 默认首页
 
 	start := int64(0)
 	stop := int64(41)
