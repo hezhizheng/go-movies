@@ -217,8 +217,5 @@ sudo docker-compose up -d
 
 <a href="https://www.jetbrains.com/?from=go-movies" target="_blank"><img src="https://i.loli.net/2020/08/16/Brce57tU4SQWspm.png" width="250" align="middle"/></a>
 
-## 感谢
-[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
-
 ## License
 [MIT](./LICENSE.txt)
