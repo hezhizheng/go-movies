@@ -1,10 +1,6 @@
-package tian_kong
+package haohua
 
 import (
-	"github.com/go-redis/redis/v7"
-	"github.com/panjf2000/ants/v2"
-	"github.com/spf13/viper"
-	"github.com/valyala/fasthttp"
 	"go_movies/utils"
 	"go_movies/utils/request"
 	"log"
@@ -14,9 +10,14 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/go-redis/redis/v7"
+	"github.com/panjf2000/ants/v2"
+	"github.com/spf13/viper"
+	"github.com/valyala/fasthttp"
 )
 
-const ApiHost = "https://api.tiankongapi.com/api.php/provide/vod"
+const ApiHost = "https://hhzyapi.com/api.php/provide/vod"
 const AcList = "list"
 const AcDetail = "detail"
 
@@ -95,6 +96,10 @@ func (spiderApi *SpiderApi) DoRecentUpdate() {
 	DoRecentUpdate()
 }
 
+func (spiderApi *SpiderApi) Categories() string {
+	return CategoriesStr()
+}
+
 func StartApi() {
 	allMoviesDoneKeyExists := utils.RedisDB.Exists("all_movies_done").Val()
 	if allMoviesDoneKeyExists > 0 {
@@ -107,7 +112,7 @@ func list(pg int) {
 	// 执行时间标记
 	startTime := time.Now()
 	defer ants.Release()
-	antPool, _ := ants.NewPool(100)
+	antPool, _ := ants.NewPool(1000)
 
 	//_f := initFastHttp()
 
@@ -174,7 +179,7 @@ func DoRecentUpdate() {
 
 func actionRecentUpdateList() {
 	defer ants.Release()
-	antPool, _ := ants.NewPool(100)
+	antPool, _ := ants.NewPool(1000)
 
 	film := GetAssignCategoryIds("film")
 	tv := GetAssignCategoryIds("tv")
@@ -223,7 +228,7 @@ func actionRecentUpdateList() {
 					})
 
 					if inType(value.TypeId, film) {
-						utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
+						utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
@@ -232,7 +237,7 @@ func actionRecentUpdateList() {
 					}
 
 					if inType(value.TypeId, tv) {
-						utils.RedisDB.ZAdd("detail_links:id:3", &redis.Z{
+						utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
@@ -241,7 +246,7 @@ func actionRecentUpdateList() {
 					}
 
 					if inType(value.TypeId, cartoon) {
-						utils.RedisDB.ZAdd("detail_links:id:24", &redis.Z{
+						utils.RedisDB.ZAdd("detail_links:id:17", &redis.Z{
 							Score:  float64(stamp1.Unix()),
 							Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 						})
@@ -339,7 +344,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 				})
 
 				if inType(value.TypeId, film) {
-					utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
+					utils.RedisDB.ZAdd("detail_links:id:2", &redis.Z{
 						Score:  float64(stamp1.Unix()),
 						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 					})
@@ -348,7 +353,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 				}
 
 				if inType(value.TypeId, tv) {
-					utils.RedisDB.ZAdd("detail_links:id:3", &redis.Z{
+					utils.RedisDB.ZAdd("detail_links:id:1", &redis.Z{
 						Score:  float64(stamp1.Unix()),
 						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 					})
@@ -357,7 +362,7 @@ func actionList(subCategoryId string, pg int, pageCount int) {
 				}
 
 				if inType(value.TypeId, cartoon) {
-					utils.RedisDB.ZAdd("detail_links:id:24", &redis.Z{
+					utils.RedisDB.ZAdd("detail_links:id:17", &redis.Z{
 						Score:  float64(stamp1.Unix()),
 						Member: `/?m=vod-detail-id-` + strconv.Itoa(value.VodId) + `.html`,
 					})
@@ -375,7 +380,7 @@ func pageCount(subCategoryId string, retry int) (int, string) {
 		return 0, subCategoryId
 	}
 	url := ApiHost + "?ac=" + AcList + "&t=" + subCategoryId + "&pg=1"
-
+	log.Println("pageCount 请求:", retry, url)
 	//_, resp, err := getFastReqClient().Get(nil, url)
 	resp, err := request.IClient(request.Client).Get(&request.RequestForm{
 		Uri: url,
@@ -387,6 +392,7 @@ func pageCount(subCategoryId string, retry int) (int, string) {
 	}
 
 	var nav ResData
+	log.Println(string(resp))
 	jErr := utils.Json.Unmarshal(resp, &nav)
 	if jErr != nil {
 		log.Println(jErr, "pageCount json 解析失败")
@@ -688,23 +694,24 @@ func GetAssignCategoryIds(_type string) []int {
 		return ids
 	}
 
-	film := nav[0].Sub
-	tv := nav[1].Sub
-	cartoon := nav[2].Sub
+	subMap := make(map[string][]Categories, len(nav))
+	for _, c := range nav {
+		subMap[c.TypeId] = c.Sub
+	}
 
 	switch _type {
 	case "film":
-		for _, v := range film {
+		for _, v := range subMap["2"] {
 			intId, _ := strconv.Atoi(v.TypeId)
 			ids = append(ids, intId)
 		}
 	case "tv":
-		for _, v := range tv {
+		for _, v := range subMap["1"] {
 			intId, _ := strconv.Atoi(v.TypeId)
 			ids = append(ids, intId)
 		}
 	case "cartoon":
-		for _, v := range cartoon {
+		for _, v := range subMap["17"] {
 			intId, _ := strconv.Atoi(v.TypeId)
 			ids = append(ids, intId)
 		}

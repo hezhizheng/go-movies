@@ -2,14 +2,15 @@ package controller
 
 import (
 	"fmt"
-	"github.com/julienschmidt/httprouter"
-	"go_movies/utils/spider/tian_kong"
+	"go_movies/utils/spider/haohua"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func Debug(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-	go tian_kong.DelAllListCacheKey()
+	go haohua.DelAllListCacheKey()
 
 	fmt.Fprint(w, "DEBUG")
 }

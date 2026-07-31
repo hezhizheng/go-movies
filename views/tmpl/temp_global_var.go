@@ -19,6 +19,10 @@ var (
 		"year": func() int {
 			return time.Now().Year()
 		},
+		"icon": func(k int) string {
+			icons := []string{"icon_1", "icon_2", "icon_4"}
+			return icons[k%len(icons)]
+		},
 	}
 	GoTpl = template.Must(
 		template.New("").

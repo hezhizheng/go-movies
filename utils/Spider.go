@@ -7,9 +7,10 @@ import "strings"
 const CategoriesKey = "categories"
 
 type Categories struct {
-	Link string       `json:"link"`
-	Name string       `json:"name"`
-	Sub  []Categories `json:"sub"`
+	Link   string       `json:"link"`
+	Name   string       `json:"name"`
+	TypeId string       `json:"type_id"`
+	Sub    []Categories `json:"sub"`
 }
 
 // 获取url中的链接

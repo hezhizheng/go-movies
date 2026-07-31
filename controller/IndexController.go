@@ -4,7 +4,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"go_movies/services"
 	"go_movies/utils"
-	"go_movies/utils/spider/tian_kong"
 	"go_movies/views/tmpl"
 	"net/http"
 	"strconv"
@@ -14,24 +13,22 @@ import (
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show := make(map[string]interface{})
 
-	NewFilmKey := "detail_links:id:1"
-	NewTVKey := "detail_links:id:2"
-	NewCartoonKey := "detail_links:id:4"
-	NewFilm := services.MovieListsRange(NewFilmKey, 0, 14)
-	NewTV := services.MovieListsRange(NewTVKey, 0, 14)
-	NewCartoon := services.MovieListsRange(NewCartoonKey, 0, 14)
-
-	show["newFilm"] = NewFilm
-	show["newTv"] = NewTV
-	show["newCartoon"] = NewCartoon
-
 	// 导航栏类目显示
 	Categories := services.AllCategoryData()
 	show["categories"] = Categories
 	show["allCategories"] = getAllCategory(Categories)
 
-	show["navFilm"] = getAssignTypeSubCategories(Categories, "film")
-	show["navTv"] = getAssignTypeSubCategories(Categories, "tv")
+	// 首页板块按当前采集源的分类动态生成
+	sections := make([]services.IndexSection, 0, len(Categories))
+	for _, c := range Categories {
+		sections = append(sections, services.IndexSection{
+			Name:   c.Name,
+			Link:   c.Link,
+			Subs:   c.Sub,
+			Movies: services.MovieListsRange("detail_links:id:"+c.TypeId, 0, 14),
+		})
+	}
+	show["sections"] = sections
 
 	tmpl.GoTpl.ExecuteTemplate(w, "index", show)
 }
@@ -45,7 +42,16 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	show := make(map[string]interface{})
 
-	key := "detail_links:id:1" // 默认首页
+	// 导航栏类目显示
+	Categories := services.AllCategoryData()
+	show["categories"] = Categories
+	show["allCategories"] = getAllCategory(Categories)
+
+	// 默认当前采集源的第一个主分类
+	key := ""
+	if len(Categories) > 0 {
+		key = "detail_links:id:" + Categories[0].TypeId
+	}
 
 	start := int64(0)
 	stop := int64(41)
@@ -66,10 +72,12 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	prevStatus := "1"
 	nextStatus := "1"
 
-	cateStrId := services.TransformCategoryId(cate)
-	cateIntId, _ := strconv.Atoi(cateStrId)
+	cateIntId := 0
+	cateStrId := ""
 
 	if len(cate) > 0 {
+		cateStrId = services.TransformCategoryId(cate)
+		cateIntId, _ = strconv.Atoi(cateStrId)
 		key = "detail_links:id:" + cateStrId
 		prev = path + "?cate=" + cate + "&start=" + strconv.FormatInt(start-42, 10) + "&stop=" + strconv.FormatInt(stop-42, 10)
 		next = path + "?cate=" + cate + "&start=" + strconv.FormatInt(start+42, 10) + "&stop=" + strconv.FormatInt(stop+42, 10)
@@ -98,22 +106,9 @@ func Display(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	show["prev_status"] = prevStatus
 	show["next_status"] = nextStatus
 
-	// 导航栏类目显示
-	Categories := services.AllCategoryData()
-	show["categories"] = Categories
-	show["allCategories"] = getAllCategory(Categories)
-
 	// 根据不同类别显示不同 筛选类别项
-	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("film")) || cateIntId == 1 {
-		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "film")
-	}
-
-	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("tv")) || cateIntId == 3 {
-		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "tv")
-	}
-
-	if utils.InArray(cateIntId, tian_kong.GetAssignCategoryIds("cartoon")) || cateIntId == 24 {
-		show["currentSubCate"] = getAssignTypeSubCategories(Categories, "cartoon")
+	if subCate := currentGroupSubCategories(cateIntId, Categories); len(subCate) > 0 {
+		show["currentSubCate"] = subCate
 	}
 
 	tmpl.GoTpl.ExecuteTemplate(w, "display", show)
@@ -215,15 +210,19 @@ func getAllCategory(Categories []utils.Categories) []utils.Categories {
 	return allC
 }
 
-func getAssignTypeSubCategories(Categories []utils.Categories, _type string) []utils.Categories {
-	var cate []utils.Categories
-	switch _type {
-	case "film":
-		cate = Categories[0].Sub
-	case "tv":
-		cate = Categories[1].Sub
-	case "cartoon":
-		cate = Categories[2].Sub
+// 判断当前类目 id 属于哪个主分类，返回该主分类的子分类
+func currentGroupSubCategories(cateIntId int, Categories []utils.Categories) []utils.Categories {
+	for _, c := range Categories {
+		mainId, _ := strconv.Atoi(c.TypeId)
+		if cateIntId == mainId {
+			return c.Sub
+		}
+		for _, sub := range c.Sub {
+			subId, _ := strconv.Atoi(sub.TypeId)
+			if cateIntId == subId {
+				return c.Sub
+			}
+		}
 	}
-	return cate
+	return nil
 }

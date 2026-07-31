@@ -1,18 +1,15 @@
 package spider
 
 import (
-	"github.com/spf13/viper"
 	"go_movies/utils"
-	"go_movies/utils/spider/dbzy"
-	"go_movies/utils/spider/tian_kong"
-	"go_movies/utils/spider/tian_kong/tian_kong_sync"
+	"go_movies/utils/spider/haohua"
+
+	"github.com/spf13/viper"
 )
 
 // 定义 mod 的映射关系
 var spiderModMap = map[string]utils.SpiderTask{
-	"async": &tian_kong.SpiderApi{},      // 异步 goroutine 并行
-	"sync":  &tian_kong_sync.SpiderApi{}, // 同步 按顺序执行 串行
-	"dbzy":  &dbzy.SpiderApi{},           // 豆瓣资源
+	"haohua": &haohua.SpiderApi{}, // 豪华资源
 }
 
 func Create() utils.SpiderTask {

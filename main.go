@@ -74,8 +74,16 @@ func init() {
 
 // 首次启动自动开启爬虫
 func firstSpider() {
+	categories := spider.Create().Categories()
 
-	hasHome := utils.RedisDB.Exists("detail_links:id:1").Val()
+	var nav []utils.Categories
+	if err := utils.Json.Unmarshal([]byte(categories), &nav); err != nil || len(nav) == 0 {
+		log.Println("firstSpider 分类解析失败:", err)
+		return
+	}
+
+	// 按当前采集源的首个主分类判断是否第一次启动
+	hasHome := utils.RedisDB.Exists("detail_links:id:" + nav[0].TypeId).Val()
 	log.Println("hasHome", hasHome)
 	// 不存在首页的key 则认为是第一次启动
 	if hasHome == 0 {

@@ -21,6 +21,14 @@ type MovieListStruct struct {
 	Quality   string `json:"quality"`
 }
 
+// 首页板块结构，按当前采集源的分类动态生成
+type IndexSection struct {
+	Name   string
+	Link   string
+	Subs   []utils.Categories
+	Movies []MovieListStruct
+}
+
 type SortMovieListStruct []MovieListStruct
 
 var (
